@@ -1,0 +1,78 @@
+<%- include('../layouts/header.ejs')  %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+      <div class="col-md-6">
+          <div class="card">
+              <div class="card-header">
+                  <h1 class="text-center">User Login</h1>
+              </div>
+              <div class="card-body">
+                  <% if(typeof message !== 'undefined') { %>
+                      <div class="alert alert-danger" role="alert">
+                          <%= message %>
+                      </div>
+                  <% } %>
+                  <form action="/login" method="post" id="form">
+                      <div class="mb-3">
+                          <label for="email" class="form-label">Email</label>
+                          <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                      </div>
+                      <div class="mb-3">
+                          <label for="password" class="form-label">Password</label>
+                          <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                      </div>
+                      <button type="submit" class="btn btn-primary d-block mx-auto">Login</button>
+                      <div id="error" class="text-warning fw-bold text-center mt-2"></div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+<script>
+    let form = document.getElementById("form");
+    let error = document.getElementById("error");
+    let message = [];
+  
+    form.addEventListener("submit", (e) => {
+      message = [];
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+  
+      email_validate(email);
+  
+      if (password.length < 5) {
+        message.push("Password should be at least 6 characters");
+      }
+  
+      if (message.length > 0) {
+        e.preventDefault();
+        error.innerText = message[0];
+      }
+    });
+  
+    function email_validate(email) {
+      let reg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      let result = reg.test(email);
+      if (!result) {
+        message.push("Invalid Email");
+      }
+    }
+  </script>
+
+
+
+<%- include('../layouts/footer.ejs')  %>
+
+
+
+
+
+
+
+
+

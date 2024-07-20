@@ -1,0 +1,1650 @@
+<%- include('../layouts/header.ejs')%>
+
+
+
+<link
+rel="icon"
+href="/static/adminfile/assets/img/kaiadmin/favicon.ico"
+type="image/x-icon"
+/>
+
+<!-- Fonts and icons -->
+<script src="/static/adminfile/assets/js/plugin/webfont/webfont.min.js"></script>
+<script>
+WebFont.load({
+  google: { families: ["Public Sans:300,400,500,600,700"] },
+  custom: {
+    families: [
+      "Font Awesome 5 Solid",
+      "Font Awesome 5 Regular",
+      "Font Awesome 5 Brands",
+      "simple-line-icons",
+    ],
+    urls: ["/static/adminfile/assets/css/fonts.min.css"],
+  },
+  active: function () {
+    sessionStorage.fonts = true;
+  },
+});
+</script>
+
+<!-- CSS Files -->
+<link rel="stylesheet" href="/static/adminfile/assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/static/adminfile/assets/css/plugins.min.css" />
+<link rel="stylesheet" href="/static/adminfile/assets/css/kaiadmin.min.css" />
+
+<!-- CSS Just for demo purpose, don't include it in your project -->
+<link rel="stylesheet" href="/static/adminfile/assets/css/demo.css" />
+
+<div class="wrapper">
+<!-- Sidebar -->
+<div class="sidebar" data-background-color="dark">
+  <div class="sidebar-logo">
+    <!-- Logo Header -->
+    <div class="logo-header" data-background-color="dark">
+      <a href="../index.html" class="logo">
+        <img
+          src="/static/adminfile/assets/img/kaiadmin/logo_light.svg"
+          alt="navbar brand"
+          class="navbar-brand"
+          height="20"
+        />
+      </a>
+      <div class="nav-toggle">
+        <button class="btn btn-toggle toggle-sidebar">
+          <i class="gg-menu-right"></i>
+        </button>
+        <button class="btn btn-toggle sidenav-toggler">
+          <i class="gg-menu-left"></i>
+        </button>
+      </div>
+      <button class="topbar-toggler more">
+        <i class="gg-more-vertical-alt"></i>
+      </button>
+    </div>
+    <!-- End Logo Header -->
+  </div>
+  <div class="sidebar-wrapper scrollbar scrollbar-inner">
+    <div class="sidebar-content">
+      <ul class="nav nav-secondary">
+        <li class="nav-item">
+          <a
+            data-bs-toggle="collapse"
+            href="#dashboard"
+            class="collapsed"
+            aria-expanded="false"
+          >
+            <i class="fas fa-home"></i>
+            <p>Dashboard</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="dashboard">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="../../demo1/index.html">
+                  <span class="sub-item">Dashboard 1</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-section">
+          <span class="sidebar-mini-icon">
+            <i class="fa fa-ellipsis-h"></i>
+          </span>
+          <h4 class="text-section">Components</h4>
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#base">
+            <i class="fas fa-layer-group"></i>
+            <p>Base</p>
+            <span class="caret"></span>
+          </a>
+          <!-- <div class="collapse" id="base">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="/static/adminfile/components/avatars.html">
+                  <span class="sub-item">Avatars</span>
+                </a>
+              </li>
+              <li>
+                <a href="/static/adminfile/components/buttons.html">
+                  <span class="sub-item">Buttons</span>
+                </a>
+              </li>
+              <li>
+                <a href="/static/adminfile/components/gridsystem.html">
+                  <span class="sub-item">Grid System</span>
+                </a>
+              </li>
+              <li>
+                <a href="/static/adminfile/components/panels.html">
+                  <span class="sub-item">Panels</span>
+                </a>
+              </li>
+              <li>
+                <a href="/static/adminfile/components/notifications.html">
+                  <span class="sub-item">Notifications</span>
+                </a>
+              </li>
+              <li>
+                <a href="/static/adminfile/components/sweetalert.html">
+                  <span class="sub-item">Sweet Alert</span>
+                </a>
+              </li>
+              <li>
+                <a href="/static/adminfile/components/font-awesome-icons.html">
+                  <span class="sub-item">Font Awesome Icons</span>
+                </a>
+              </li>
+              <li>
+                <a href="/static/adminfile/components/simple-line-icons.html">
+                  <span class="sub-item">Simple Line Icons</span>
+                </a>
+              </li>
+              <li>
+                <a href="/static/adminfile/components/typography.html">
+                  <span class="sub-item">Typography</span>
+                </a>
+              </li>
+            </ul>
+          </div> -->
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#sidebarLayouts">
+            <i class="fas fa-th-list"></i>
+            <p>Sidebar Layouts</p>
+            <span class="caret"></span>
+          </a>
+          <!-- <div class="collapse" id="sidebarLayouts">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="../sidebar-style-2.html">
+                  <span class="sub-item">Sidebar Style 2</span>
+                </a>
+              </li>
+              <li>
+                <a href="../icon-menu.html">
+                  <span class="sub-item">Icon Menu</span>
+                </a>
+              </li>
+            </ul>
+          </div> -->
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#forms">
+            <i class="fas fa-pen-square"></i>
+            <p>Forms</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="forms">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="../forms/forms.html">
+                  <span class="sub-item">Basic Form</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item active submenu">
+          <a data-bs-toggle="collapse" href="/admin/product">
+            <i class="fas fa-table"></i>
+            <p>products</p>
+            <span class="caret"></span>
+          </a>
+          <!-- <div class="collapse show" id="tables">
+            <ul >
+              <li>
+                <a href="../tables/tables.html">
+                  <span class="sub-item">Basic Table</span>
+                </a>
+              </li>
+              <li class="active">
+                <a href="../tables/datatables.html">
+                  <span class="sub-item">Datatables</span>
+                </a>
+              </li>
+            </ul>
+          </div> -->
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#maps">
+            <i class="fas fa-map-marker-alt"></i>
+            <p>Maps</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="maps">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="../maps/googlemaps.html">
+                  <span class="sub-item">Google Maps</span>
+                </a>
+              </li>
+              <li>
+                <a href="../maps/jsvectormap.html">
+                  <span class="sub-item">Jsvectormap</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#charts">
+            <i class="far fa-chart-bar"></i>
+            <p>Charts</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="charts">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="../charts/charts.html">
+                  <span class="sub-item">Chart Js</span>
+                </a>
+              </li>
+              <li>
+                <a href="../charts/sparkline.html">
+                  <span class="sub-item">Sparkline</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="../widgets.html">
+            <i class="fas fa-desktop"></i>
+            <p>Widgets</p>
+            <span class="badge badge-success">4</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#submenu">
+            <i class="fas fa-bars"></i>
+            <p>Menu Levels</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="submenu">
+            <ul class="nav nav-collapse">
+              <li>
+                <a data-bs-toggle="collapse" href="#subnav1">
+                  <span class="sub-item">Level 1</span>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="subnav1">
+                  <ul class="nav nav-collapse subnav">
+                    <li>
+                      <a href="#">
+                        <span class="sub-item">Level 2</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <span class="sub-item">Level 2</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <a data-bs-toggle="collapse" href="#subnav2">
+                  <span class="sub-item">Level 1</span>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="subnav2">
+                  <ul class="nav nav-collapse subnav">
+                    <li>
+                      <a href="#">
+                        <span class="sub-item">Level 2</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <a href="#">
+                  <span class="sub-item">Level 1</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- End Sidebar -->
+
+<div class="main-panel">
+  <div class="main-header">
+    <div class="main-header-logo">
+      <!-- Logo Header -->
+      <div class="logo-header" data-background-color="dark">
+        <a href="../index.html" class="logo">
+          <img
+            src="/static/adminfile/assets/img/kaiadmin/logo_light.svg"
+            alt="navbar brand"
+            class="navbar-brand"
+            height="20"
+          />
+        </a>
+        <div class="nav-toggle">
+          <button class="btn btn-toggle toggle-sidebar">
+            <i class="gg-menu-right"></i>
+          </button>
+          <button class="btn btn-toggle sidenav-toggler">
+            <i class="gg-menu-left"></i>
+          </button>
+        </div>
+        <button class="topbar-toggler more">
+          <i class="gg-more-vertical-alt"></i>
+        </button>
+      </div>
+      <!-- End Logo Header -->
+    </div>
+    <!-- Navbar Header -->
+    <nav
+      class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+    >
+      <div class="container-fluid">
+        <nav
+          class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
+        >
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button type="submit" class="btn btn-search pe-1">
+                <i class="fa fa-search search-icon"></i>
+              </button>
+            </div>
+            <input
+              type="text"
+              placeholder="Search ..."
+              class="form-control"
+            />
+          </div>
+        </nav>
+
+        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+          <li
+            class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none"
+          >
+            <a
+              class="nav-link dropdown-toggle"
+              data-bs-toggle="dropdown"
+              href="#"
+              role="button"
+              aria-expanded="false"
+              aria-haspopup="true"
+            >
+              <i class="fa fa-search"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-search animated fadeIn">
+              <form class="navbar-left navbar-form nav-search">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    placeholder="Search ..."
+                    class="form-control"
+                  />
+                </div>
+              </form>
+            </ul>
+          </li>
+          <li class="nav-item topbar-icon dropdown hidden-caret">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="messageDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i class="fa fa-envelope"></i>
+            </a>
+            <ul
+              class="dropdown-menu messages-notif-box animated fadeIn"
+              aria-labelledby="messageDropdown"
+            >
+              <li>
+                <div
+                  class="dropdown-title d-flex justify-content-between align-items-center"
+                >
+                  Messages
+                  <a href="#" class="small">Mark all as read</a>
+                </div>
+              </li>
+              <li>
+                <div class="message-notif-scroll scrollbar-outer">
+                  <div class="notif-center">
+                    <a href="#">
+                      <div class="notif-img">
+                        <img
+                          src="/static/adminfile/assets/img/jm_denis.jpg"
+                          alt="Img Profile"
+                        />
+                      </div>
+                      <div class="notif-content">
+                        <span class="subject">Jimmy Denis</span>
+                        <span class="block"> How are you ? </span>
+                        <span class="time">5 minutes ago</span>
+                      </div>
+                    </a>
+                    <a href="#">
+                      <div class="notif-img">
+                        <img
+                          src="/static/adminfile/assets/img/chadengle.jpg"
+                          alt="Img Profile"
+                        />
+                      </div>
+                      <div class="notif-content">
+                        <span class="subject">Chad</span>
+                        <span class="block"> Ok, Thanks ! </span>
+                        <span class="time">12 minutes ago</span>
+                      </div>
+                    </a>
+                    <a href="#">
+                      <div class="notif-img">
+                        <img
+                          src="/static/adminfile/assets/img/mlane.jpg"
+                          alt="Img Profile"
+                        />
+                      </div>
+                      <div class="notif-content">
+                        <span class="subject">Jhon Doe</span>
+                        <span class="block">
+                          Ready for the meeting today...
+                        </span>
+                        <span class="time">12 minutes ago</span>
+                      </div>
+                    </a>
+                    <a href="#">
+                      <div class="notif-img">
+                        <img
+                          src="/static/adminfile/assets/img/talha.jpg"
+                          alt="Img Profile"
+                        />
+                      </div>
+                      <div class="notif-content">
+                        <span class="subject">Talha</span>
+                        <span class="block"> Hi, Apa Kabar ? </span>
+                        <span class="time">17 minutes ago</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <a class="see-all" href="javascript:void(0);"
+                  >See all messages<i class="fa fa-angle-right"></i>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item topbar-icon dropdown hidden-caret">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="notifDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i class="fa fa-bell"></i>
+              <span class="notification">4</span>
+            </a>
+            <ul
+              class="dropdown-menu notif-box animated fadeIn"
+              aria-labelledby="notifDropdown"
+            >
+              <li>
+                <div class="dropdown-title">
+                  You have 4 new notification
+                </div>
+              </li>
+              <li>
+                <div class="notif-scroll scrollbar-outer">
+                  <div class="notif-center">
+                    <a href="#">
+                      <div class="notif-icon notif-primary">
+                        <i class="fa fa-user-plus"></i>
+                      </div>
+                      <div class="notif-content">
+                        <span class="block"> New user registered </span>
+                        <span class="time">5 minutes ago</span>
+                      </div>
+                    </a>
+                    <a href="#">
+                      <div class="notif-icon notif-success">
+                        <i class="fa fa-comment"></i>
+                      </div>
+                      <div class="notif-content">
+                        <span class="block">
+                          Rahmad commented on Admin
+                        </span>
+                        <span class="time">12 minutes ago</span>
+                      </div>
+                    </a>
+                    <a href="#">
+                      <div class="notif-img">
+                        <img
+                          src="/static/adminfile/assets/img/profile2.jpg"
+                          alt="Img Profile"
+                        />
+                      </div>
+                      <div class="notif-content">
+                        <span class="block">
+                          Reza send messages to you
+                        </span>
+                        <span class="time">12 minutes ago</span>
+                      </div>
+                    </a>
+                    <a href="#">
+                      <div class="notif-icon notif-danger">
+                        <i class="fa fa-heart"></i>
+                      </div>
+                      <div class="notif-content">
+                        <span class="block"> Farrah liked Admin </span>
+                        <span class="time">17 minutes ago</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <a class="see-all" href="javascript:void(0);"
+                  >See all notifications<i class="fa fa-angle-right"></i>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item topbar-icon dropdown hidden-caret">
+            <a
+              class="nav-link"
+              data-bs-toggle="dropdown"
+              href="#"
+              aria-expanded="false"
+            >
+              <i class="fas fa-layer-group"></i>
+            </a>
+            <div class="dropdown-menu quick-actions animated fadeIn">
+              <div class="quick-actions-header">
+                <span class="title mb-1">Quick Actions</span>
+                <span class="subtitle op-7">Shortcuts</span>
+              </div>
+              <div class="quick-actions-scroll scrollbar-outer">
+                <div class="quick-actions-items">
+                  <div class="row m-0">
+                    <a class="col-6 col-md-4 p-0" href="#">
+                      <div class="quick-actions-item">
+                        <div class="avatar-item bg-danger rounded-circle">
+                          <i class="far fa-calendar-alt"></i>
+                        </div>
+                        <span class="text">Calendar</span>
+                      </div>
+                    </a>
+                    <a class="col-6 col-md-4 p-0" href="#">
+                      <div class="quick-actions-item">
+                        <div
+                          class="avatar-item bg-warning rounded-circle"
+                        >
+                          <i class="fas fa-map"></i>
+                        </div>
+                        <span class="text">Maps</span>
+                      </div>
+                    </a>
+                    <a class="col-6 col-md-4 p-0" href="#">
+                      <div class="quick-actions-item">
+                        <div class="avatar-item bg-info rounded-circle">
+                          <i class="fas fa-file-excel"></i>
+                        </div>
+                        <span class="text">Reports</span>
+                      </div>
+                    </a>
+                    <a class="col-6 col-md-4 p-0" href="#">
+                      <div class="quick-actions-item">
+                        <div
+                          class="avatar-item bg-success rounded-circle"
+                        >
+                          <i class="fas fa-envelope"></i>
+                        </div>
+                        <span class="text">Emails</span>
+                      </div>
+                    </a>
+                    <a class="col-6 col-md-4 p-0" href="#">
+                      <div class="quick-actions-item">
+                        <div
+                          class="avatar-item bg-primary rounded-circle"
+                        >
+                          <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <span class="text">Invoice</span>
+                      </div>
+                    </a>
+                    <a class="col-6 col-md-4 p-0" href="#">
+                      <div class="quick-actions-item">
+                        <div
+                          class="avatar-item bg-secondary rounded-circle"
+                        >
+                          <i class="fas fa-credit-card"></i>
+                        </div>
+                        <span class="text">Payments</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item topbar-user dropdown hidden-caret">
+            <a
+              class="dropdown-toggle profile-pic"
+              data-bs-toggle="dropdown"
+              href="#"
+              aria-expanded="false"
+            >
+              <div class="avatar-sm">
+                <img
+                  src="/static/adminfile/assets/img/profile.jpg"
+                  alt="..."
+                  class="avatar-img rounded-circle"
+                />
+              </div>
+              <span class="profile-username">
+                <span class="op-7">Hi,</span>
+                <span class="fw-bold">salman</span>
+              </span>
+            </a>
+            <ul class="dropdown-menu dropdown-user animated fadeIn">
+              <div class="dropdown-user-scroll scrollbar-outer">
+                <li>
+                  <div class="user-box">
+                    <div class="avatar-lg">
+                      <img
+                        src="/static/adminfile/assets/img/profile.jpg"
+                        alt="image profile"
+                        class="avatar-img rounded"
+                      />
+                    </div>
+                    <div class="u-text">
+                      <h4>salman</h4>
+                      <p class="text-muted">hello@example.com</p>
+                      <a
+                        href="profile.html"
+                        class="btn btn-xs btn-secondary btn-sm"
+                        >View Profile</a
+                      >
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">My Profile</a>
+                  <a class="dropdown-item" href="#">My Balance</a>
+                  <a class="dropdown-item" href="#">Inbox</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Account Setting</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Logout</a>
+                </li>
+              </div>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+  </div>
+
+            <!-- FORM -->
+           <div class="container">
+         <div class="page-inner">
+              <div class="page-header">
+                <h3 class="fw-bold mb-3">Add product</h3>
+                
+              </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                  <div class="card">
+             <form  id="productForm" enctype="multipart/form-data" method="post">
+                    <div class="card-header">
+                      <div class="card-title">Product details</div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            
+                          <div class="form-group">
+                            <label for="email2">Product Name</label>
+                            <input
+                            name="productName"
+                              type="text"
+                              class="form-control"
+                              id="email2"
+                              value="<%=product.productName%>"
+                              style="width: 100%;"
+
+                            />
+                          
+                          </div>
+                          <div class="form-group">
+                            <label for="password">Category</label>
+                            <select class="form-control text-black" name="productCategory">
+                                <option value="">Select Category</option>
+
+                                 <% categories.forEach(category=> { %>
+                                  <option value="<%= category._id %>" <%=product.productCategory.equals(category._id)?'selected':''%>>
+                                    <%= category.categoryName %>
+                                  </option>                           
+                                  <% }); %>
+                                 
+                              </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="password">Brands</label>
+                            <select class="form-control text-black" name="productBrand">
+                                <option value="">Select brand</option>
+
+                                 <% brands.forEach(brand=> { %>
+                                  <option value="<%= brand._id %>" <%=product.productBrand.equals(brand._id)?'selected':''%>>
+                                    <%= brand.brandName %>
+                                  </option>                           
+                                  <% }); %>
+                                 
+                              </select>
+                          </div>
+                          <div class="col">
+                            <label for="productGender">Gender:</label><br>
+                            <div class="radio-group">
+                              <input type="radio" id="genderMale" name="productGender" value="Male"
+                                <%=product.productGender==='Male' ? 'checked' : '' %>>
+                              <label for="genderMale">Male</label>
+            
+                              <input type="radio" id="genderFemale" name="productGender" value="Female"
+                                <%=product.productGender==='Female' ? 'checked' : '' %>>
+                              <label for="genderFemale">Female</label>
+            
+                              <input type="radio" id="genderUnisex" name="productGender" value="Unisex"
+                                <%=product.productGender==='Unisex' ? 'checked' : '' %>>
+                              <label for="genderUnisex">Unisex</label>
+                              <input type="radio" id="genderKids" name="productGender" value="Kids"
+                                <%=product.productGender==='Kids' ? 'checked' : '' %>>
+                              <label for="genderKids">Kids</label>
+                            </div>
+
+                          <div class="form-group">
+                            <label for="comment">Description</label>
+                            <textarea class="form-control" id="comment" rows="5" name="productDescription"><%=product.productDescription%>
+                            </textarea>
+                          </div>
+                          <div>
+                            <% product.variants.forEach((variant,variantIndex)=>{ %>
+                            <div>
+                             <h2>Variant :<%=variantIndex + 1%></h2>
+                             
+                              
+                                <div class="form-group" style="display: flex;">
+                                    <% variant.images.forEach((image, imageIndex)=> { %>
+                                      <div class="col">
+                                        <img src="/static/productImages/<%= image %>" alt="Variant Image" width="100">
+                                        <input type="hidden" name="variants[<%= variantIndex %>][existingImages][]"
+                                          value="<%= image %>">
+                                          
+                                        <button type="button" class="remove-image-button btn btn-danger"
+                                          data-variant-index="<%= variantIndex %>" data-image-index="<%= imageIndex %>">remove</button>
+                                          <div id="imagePreview<%= variantIndex %>" class=" dynamicimage mt-2 d-flex flex-wrap "  >
+                                            <!-- Preview images will be added here dynamically -->
+                                          </div>
+                                      </div>
+                                      <% }) %>
+                                     
+                                      <div class="col">
+                                        <div class="image-upload-container">
+                                          <input type="file" id="eimageInput<%= variantIndex %>" name="variants[<%= variantIndex %>][newImages][]" 
+                                            accept="image/*" multiple style="display: none;" onchange="ehandleImageSelect(event, <%= variantIndex %>)">
+                                          <button type="button" class="btn btn-primary" onclick="document.getElementById('eimageInput<%= variantIndex %>').click()">
+                                            Add Images
+                                          </button>
+                                         
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <!-- Crop Modal -->
+                                    <div class="modal fade" id="ecropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <div id="ecropContainer" style="max-width: 100%; height: 400px;"></div>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-primary" onclick="ecropImage()">Crop & Continue</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                <div class="mt-5" id="cpq">
+                                <label for="color">Color:</label>
+                                <input type="text" id="color" name="color" class="color-input" value="<%= variant.color%>" required>
+                                
+                                <label for="price">Price:</label>
+                                <input type="number" id="price" name="price" class="price-input" step="0.01" value="<%= variant.price%>" required>
+                
+                                <label for="price">Quantity:</label>
+                                <input type="number" id="quantity" name="quantity" class="quantity-input" step="0.01" value="<%= variant.quantity%>" required>
+                            </div>
+                          
+                                <div id="messageContainer"></div>
+                                </div>
+                           
+                                <%})%> 
+                                
+                            </div>
+                            
+                          </div>
+                          <div id="variantsContainer"></div>
+                      
+                    <div class="card-action">
+                        <button type="button" id="submitAllData" class="btn btn-primary">Add Product</button>
+                        <button type="button" id="addVariantBtn" class="btn btn-secondary mt-3">Add Variant</button>
+ <button class="btn btn-danger"><a href="/admin/product" style="text-decoration: none;color: white;">Cancel</a></button>
+                    </div>
+                
+                  </div>
+                </div>
+        </form>
+              </div>
+             
+            </div>
+          </div>
+          <!-- ////// -->
+          <template id="variantFormTemplate">
+            <div class="variant-form mb-4 p-3 border rounded">
+              <h4>Variant <span class="variant-number"></span></h4>
+              <div class="image-upload-container mb-3">
+             
+                <div class="image-upload">
+                  <input type="file" id="file-0" accept="image/*" onchange="handleImageUpload(event, this, 0)" data-index="0">
+                  <div class="preview-image" data-index="0"></div>
+                  <label for="file-0"></label>
+                 </div>
+                <div class="image-upload">
+                  <input type="file" id="file-1" accept="image/*" onchange="handleImageUpload(event, this, 1)" data-index="1">
+                  <div class="preview-image" data-index="1"></div>
+                  <label for="file-1"></label>
+                  </div>
+                <div class="image-upload">
+                  <input type="file" id="file-2" accept="image/*" onchange="handleImageUpload(event, this, 2)" data-index="2">
+                  <div class="preview-image" data-index="2"></div>
+                  <label for="file-2"></label>
+                </div>
+              </div>
+              </div>
+              <div class="mb-3">
+                <label for="color" class="form-label">Color:</label>
+                <input type="text" class="form-control color-input" name="color" required>
+              </div>
+              <div class="mb-3">
+                <label for="price" class="form-label">Price:</label>
+                <input type="number" class="form-control price-input" name="price" step="0.01" required>
+              </div>
+              <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity:</label>
+                <input type="number" class="form-control quantity-input" name="quantity" required>
+              </div>
+              <button type="button" class="btn btn-danger remove-variant">Remove Variant</button>
+            </div>                              
+          </template>
+          
+          <!-- Crop Modal -->
+          <div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div id="cropContainer" style="max-width: 100%; height: 400px;"></div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" onclick="cropImage()">Crop & Continue</button>
+                </div>
+              </div>
+            </div>
+          </div>
+         
+
+         
+        
+           
+
+
+         
+
+
+<style>
+   
+.dynamicimage{
+  display: flex;
+  justify-content: space-between;
+}
+ 
+
+#cpq{
+    display: flex;
+    justify-content:space-around;
+}
+.image-upload-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.image-upload {
+  width: 12%;
+  height: 150px;
+  border: 2px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.image-preview-wrapper {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  margin-bottom: 10px;
+}
+
+.preview-image-fit {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+
+
+</style>
+
+
+  
+        
+
+  <footer class="footer">
+    <div class="container-fluid d-flex justify-content-between">
+      <nav class="pull-left">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="http://www.themekita.com">
+              ThemeKita
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"> Help </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"> Licenses </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="copyright">
+        2024, made with <i class="fa fa-heart heart text-danger"></i> by
+        <a href="http://www.themekita.com">ThemeKita</a>
+      </div>
+      <div>
+        Distributed by
+        <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
+      </div>
+    </div>
+  </footer>
+</div>
+
+</div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+let ecropper = null;
+let ecurrentVariantIndex;
+let ecurrentImageIndex;
+let eimagesToCrop = [];
+
+function ehandleImageSelect(event, variantIndex) {
+  const files = event.target.files;
+  ecurrentVariantIndex = variantIndex;
+  eimagesToCrop = Array.from(files);
+  
+  if (eimagesToCrop.length > 0) {
+    ecurrentImageIndex = 0;
+    ecropNextImage();
+  }
+}
+
+function ecropNextImage() {
+  if (ecurrentImageIndex < eimagesToCrop.length) {
+    const file = eimagesToCrop[ecurrentImageIndex];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      eopenCropModal(e.target.result);
+    }
+    reader.readAsDataURL(file);
+  } else {
+    // All images have been cropped
+    eupdatePreview();
+  }
+}
+
+function eopenCropModal(imageSrc) {
+  const modal = new bootstrap.Modal(document.getElementById('ecropModal'));
+  const cropContainer = document.getElementById('ecropContainer');
+
+  // Clean up any existing cropper instance
+  if (ecropper) {
+    ecropper.destroy();
+    ecropper = null;
+  }
+
+  cropContainer.innerHTML = '';
+  const image = document.createElement('img');
+  image.src = imageSrc;
+  cropContainer.appendChild(image);
+
+  modal.show();
+
+  modal._element.addEventListener('shown.bs.modal', function () {
+    setTimeout(() => {
+      if (image.complete) {
+        initializeCropper(image);
+      } else {
+        image.onload = () => initializeCropper(image);
+      }
+    }, 100);
+  });
+}
+
+function initializeCropper(image) {
+  if (ecropper) {
+    ecropper.destroy();
+  }
+  ecropper = new Cropper(image, {
+    aspectRatio: 1,
+    viewMode: 1,
+    dragMode: 'move',
+    scalable: true,
+    zoomable: true,
+    minCropBoxWidth: 100,
+    minCropBoxHeight: 100,
+  });
+}
+
+function ecropImage() {
+  if (ecropper) {
+    const croppedCanvas = ecropper.getCroppedCanvas({
+      width: 300,
+      height: 300
+    });
+
+    croppedCanvas.toBlob(function(blob) {
+      // Replace the original image with the cropped one
+      eimagesToCrop[ecurrentImageIndex] = new File([blob], `cropped_image_${ecurrentImageIndex}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
+
+      // Move to the next image
+      ecurrentImageIndex++;
+      const modal = bootstrap.Modal.getInstance(document.getElementById('ecropModal'));
+      modal.hide();
+
+      // Clean up the cropper instance
+      if (ecropper) {
+        ecropper.destroy();
+        ecropper = null;
+      }
+
+      // Crop the next image or update preview if done
+      ecropNextImage();
+    }, 'image/jpeg');
+  }
+}
+
+function eupdatePreview() {
+  const previewContainer = document.getElementById(`imagePreview${ecurrentVariantIndex}`);
+  previewContainer.innerHTML = ''; // Clear existing previews
+
+  eimagesToCrop.forEach((file, index) => {
+    const preview = document.createElement('div');
+    preview.className = 'm-1';
+    preview.innerHTML = `
+      <img src="${URL.createObjectURL(file)}" alt="Preview" style="width: 100px; height: 100px; object-fit: cover;">
+      <button type="button" class="btn btn-sm btn-danger mt-1" onclick="eremoveImage(${ecurrentVariantIndex}, ${index})">Remove</button>
+    `;
+    previewContainer.appendChild(preview);
+  });
+
+  // Update file input
+  const fileInput = document.getElementById(`eimageInput${ecurrentVariantIndex}`);
+  const dataTransfer = new DataTransfer();
+  eimagesToCrop.forEach(file => dataTransfer.items.add(file));
+  fileInput.files = dataTransfer.files;
+}
+
+function eremoveImage(variantIndex, imageIndex) {
+  eimagesToCrop.splice(imageIndex, 1);
+  eupdatePreview();
+}
+</script>
+
+
+<script>
+let variantCount = 0;
+let cropper;
+let currentVariantElement;
+let currentImageIndex;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const addVariantBtn = document.getElementById('addVariantBtn');
+  const variantsContainer = document.getElementById('variantsContainer');
+  const submitAllDataBtn = document.getElementById('submitAllData');
+   
+  if (submitAllDataBtn) {
+    submitAllDataBtn.addEventListener('click', submitAllData);
+  } else {
+    console.error('Submit button not found');
+  }
+
+  if (addVariantBtn) {
+    addVariantBtn.addEventListener('click', addVariantForm);
+  } else {
+    console.error('Add Variant button not found');
+  }
+
+  if (variantsContainer) {
+    variantsContainer.addEventListener('click', handleVariantContainerClick);
+  } else {
+    console.error('Variants container not found');
+  }
+
+  if (submitAllDataBtn) {
+    submitAllDataBtn.addEventListener('click', submitAllData);
+  } else {
+    console.error('Submit All Data button not found');
+  }
+});
+
+function addVariantForm() {
+  const variantsContainer = document.getElementById('variantsContainer');
+  const variantFormTemplate = document.getElementById('variantFormTemplate');
+  
+  if (!variantsContainer || !variantFormTemplate) {
+    console.error('Unable to add variant form: container or template not found');
+    return;
+  }
+
+  variantCount++;
+  const variantForm = document.importNode(variantFormTemplate.content, true);
+  const variantFormElement = variantForm.querySelector('.variant-form');
+
+  if (variantFormElement) {
+    variantFormElement.setAttribute('data-variant', variantCount);
+    
+    const variantNumberElement = variantFormElement.querySelector('.variant-number');
+    if (variantNumberElement) {
+      variantNumberElement.textContent = variantCount;
+    }
+
+    for (let i = 0; i < 3; i++) {
+      const fileInput = variantFormElement.querySelector(`input[type="file"][data-index="${i}"]`);
+      const fileLabel = variantFormElement.querySelector(`label[for="file-${i}"]`);
+      if (fileInput && fileLabel) {
+        const newId = `file-${variantCount}-${i}`;
+        fileInput.id = newId;
+        fileLabel.setAttribute('for', newId);
+      }
+    }
+  
+    variantsContainer.appendChild(variantForm);
+    updateVariantNumbers();
+  } else {
+    console.error('Unable to find variant form element in template');
+  }
+}
+
+function handleVariantContainerClick(event) {
+  if (event.target.classList.contains('remove-variant')) {
+    const variantForm = event.target.closest('.variant-form');
+    if (variantForm) {
+      console.log('Removing variant form');
+      variantForm.remove();
+      updateVariantNumbers();
+    } else {
+      console.error('Variant form not found');
+    }
+  }
+}
+
+function updateVariantNumbers() {
+  console.log('Updating variant numbers');
+  const variantForms = document.querySelectorAll('.variant-form');
+  variantForms.forEach((form, index) => {
+    const variantNumber = form.querySelector('.variant-number');
+    if (variantNumber) {
+      variantNumber.textContent = index + 2;
+    }
+    form.setAttribute('data-variant', index + 2);
+  });
+  variantCount = variantForms.length;
+  console.log('New variant count:', variantCount);
+}
+
+function handleImageUpload(event, input, index) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      currentVariantElement = input.closest('.variant-form');
+      currentImageIndex = index;
+     
+      if (currentVariantElement) {
+        openCropModal(e.target.result);
+      } else {
+        console.error('Variant form not found');
+      }
+    }
+    reader.readAsDataURL(file);
+  }
+}
+
+function openCropModal(imageSrc) {
+  const modal = new bootstrap.Modal(document.getElementById('cropModal'));
+  const cropContainer = document.getElementById('cropContainer');
+
+  cropContainer.innerHTML = '';
+  const image = document.createElement('img');
+  image.src = imageSrc;
+  cropContainer.appendChild(image);
+
+  modal.show();
+
+  modal._element.addEventListener('shown.bs.modal', function () {
+    setTimeout(() => {
+      cropper = new Cropper(image, {
+        aspectRatio: 1,
+        viewMode: 1,
+        dragMode: 'move',
+        scalable: true,
+        zoomable: true,
+        minCropBoxWidth: 100,
+        minCropBoxHeight: 100,
+      });
+    }, 100);
+  }, { once: true });
+}
+
+function cropImage() {
+  if (cropper) {
+    const croppedCanvas = cropper.getCroppedCanvas({
+      width: 300,
+      height: 300,
+      minWidth: 100,
+      minHeight: 100,
+      maxWidth: 4096,
+      maxHeight: 4096,
+      fillColor: '#fff',
+      imageSmoothingEnabled: true,
+      imageSmoothingQuality: 'high'
+    });
+
+    croppedCanvas.toBlob(function(blob) {
+      const croppedFile = new File([blob], `cropped_image_${currentImageIndex}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
+      const variantIndex = currentVariantElement.getAttribute('data-variant');
+      updateFileInput(variantIndex, currentImageIndex, croppedFile);
+      updatePreview(currentImageIndex, URL.createObjectURL(croppedFile));
+      
+      const modal = bootstrap.Modal.getInstance(document.getElementById('cropModal'));
+      modal.hide();
+    }, 'image/jpeg', 0.95);
+  }
+}
+
+function updateFileInput(variantIndex, imageIndex, file) {
+  const variantForm = document.querySelector(`.variant-form[data-variant="${variantIndex}"]`);
+  const fileInput = variantForm.querySelector(`input[type="file"][data-index="${imageIndex}"]`);
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(file);
+  fileInput.files = dataTransfer.files;
+}
+
+function updatePreview(imageIndex, imageSrc) {
+  const previewContainer = currentVariantElement.querySelector(`.preview-image[data-index="${imageIndex}"]`);
+  previewContainer.innerHTML = `
+    <div class="image-preview-wrapper">
+      <img src="${imageSrc}" alt="Preview" class="preview-image-fit">
+    </div>
+    <button type="button" class="btn btn-sm btn-danger mt-1" onclick="removeImage(event)" data-image-index="${imageIndex}">Remove</button>
+  `;
+}
+
+function removeImage(event) {
+  const button = event.target;
+  const variantForm = button.closest('.variant-form');
+  if (variantForm) {
+    const imageIndex = button.getAttribute('data-image-index');
+    const fileInput = variantForm.querySelector(`input[type="file"][data-index="${imageIndex}"]`);
+    if (fileInput) {
+      fileInput.value = ''; // Clear the file input
+    }
+    
+    const previewContainer = variantForm.querySelector(`.preview-image[data-index="${imageIndex}"]`);
+    if (previewContainer) {
+      previewContainer.innerHTML = ''; // Clear the preview
+    }
+  } else {
+    console.error('Variant form not found for image removal');
+  }
+}
+
+function submitAllData(event) {
+  event.preventDefault();
+  const form = document.getElementById('productForm');
+  const formData = new FormData(form);
+
+  // Get all existing variant forms
+  const existingVariants = form.querySelectorAll('#cpq');
+  console.log('Existing variants:', existingVariants.length);
+
+//   // Get all newly added variant forms
+  const newVariantsContainer = document.getElementById('variantFormTemplate');
+
+// // Get all newly added variant forms within the container
+const newVariants = newVariantsContainer ? newVariantsContainer.querySelectorAll('.variant-form') : [];
+
+
+
+
+  // Get all newly added variant forms
+  // const newVariants = form.querySelectorAll('.variant-form');
+  console.log('New variants:', newVariants.length);
+
+  // Process existing variants
+  existingVariants.forEach((variantForm, index) => {
+    processVariantForm(variantForm, formData, index, true);
+  });
+
+  // Process newly added variants
+  newVariants.forEach((variantForm, index) => {
+    processVariantForm(variantForm, formData, existingVariants.length + index, false);
+  });
+
+  // Log the FormData contents
+  // console.log('FormData contents:');
+  // for (let [key, value] of formData.entries()) {
+  //   console.log(key, value);
+  // }
+  console.log(formData);
+
+  // Send the formData to the server
+  fetch('/admin/product/editProduct', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    document.getElementById('messageContainer').innerHTML = '<div class="alert alert-success">Product updated successfully!</div>';
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    document.getElementById('messageContainer').innerHTML = '<div class="alert alert-danger">Error updating product. Please try again.</div>';
+  });
+}
+
+function processVariantForm(variantForm, formData, index, isExisting) {
+  console.log(`Processing ${isExisting ? 'existing' : 'new'} variant form ${index + 1}`);
+
+  let colorInput, priceInput, quantityInput;
+
+  if (isExisting) {
+    colorInput = variantForm.querySelector('.color-input');
+    priceInput = variantForm.querySelector('.price-input');
+    quantityInput = variantForm.querySelector('.quantity-input');
+  } else {
+    colorInput = variantForm.querySelector('input[name="color"]');
+    priceInput = variantForm.querySelector('input[name="price"]');
+    quantityInput = variantForm.querySelector('input[name="quantity"]');
+  }
+
+  if (!colorInput || !priceInput || !quantityInput) {
+    console.error(`Missing input fields in variant form ${index + 1}`);
+    return; // Skip this iteration
+  }
+
+  console.log(`Variant ${index + 1}: Color: ${colorInput.value}, Price: ${priceInput.value}, Quantity: ${quantityInput.value}`);
+
+  formData.append(`variants[${index}][color]`, colorInput.value);
+  formData.append(`variants[${index}][price]`, priceInput.value);
+  formData.append(`variants[${index}][quantity]`, quantityInput.value);
+
+  // Handle images for both existing and new variants
+  const imageInputs = variantForm.querySelectorAll('input[type="file"]');
+  imageInputs.forEach((input, imgIndex) => {
+    if (input.files.length > 0) {
+      formData.append(`variants[${index}][newImages][${imgIndex}]`, input.files[0]);
+    }
+  });
+
+  // Handle existing images for existing variants
+  if (isExisting) {
+    const existingImages = variantForm.querySelectorAll('input[name^="variants"][name$="[existingImages][]"]');
+    existingImages.forEach((input, imgIndex) => {
+      formData.append(`variants[${index}][existingImages][${imgIndex}]`, input.value);
+    });
+  }
+}
+
+
+// Function to add a new variant form
+function addVariantForm() {
+  const variantsContainer = document.getElementById('variantsContainer');
+  const template = document.getElementById('variantFormTemplate');
+  const newVariant = template.content.cloneNode(true);
+  
+  // Update variant number
+  const variantNumber = variantsContainer.children.length + 1;
+  newVariant.querySelector('.variant-number').textContent = variantNumber;
+
+  // Update input IDs and labels to make them unique
+  newVariant.querySelectorAll('input[type="file"]').forEach((input, index) => {
+    const newId = `file-${variantNumber}-${index}`;
+    input.id = newId;
+    input.nextElementSibling.setAttribute('for', newId);
+  });
+
+  variantsContainer.appendChild(newVariant);
+}
+
+// Event listener for the "Add Variant" button
+document.getElementById('addVariantBtn').addEventListener('click', addVariantForm);
+
+// Event listener for the submit button
+document.getElementById('submitAllData').addEventListener('click', submitAllData);
+
+// function submitAllData(event) {
+//   event.preventDefault();
+//   const form = document.getElementById('productForm');
+//   const formData = new FormData(form);
+// console.log(formData);
+//   // Get all existing variant forms
+//   const existingVariants = document.querySelectorAll('productForm');
+  
+//   // Get all newly added variant forms
+//   const newVariantsContainer = document.getElementById('variantFormTemplate');
+
+// // Get all newly added variant forms within the container
+// const newVariants = newVariantsContainer ? newVariantsContainer.querySelectorAll('.variant-form') : [];
+
+
+//   // Process existing variants
+//   existingVariants.forEach((variantForm, index) => {
+//     processVariantForm(variantForm, formData, index);
+//   });
+
+//   // Process newly added variants
+//   newVariants.forEach((variantForm, index) => {
+//     processVariantForm(variantForm, formData, existingVariants.length + index);
+//   });
+
+//   // Log the FormData contents
+//   for (let [key, value] of formData.entries()) {
+//     console.log(key, value);
+//   }
+  
+
+//   // Send the formData to the server
+//   fetch('/admin/product/editProduct', {
+//     method: 'POST',
+//     body: formData
+//   })
+//   .then(response => response.json())
+//   .then(data => {
+//     console.log('Success:', data);
+//     document.getElementById('messageContainer').innerHTML = '<div class="alert alert-success">Product updated successfully!</div>';
+//   })
+//   .catch((error) => {
+//     console.error('Error:', error);
+//     document.getElementById('messageContainer').innerHTML = '<div class="alert alert-danger">Error updating product. Please try again.</div>';
+//   });
+// }
+
+// function processVariantForm(variantForm, formData, index) {
+//   console.log(`Processing variant form ${index + 1}`);
+
+//   const colorInput = variantForm.querySelector('input[name="color"]');
+//   const priceInput = variantForm.querySelector(' input[name="price"]');
+//   const quantityInput = variantForm.querySelector('input[name="quantity"]');
+// console.log(colorInput.value);
+//   if (!colorInput || !priceInput || !quantityInput) {
+//     console.error(`Missing input fields in variant form ${index + 1}`);
+//     return; // Skip this iteration
+//   }
+
+
+//   formData.append(`variants[${index}][color]`, colorInput.value);
+//   formData.append(`variants[${index}][price]`, priceInput.value);
+//   formData.append(`variants[${index}][quantity]`, quantityInput.value);
+
+//   // Handle existing images
+//   const existingImages = variantForm.querySelectorAll('input[name^="variants"][name$="[existingImages][]"]');
+//   existingImages.forEach((input, imgIndex) => {
+//     formData.append(`variants[${index}][existingImages][${imgIndex}]`, input.value);
+//   });
+
+//   // Handle new images
+//   const newImageInputs = variantForm.querySelectorAll('input[type="file"]');
+//   newImageInputs.forEach((input, imgIndex) => {
+//     if (input.files.length > 0) {
+//       formData.append(`variants[${index}][newImages][${imgIndex}]`, input.files[0]);
+//     }
+//   });
+  
+// }
+// document.getElementById('productForm').addEventListener('submit', submitAllData);
+</script>
+
+
+<!--   Core JS Files   -->
+<script src="/static/adminfile/assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="/static/adminfile/assets/js/core/popper.min.js"></script>
+<script src="/static/adminfile/assets/js/core/bootstrap.min.js"></script>
+
+<!-- jQuery Scrollbar -->
+<script src="/static/adminfile/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+<!-- Datatables -->
+<script src="/static/adminfile/assets/js/plugin/datatables/datatables.min.js"></script>
+<!-- Kaiadmin JS -->
+<script src="/static/adminfile/assets/js/kaiadmin.min.js"></script>
+<!-- Kaiadmin DEMO methods, don't include it in your project! -->
+<script src="/static/adminfile/assets/js/setting-demo2.js"></script>
+<script>
+$(document).ready(function () {
+  $("#basic-datatables").DataTable({});
+
+  $("#multi-filter-select").DataTable({
+    pageLength: 5,
+    initComplete: function () {
+      this.api()
+        .columns()
+        .every(function () {
+          var column = this;
+          var select = $(
+            '<select class="form-select"><option value=""></option></select>'
+          )
+            .appendTo($(column.footer()).empty())
+            .on("change", function () {
+              var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+              column
+                .search(val ? "^" + val + "$" : "", true, false)
+                .draw();
+            });
+
+          column
+            .data()
+            .unique()
+            .sort()
+            .each(function (d, j) {
+              select.append(
+                '<option value="' + d + '">' + d + "</option>"
+              );
+            });
+        });
+    },
+  });
+
+  // Add Row
+  $("#add-row").DataTable({
+    pageLength: 5,
+  });
+
+  var action =
+    '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+  $("#addRowButton").click(function () {
+    $("#add-row")
+      .dataTable()
+      .fnAddData([
+        $("#addName").val(),
+        $("#addPosition").val(),
+        $("#addOffice").val(),
+        action,
+      ]);
+    $("#addRowModal").modal("hide");
+  });
+});
+</script>
+
+
+
+
+<%- include('../layouts/footer.ejs')%>

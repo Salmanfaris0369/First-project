@@ -1,0 +1,107 @@
+<%- include("../layouts/header.ejs")%>
+
+
+
+<div class="container mt-5">
+    <h1 class="display-4 text-center">USERS</h1>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Image</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(users.length > 0) { %>
+                    <% for(let i = 0; i < users.length; i++) { %>
+                        <tr>
+                            <td><%= users[i].name %></td>
+                            <td><%= users[i].email %></td>
+                            <td><%= users[i].mobile %></td>
+                            <td><img src="/userimages/<%= users[i].image %>" alt="<%= users[i].image %>" class="img-thumbnail" style="max-width: 100px; max-height: 100px;"></td>
+                            <td><%= users[i].is_blocked ? 'Blocked' : 'Active' %></td>
+                            <td>
+                               
+                                    <button  id="userActionBtn_<%= users[i]._id %>"  onclick="confirmAction('userActionBtn_<%= users[i]._id %>', '<%= users[i].is_blocked %>')">
+                                      <%= users[i].is_blocked ? 'Unblock' : 'Block' %>
+                                    </button>
+                                    
+                            </td>
+                        </tr>
+                    <% } %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" class="text-center">Users Not Found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/admin/dashboard" class="btn btn-secondary">Back to dashboard</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmAction(userId, isBlocked) {
+        // console.log(isBlocked);
+        let userID = userId.split('_')[1];
+        console.log(userID);
+        let action = isBlocked ==='true' ? 'unblock' : 'block';  
+        console.log(action); 
+        let message = `Are you sure you want to ${action} this user?`;
+        console.log(action+'kk');
+        Swal.fire({
+            title: 'Confirm Action',
+            text: message,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: `Yes, ${action.charAt(0).toUpperCase() + action.slice(1)} it!`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/admin/users/block_unblock/${userID}`, {
+                
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: action })
+                }).then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          Swal.fire(
+                              'Success!',
+                              `User has been ${action}ed.`,
+                              'success'
+                          ).then(() => {
+                            location.reload();
+                            let buttonElement = document.getElementById(userId);
+                          buttonElement.innerHTML = action === 'unblock' ? 'Block' : 'Unblock';
+                          buttonElement.onclick = function() {
+                              confirmAction(userId, action === 'unblock' ? 'false' : 'true');
+                          };
+
+
+                          });
+                      } else {
+                          Swal.fire(
+                              'Error!',
+                              'Something went wrong. Please try again.',
+                              'error'
+                          );
+                      }
+                  });
+            }
+        });
+    }
+</script>
+
+<%- include("../layouts/footer.ejs")%>
