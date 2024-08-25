@@ -63,7 +63,26 @@ const productSchema=new Schema({
     is_delete:{
         type:Boolean,
         default:false
-    }
+    },
+    averageRating: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5
+      },
+      totalReviews: {
+        type: Number,
+        default: 0
+      },
+      isFeatured: {
+        type: Boolean,
+        default: false
+      },
+      tags: [{
+        type: String
+      }]
+
+
 },{timestamps:true});
 
 module.exports=mongoose.model('product',productSchema)

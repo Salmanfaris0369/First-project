@@ -1,0 +1,54 @@
+const mongoose=require('mongoose')
+const Schema=mongoose.Schema;
+const address=new Schema({
+    user_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user',
+        required:true
+    },
+    addressName:{
+        type:String,
+        required:true
+    },
+    addressEmail:{
+        type:String,
+        required:true
+    },
+    addressMobile:{
+        type:String,
+        required:true
+    },
+    addressHouseNo:{
+        type:String,
+        required:true
+    },
+    addressStreet:{
+        type:String,
+        required:true
+    },
+    addressPost:{
+        type:String,
+        required:true
+    },
+    addressMark:{
+        type:String
+    },
+    addressCity:{
+        type:String,
+        required:true
+    },
+    addressDistrict:{
+        type:String,
+        required:true
+    },
+    addressState:{
+        type:String,
+        required:true
+    },
+    addressPin:{
+        type:String,
+        required:true
+    }
+});
+
+module.exports=mongoose.model("address",address)

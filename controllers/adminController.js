@@ -1,6 +1,9 @@
 
   const User = require('../models/usermodel')
   const Admin = require('../models/adminmodel')
+  const Order = require('../models/orderModel')
+  const Address= require('../models/addressModel')
+  const Product = require('../models/productModel')
  
   const bcrypt=require('bcrypt')
 
@@ -82,6 +85,88 @@ const block_unblock = async(req, res) => {
     }
 }
 
+const loadOrder=async(req,res)=>{
+    try {  
+        const orders = await Order.find().populate('user');
+          res.render('order',{orders : orders})
+    } catch (error) {
+        res.status(500).json({ success : false, error : "Some error occured"});
+    }
+}
+
+const loadOaderInfo = async(req,res)=>{
+    try {  
+        console.log(req.query.orderId,'salman');
+        
+          const orderID=req.query.orderId
+          if(!orderID){
+             return res.status(400).json({success:false,message:"order id is not found"})
+         }
+         const order =await Order.findOne({orderId:orderID}).populate('orderItems.product').populate('address').exec();
+ 
+          if (!order) {
+             return res.status(404).send('Order not found');
+         }
+         if (!order.address) {
+            // Handle missing address case
+            return res.status(404).send('Address not found for this order');
+        }
+
+
+         res.render('adminOrderInfo',{order});
+
+        } catch (error) {
+        console.log(error);
+        res.status(500).json({ success : false, error : "Some error occured"});
+    }
+}
+
+const statusChange = async(req,res)=>{
+    try {   
+        const{orderId,itemId,currentStatus} = req.body
+
+        
+        console.log(orderId+','+itemId+','+currentStatus,'dddddddddddddd');
+
+        const order = await Order.findOne({orderId:orderId})
+        if(!order){
+            res.status(400).send({success:false,message:"order id not found"})
+           }
+
+           const updateOrder= await Order.findByIdAndUpdate(order._id,{orderStatus:currentStatus},{new:true})
+           if(!updateOrder){
+            res.status(400).send({success:false,message:"order id not found"})
+           }
+           const itemIndex = order.orderItems.findIndex(item => item._id.toString() === itemId);
+        if (itemIndex === -1) {
+            return res.status(400).send({ success: false, message: "Item not found in order" });
+        }
+        order.orderItems[itemIndex].itemStatus = currentStatus;
+
+        const allItemsCanceled = order.orderItems.every(item => item.itemStatus === 'Canceled');
+          console.log(allItemsCanceled);
+        order.orderStatus = allItemsCanceled ? 'Canceled' : currentStatus;
+
+        await order.save();
+
+        res.status(200).send({ success: true, message: "Order and item status updated successfully" });
+
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ success : false, error : "Some error occured"});
+    }
+}
+
+const logOut = async(req,res)=>{
+    try {  console.log(req.session.admin_id);
+        req.session.admin_id=null
+        res.redirect('/login')
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success : false, error : "Some error occured"});
+    }
+}
 
 
 module.exports={
@@ -90,5 +175,9 @@ module.exports={
     loadDashboard,
     loadUsers,
     block_unblock,
+    loadOrder,
+    loadOaderInfo,
+    statusChange,
+    logOut
     
 }

@@ -49,33 +49,7 @@
 
     <!-- Header Section Begin -->
     <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-7">
-                        <div class="header__top__left">
-                            <p>Free shipping, 30-day return or refund guarantee.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-5">
-                        <div class="header__top__right">
-                            <div class="header__top__links">
-                                <a href="#">Sign in</a>
-                                <a href="#">FAQs</a>
-                            </div>
-                            <div class="header__top__hover">
-                                <span>Usd <i class="arrow_carrot-down"></i></span>
-                                <ul>
-                                    <li>USD</li>
-                                    <li>EUR</li>
-                                    <li>USD</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-3">
@@ -86,28 +60,24 @@
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li><a href="./inex.html">Home</a></li>
+                            <li><a href="/home">Home</a></li>
                             <li class="active"><a href="./shop.html">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="./about.html">About Us</a></li>
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./blog.html">Blog</a></li>
+                            <% if (isAuthenticated) { %>
+                                <li><a class="text-decoration-none" href='/userProfile'>Account</a></li>
+                            <% } else { %>
+                                <li><a class="text-decoration-none" href="/login">Sign In</a></li>
+                            <% } %>
+                           
                             <li><a href="./contact.html">Contacts</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
-                        <a href="#" class="search-switch"><img src="/static/img/icon/search.png" alt=""></a>
+                    
                         <a href="#"><img src="/static/img/icon/heart.png" alt=""></a>
-                        <a href="#"><img src="/static/img/icon/cart.png" alt=""> <span>0</span></a>
-                        <div class="price">$0.00</div>
+                        <a href="/home/cart"><img src="/static/img/icon/cart.png" alt=""> <span>0</span></a>
+                       
                     </div>
                 </div>
             </div>
@@ -157,19 +127,53 @@
                                             <% productData.variants.forEach((variant, variantIndex) => { %>
                                                 <% variant.images.forEach((image, imageIndex) => { %>
                                                     <div class="product-preview mx-1">
-                                                        <img src="/static/productImages/<%= image %>" alt="Product Thumbnail" class="sub-image" data-variant="<%= variantIndex %>" data-image="<%= imageIndex %>">
+                                                        <img src="/static/productImages/<%= image %>" alt="Product Thumbnail" class="sub-image" data-variant="<%= variantIndex %>" data-image="<%= imageIndex %>" style="height: 105px;">
                                                     </div>
                                                 <% }) %>
                                             <% }) %>
                                         </div>
-                                    </div>
-                                </div>
+
+                                    
+                                            <div class="product__details__tab__content__item col-md-8">
+                                                <h5 style="text-align: center;">Products Infomation</h5>
+                                                <p style="text-align: center;"> Name :
+                                                    <%= productData.productName %>
+                                                </p>
+                                                     <br>
+                                                     <p style="text-align: center;"> Brand :
+                                                        <%= productData.productBrand.brandName %>
+                                                    </p>
+                                                         <br>
+                                                         <p style="text-align: center;"> Category :
+                                                            <%= productData.productCategory.categoryName %>
+                                                        </p>
+                                                             <br>
+                                                             <p style="text-align: center;">Color :
+                                                                <%= productData.variants[0].color %>
+                                                            </p>
+                                                                 <br>
+                                                                 <p style="text-align: center;"> price : ₹ 
+                                                                    <%= productData.variants[0].price %>
+                                                                </p>
+                                                                     <br>      
+                                                                     <p style="text-align: left;">Highlights : 
+                                                                        <%= productData.productDescription %>
+                                                                    </p>
+                                                                         
+                                            </div>
+                                     </div>
+
+                             </div>
                             </div>
                             <!-- /Sub-images -->
                         </div>
-                    </div>                    
+                    </div>  
+                              
             </div>
         </div>
+       
+
+
         <div class="product__details__content">
             <div class="container">
                 <div class="row d-flex justify-content-center">
@@ -184,12 +188,12 @@
                                 <i class="fa fa-star-o"></i>
                                 <span> - 5 Reviews</span>
                             </div>
-                            <h3><%= productData.variants[0].price %><span>70.00</span></h3>
-                            <!-- <p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
+                            <h3>₹ <%= productData.variants[0].price %><span>70.00</span></h3>
+                            <p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
                                 cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
                             with placket.</p>
                             <div class="product__details__option">
-                                <div class="product__details__option__size">
+                                <!-- <div class="product__details__option__size">
                                     <span>Size:</span>
                                     <label for="xxl">xxl
                                         <input type="radio" id="xxl">
@@ -203,8 +207,8 @@
                                     <label for="sm">s
                                         <input type="radio" id="sm">
                                     </label>
-                                </div>
-                                <div class="product__details__option__color">
+                                </div> -->
+                                <!-- <div class="product__details__option__color">
                                     <span>Color:</span>
                                     <label class="c-1" for="sp-1">
                                         <input type="radio" id="sp-1">
@@ -221,17 +225,15 @@
                                     <label class="c-9" for="sp-9">
                                         <input type="radio" id="sp-9">
                                     </label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="product__details__cart__option">
                                 <div class="quantity">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
-                                    </div>
+                                    <div id="quantity-status" class="quantity-status"></div>
                                 </div>
-                                <a href="#" class="primary-btn">add to cart</a>
+                                <a class="text-light primary-btn" id="addCartMain" onclick="getInfo('<%= productData.productName %>','<%= productData.variants[0].color %>','<%= productData.variants[0].price %>','<%= productData.variants[0].images[0] %>')" data-id="<%= productData._id %>">add to cart</a>
                             </div>
-                            <div class="product__details__btns__option">
+                            <!-- <div class="product__details__btns__option">
                                 <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
                                 <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
                             </div>
@@ -389,19 +391,18 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+                <% if (products.length === 0) { %>
+                    <p>No products found matching your criteria.</p>
+                <% } else { %>
+                <% products.forEach(product => { %>
+                <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                            <span class="label">New</span>
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="/static/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="/static/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="/static/img/icon/search.png" alt=""></a></li>
-                            </ul>
+                        <a href="/productinfo/<%= product._id %>"><div class="product__item__pic clickable-product"  alt="Clickable Image" data-product-id="<%=product._id%>" id="clickableImage" style="background-image: url('/static/productimages/<%= product.variants[0].images[0] %>'); background-position: center;" ></a> 
+                           
                         </div>
                         <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
+                            <h6><%= product.productName %></h6>
+                <a class="add-cart" data-id="<%= product._id %>">+ Add To Cart</a>
                             <div class="rating">
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
@@ -409,41 +410,9 @@
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
                             </div>
-                            <h5>$67.24</h5>
-                            <div class="product__color__select">
-                                <label for="pc-1">
-                                    <input type="radio" id="pc-1">
-                                </label>
-                                <label class="active black" for="pc-2">
-                                    <input type="radio" id="pc-2">
-                                </label>
-                                <label class="grey" for="pc-3">
-                                    <input type="radio" id="pc-3">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="/static/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="/static/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="/static/img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$67.24</h5>
+                            <h5>₹<%= product.variants[0].price %></h5>
+                            <h5><%= product.variants[0].color %></h5>
+                           
                             <div class="product__color__select">
                                 <label for="pc-4">
                                     <input type="radio" id="pc-4">
@@ -458,75 +427,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item sale">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                            <span class="label">Sale</span>
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="/static/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="/static/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="/static/img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Multi-pocket Chest Bag</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$43.48</h5>
-                            <div class="product__color__select">
-                                <label for="pc-7">
-                                    <input type="radio" id="pc-7">
-                                </label>
-                                <label class="active black" for="pc-8">
-                                    <input type="radio" id="pc-8">
-                                </label>
-                                <label class="grey" for="pc-9">
-                                    <input type="radio" id="pc-9">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="/static/img/icon/heart.png" alt=""></a></li>
-                                <li><a href="#"><img src="/static/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                <li><a href="#"><img src="/static/img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Diagonal Textured Cap</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>$60.9</h5>
-                            <div class="product__color__select">
-                                <label for="pc-10">
-                                    <input type="radio" id="pc-10">
-                                </label>
-                                <label class="active black" for="pc-11">
-                                    <input type="radio" id="pc-11">
-                                </label>
-                                <label class="grey" for="pc-12">
-                                    <input type="radio" id="pc-12">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <% }) %>
+            <% } %>
+               
             </div>
         </div>
     </section>
@@ -611,6 +514,29 @@
     <!-- Search End -->
 
     <style>
+
+.quantity-status {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .limited-stock {
+            color: #92511d;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+        }
+        .in-stock {
+            color: #4f8a5d;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .out-of-stock {
+            color: #b22936;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
         #container {
         box-shadow: 3px 3px 4px rgba(0, 0, 0, 3);
         height: 500px;
@@ -625,7 +551,210 @@
         }
 
     </style>
+<!-- stock maintaining  -->
+<script id="product-data" type="application/json">
+    <%- JSON.stringify(productData) %>
+</script>
+<script>
+    function updateQuantityStatus(variants) {
+        const quantityStatusElement = document.getElementById('quantity-status');
+        
+        
+        const selectedVariant = variants[0]; 
+        
+        let quantityStatus;
+        if (selectedVariant.quantity === 0) {
+            quantityStatus = 'Out of Stock';
+        } else if (selectedVariant.quantity < 10) {
+            quantityStatus = `${selectedVariant.quantity} left`;
+        } else {
+            quantityStatus = 'In Stock';
+        }
+        
+        quantityStatusElement.textContent = quantityStatus;
+        
+        
+        quantityStatusElement.classList.remove('limited-stock', 'in-stock', 'out-of-stock');
+        
+    
 
+        if (quantityStatus === 'Out of Stock') {
+            quantityStatusElement.classList.add('out-of-stock');
+        } else if (quantityStatus.includes('left')) {
+            quantityStatusElement.classList.add('limited-stock');
+        } else {
+            quantityStatusElement.classList.add('in-stock');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Assuming you have the product data available in a global variable or data attribute
+        const productData = JSON.parse(document.getElementById('product-data').textContent);
+        updateQuantityStatus(productData.variants);
+        
+        
+    });
+</script>
+
+<!-- add to cart  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+ document.addEventListener('DOMContentLoaded', () => {
+    // Handle 'Add to Cart' functionality
+    document.querySelectorAll('.add-cart').forEach(link => {
+        link.addEventListener('click', async (event) => {
+            event.preventDefault();
+            console.log('asdfghjkl');
+            // Get the closest product__item element
+            const item = link.closest('.product__item');
+
+            // Extract data from the item
+            const productId = link.getAttribute('data-id');
+            const productName = item.querySelector('h6').textContent;
+            const imageUrl = item.querySelector('.product__item__pic').style.backgroundImage.slice(5, -2).split('/').pop();
+            const price = parseFloat(item.querySelector('h5').textContent.replace('₹', '').trim());
+            const color = item.querySelector('h5:nth-of-type(2)').textContent;
+            const quantity = 1;
+  console.log(productId,'ssaassa');
+            // Confirmation SweetAlert
+            const result = await Swal.fire({
+                title: 'Add to Cart',
+                text: `Are you sure you want to add ${productName} to your cart?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, add it!'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch('/shop/add-to-cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            productId,
+                            color,
+                            price,
+                            quantity,
+                            imageUrl
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        // Success SweetAlert
+                        await Swal.fire({
+                            title: 'Success!',
+                            text: 'Product added to cart successfully!',
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        // Error SweetAlert
+                        await Swal.fire({
+                            title: 'Error!',
+                            text: result.message || 'Failed to add product to cart.',
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            footer: '<a href="/login" style="text-decoration: none; color: #007bff; font-weight: bold;">Login or register your account</a>'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error adding product to cart:', error);
+                    // Error SweetAlert
+                    await Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while adding the product to the cart.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+            }
+        });
+    });
+
+    // Handle clickable products for navigation
+    document.querySelectorAll('.clickable-product').forEach(product => {
+        product.addEventListener('click', function() {
+            let productId = this.getAttribute('data-product-id');
+            console.log('Clicked. Product ID:', productId);
+            if (productId) {
+                window.location.href = `/productinfo/${productId}`;
+            } else {
+                console.error('Product ID is null or undefined');
+            }
+        });
+    });
+});
+
+
+</script>
+<script>
+    async function getInfo(productName,color,price,imageUrl){
+            const productId = document.getElementById('addCartMain').getAttribute('data-id');
+            const quantity = 1;
+            const result = await Swal.fire({
+                title: 'Add to Cart',
+                text: `Are you sure you want to add ${productName} to your cart?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, add it!'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch('/shop/add-to-cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            productId,
+                            color,
+                            price,
+                            quantity,
+                            imageUrl
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        // Success SweetAlert
+                        await Swal.fire({
+                            title: 'Success!',
+                            text: 'Product added to cart successfully!',
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        // Error SweetAlert
+                        await Swal.fire({
+                            title: 'Error!',
+                            text: result.message || 'Failed to add product to cart.',
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            footer: '<a href="/login" style="text-decoration: none; color: #007bff; font-weight: bold;">Login or register your account</a>'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error adding product to cart:', error);
+                    // Error SweetAlert
+                    await Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while adding the product to the cart.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+            }
+            
+    }
+</script>
     <script>
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -689,3 +818,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     <script src="/static/js/owl.carousel.min.js"></script>
     <script src="/static/js/main.js"></script>
     <% include('../layouts/footer.ejs')%>
+
+    <!-- document.getElementById('variant-selector').addEventListener('change', (event) => {
+        const selectedVariantId = event.target.value;
+        const selectedVariant = productData.variants.find(v => v._id === selectedVariantId);
+        updateQuantityStatus([selectedVariant]);
+    }); -->
+
+   

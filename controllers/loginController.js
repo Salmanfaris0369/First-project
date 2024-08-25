@@ -130,9 +130,9 @@ console.log(req.body.otp);
 
         const user =req.session.userData;
          const newUser=new User(user);
-         const userData = await newUser.save();
+         const newuserData = await newUser.save();
 
-        if(userData){
+        if(newuserData){
             req.session.otp=null
         req.session.otp_expire=null
         req.session.userData=null
@@ -192,7 +192,8 @@ const loginLoad = async(req,res)=>{
 
 const verifyLogin = async(req,res)=>{
 
-  try {  req.session.user_id=req.body.user_id
+  try {  
+
           const email=req.body.email
           const password = req.body.password
 
@@ -205,8 +206,10 @@ const verifyLogin = async(req,res)=>{
                         
                         res.render('login',{message:"You are blocked"})
                        }else{
-                        // req.session.user_id=userData._id
+                        req.session.user_id=userData._id
                         console.log(req.session.user_id,'sdfghj');
+                        req.session.user_id = userData._id;
+                        console.log( req.session.user_id+'melbin');
                         res.redirect('/home')
                        }
                }else{
@@ -223,17 +226,9 @@ const verifyLogin = async(req,res)=>{
 
 }
 
-const loadHome = async(req,res)=>{
-    try {
-        res.render('home')
-    } catch (error) {
-       console.log(error.message); 
-    }
-}
-
 const logout = async(req,res)=>{
-    try { console.log(req.session.user_id);
-        req.session.user_id=null
+    try { console.log(req.session.user_id,'qw8gcdx');
+        req.session.destroy();
         res.redirect('/login')
     } catch (error) {
         console.log(error.message);
@@ -298,7 +293,104 @@ const googleSuccess = async(req,res,next)=>{
     }
 }
 
+const resetPasswordPage = async(req,res)=>{
+    try {
+            res.render('resetPassword')
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success : false, error : "Some error occured"}); 
+    }
+}
 
+const emailToken = async(req,res)=>{
+    try {
+          const {email} = req.body
+          console.log(req.body);
+          const user = await User.findOne({email : email})
+console.log(user);
+          if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+
+        const resetTokenExpiry = Date.now() + 3600000;
+    
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = resetTokenExpiry;
+        
+        await user.save();
+        const transport = nodemailer.createTransport({
+            service : 'Gmail',
+            auth : {
+                user : process.env.user_email,
+                pass: process.env.user_pass,
+            }
+        })
+        
+        const mailOption = {
+            to : user.email,
+            from : process.env.user_email,
+            subject: 'Password Reset',
+          text:` You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n +
+                Please click on the following link, or paste this into your browser to complete the process:\n\n +
+                http://localhost:3000/resetPassword/${resetToken}\n\n +
+                If you did not request this, please ignore this email and your password will remain unchanged.\n`
+        };
+        await transport.sendMail(mailOption)
+        res.status(200).json({messege:'An Email has been sent to'+user.email+'with further instraction'})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success : false, error : "Some error occured"}); 
+    }
+}
+
+const newPasswordPage = async(req,res)=>{
+    try {    
+        const token = req.params.token
+        res.render('newPassword',{token})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success : false, error : "Some error occured"}); 
+    }
+}
+
+
+const resetPassword = async(req,res)=>{
+    try {
+        const{token}=req.params
+        const user =  await User.findOne({resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now()}})
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired token' });
+        }
+    
+        res.render('newPassword', { token }); 
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success : false, error : "Some error occured"}); 
+    }
+}
+const updatePassword = async(req,res)=>{
+    try { 
+        const {token,password,confirmPassword} = req.body;
+        console.log(req.body);
+           if(password!==confirmPassword){
+            return res.status(400).json({success : false , message : `password do not match`})
+           }        
+           const user = await User.findOne({resetPasswordToken:token})
+           if(!user){
+            return res.status(400).json({success : false , message : `user not found`})
+           }
+           const hashPassword = await bcrypt.hash(password,10)
+           user.password=hashPassword
+           user.resetPasswordToken = undefined
+           await user.save()
+           res.status(200).json({success : true , message : `password has been successfully changed,you can now`})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success : false, error : "Some error occured"}); 
+    }
+}
 
 
 module.exports={
@@ -307,11 +399,15 @@ module.exports={
     securePassword,
     loginLoad,
     verifyLogin,
-    loadHome,
     logout,
     verifyform,
     otpVerification,
     resendOtp,
-    googleSuccess
+    googleSuccess,
+    resetPassword,
+    resetPasswordPage,
+    emailToken,
+    newPasswordPage,
+    updatePassword
     
 }

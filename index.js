@@ -6,6 +6,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
 
 const nocache=require('nocache')
 
+
 const express=require('express')
 const app=express()
 app.use((req, res, next) => {
@@ -23,8 +24,11 @@ app.use((req, res, next) => {
     express.urlencoded({ limit: '100mb', extended: true })(req, res, next);
 });
 app.use(nocache())
+
 const path=require('path')
 app.use('/static',express.static(path.join(__dirname,'public')))
+
+
 
 //user route
 const userRoute=require('./routes/userRoute')
@@ -32,6 +36,7 @@ app.use('/',userRoute)
 
 //admin route
 const adminRoute=require('./routes/adminRoute')
+
 app.use('/admin',adminRoute)
 
 app.set('view engine','ejs')

@@ -1,129 +1,326 @@
 <%- include('../layouts/header.ejs') %>
 
 <div class="container">
-  <h1 class="display-4 text-center">User Registration Form</h1>
   <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div id="message" style="display:none;"></div>
-          <form action="" method="post" enctype="multipart/form-data" class="row g-3" id="form">
-              <div class="col-md-6">
-                  <label for="name" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required>
-              </div>
-              <div class="col-md-6">
-                  <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" required>
-              </div>
-              <div class="col-md-6">
-                  <label for="mobile" class="form-label">Mobile number</label>
-                  <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter Phone Number" required>
-              </div>
-               <div class="col-md-6">
-                <label for="password" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="Enter Password" required>
-            </div>
-            <div class="col-md-6">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+    <div class="col-md-6">
+      <div class="registration-form">
+        <h2 class="text-center mb-4">User Registration</h2>
+        <div id="message" class="alert" style="display:none;"></div>
+        <form action="" method="post" enctype="multipart/form-data" id="form">
+          <div class="mb-3">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+            <div class="invalid-feedback"></div>
           </div>
-              <div class="col-12 text-center">
-                  <button type="submit" value="Get otp" class="btn btn-primary">Get otp</button>
-              </div>
-              <div id="error" class="text-warning fw-bold mt-2 text-center"></div>
-
-              <div class="mt-3 text-center">Already have an account? <a href="/login" style="text-decoration: none; color: darkgrey;">Sign in</a></div>
-              <button><a href="/auth/google"  id="googl" style="text-decoration: none;color: #000;">Login with google</a></button>
-          </form>
-        
+          <div class="mb-3">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="Mobile number">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Get OTP</button>
+          </div>
+        </form>
+        <div class="mt-3 text-center">
+          Already have an account? <a href="/login" class="text-decoration-none">Sign in</a>
+        </div>
+        <div class="d-grid mt-3">
+          <a href="/auth/google" class="btn btn-outline-light">
+            <i class="fab fa-google me-2"></i>Login with Google
+          </a>
+        </div>
+        <% if(typeof message !== 'undefined') { %>
+          <div id="alertMessage" class="alert alert-custom mt-3" role="alert">
+            <%= message %>
+          </div>
           
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              const alertElement = document.getElementById('alertMessage');
+              if (alertElement) {
+                setTimeout(function() {
+                  alertElement.style.transition = 'opacity 0.5s ease-out';
+                  alertElement.style.opacity = '0';
+                  setTimeout(function() {
+                    alertElement.remove();
+                  }, 500);
+                }, 5000);
+              }
+            });
+          </script>
+        <% } %>
       </div>
+    </div>
   </div>
-
-  <% if(typeof message !== 'undefined') { %>
-      <div class="alert alert-info mt-3" role="alert">
-         <p style="color: rgb(23, 31, 31);"><%= message %></p> 
-      </div>
-  <% } %>
 </div>
 
 <style>
-  #message {
-    color: red;
-    margin-bottom: 10px;
+  body {
+    background-image: url('/static/userimages/1719139428208-1st\ image\ new\ -\ Copy\ -\ Copy\ \(2\).jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  .registration-form {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  .form-control {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  .btn-primary {
+    background-color: #4e54c8;
+    border: none;
+    border-radius: 10px;
+  }
+  .btn-primary:hover {
+    background-color: #3f45b6;
+  }
+  .btn-outline-light {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-color: #fff;
+  }
+  .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  h2, .text-center, a {
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+  .alert-custom {
+  background-color: rgba(78, 84, 200, 0.2);
+  border: 1px solid rgba(78, 84, 200, 0.5);
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  border-radius: 10px;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
 }
 </style>
 
 
+
 <script>
+document.getElementById('form').addEventListener('submit', function(event) {
+  event.preventDefault();
+  let isValid = true;
 
+  // Name validation
+  const name = document.getElementById('name');
+  if (name.value.trim() === '') {
+    showError(name, 'Name is required');
+    isValid = false;
+  } else {
+    showSuccess(name);
+  }
 
+  // Email validation
+  const email = document.getElementById('email');
+  if (email.value.trim() === '') {
+    showError(email, 'Email is required');
+    isValid = false;
+  } else if (!isValidEmail(email.value)) {
+    showError(email, 'Please enter a valid email');
+    isValid = false;
+  } else {
+    showSuccess(email);
+  }
 
-    let messageElement = document.getElementById("message")
-    let form = document.getElementById("form");
-    let error = document.getElementById("error");
-    let name_reg = /^[a-zA-Z ]+$/;
-    let mobile_reg = /^\d{10}$/;
+  // Mobile validation
+  const mobile = document.getElementById('mobile');
+  if (mobile.value.trim() === '') {
+    showError(mobile, 'Mobile number is required');
+    isValid = false;
+  } else if (!isValidPhone(mobile.value)) {
+    showError(mobile, 'Please enter a valid mobile number');
+    isValid = false;
+  } else {
+    showSuccess(mobile);
+  }
 
+  // Password validation
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmpassword');
+  if (password.value === '') {
+    showError(password, 'Password is required');
+    isValid = false;
+  } else if (password.value.length < 6) {
+    showError(password, 'Password must be at least 6 characters');
+    isValid = false;
+  } else {
+    showSuccess(password);
+  }
 
-    function showMessage(msg, duration = 5000) {
-    messageElement.textContent = msg;
-    messageElement.style.display = "block";
+  if (confirmPassword.value === '') {
+    showError(confirmPassword, 'Please confirm your password');
+    isValid = false;
+  } else if (password.value !== confirmPassword.value) {
+    showError(confirmPassword, 'Passwords do not match');
+    isValid = false;
+  } else {
+    showSuccess(confirmPassword);
+  }
 
-    setTimeout(() => {
-        messageElement.textContent = "";
-        messageElement.style.display = "none";
-    }, duration);
+  if (isValid) {
+    this.submit();
+  }
+});
+
+function showError(input, message) {
+  const formControl = input.parentElement;
+  formControl.classList.add('was-validated');
+  const feedback = formControl.querySelector('.invalid-feedback');
+  feedback.innerText = message;
+  input.classList.add('is-invalid');
 }
 
+function showSuccess(input) {
+  const formControl = input.parentElement;
+  formControl.classList.add('was-validated');
+  input.classList.remove('is-invalid');
+  input.classList.add('is-valid');
+}
 
+function isValidEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
 
-    function email_validate(email) {
-      let reg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      return reg.test(email);
+function isValidPhone(phone) {
+  const re = /^\d{10}$/;
+  return re.test(phone);
+}
+</script>
+
+<script>
+document.getElementById('form').addEventListener('submit', function(event) {
+  event.preventDefault();
+  let isValid = true;
+
+  // Name validation
+  const name = document.getElementById('name');
+  if (name.value.trim() === '') {
+    showError(name, 'Name is required');
+    isValid = false;
+  } else {
+    showSuccess(name);
+  }
+
+  // Email validation
+  const email = document.getElementById('email');
+  if (email.value.trim() === '') {
+    showError(email, 'Email is required');
+    isValid = false;
+  } else if (!isValidEmail(email.value)) {
+    showError(email, 'Please enter a valid email');
+    isValid = false;
+  } else {
+    showSuccess(email);
+  }
+
+  // Mobile validation
+  const mobile = document.getElementById('mobile');
+  if (mobile.value.trim() === '') {
+    showError(mobile, 'Mobile number is required');
+    isValid = false;
+  } else if (!isValidPhone(mobile.value)) {
+    showError(mobile, 'Please enter a valid mobile number');
+    isValid = false;
+  } else {
+    showSuccess(mobile);
+  }
+
+  // Password validation
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmpassword');
+  if (password.value === '') {
+    showError(password, 'Password is required');
+    isValid = false;
+  } else if (password.value.length < 6) {
+    showError(password, 'Password must be at least 6 characters');
+    isValid = false;
+  } else {
+    showSuccess(password);
+  }
+
+  if (confirmPassword.value === '') {
+    showError(confirmPassword, 'Please confirm your password');
+    isValid = false;
+  } else if (password.value !== confirmPassword.value) {
+    showError(confirmPassword, 'Passwords do not match');
+    isValid = false;
+  } else {
+    showSuccess(confirmPassword);
+  }
+
+  if (isValid) {
+    this.submit();
+  }
+});
+
+function showError(input, message) {
+  const formControl = input.parentElement;
+  formControl.classList.add('was-validated');
+  const feedback = formControl.querySelector('.invalid-feedback');
+  feedback.innerText = message;
+  input.classList.add('is-invalid');
+}
+
+function showSuccess(input) {
+  const formControl = input.parentElement;
+  formControl.classList.add('was-validated');
+  input.classList.remove('is-invalid');
+  input.classList.add('is-valid');
+}
+
+function isValidEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function isValidPhone(phone) {
+  const re = /^\d{10}$/;
+  return re.test(phone);
+}
+</script>
+<script>
+  function setupAlertDismissal() {
+    const alertElement = document.getElementById('alertMessage');
+    if (alertElement) {
+      setTimeout(function() {
+        alertElement.style.transition = 'opacity 0.5s ease-out';
+        alertElement.style.opacity = '0';
+        setTimeout(function() {
+          alertElement.remove();
+        }, 500);
+      }, 3000);
     }
+  }
 
-  
-    form.addEventListener("submit", (e) => {
-      e.preventDefault()
-      messages = [];
-      let name = document.getElementById("name").value.trim();
-      let email = document.getElementById("email").value.trim();
-      let mobile = document.getElementById("mobile").value.trim();
-      let password = document.getElementById("password").value.trim();
-      let confirmPassword = document.getElementById("confirmpassword").value.trim();
-  
+  // Run on initial page load
+  document.addEventListener('DOMContentLoaded', setupAlertDismissal);
 
-      if (!name_reg.test(name)) {
-        messages.push("Invalid Name");
-      }
-     
-
-      if (!email_validate(email)) {
-        messages.push("Invalid Email");
-    }
-  
-       if (!mobile_reg.test(mobile)) {
-        messages.push("Mobile Number should be 10 digit numbers");
-      }
-  
-      if (password.length < 6) {
-        messages.push("Password should be at least 6 characters");
-      }
-      if(password!==confirmPassword){
-      messages.push("password not matching");
-     }
-  
-      if (messages.length > 0) {
-        showMessage(messages.join(". "), 5000);
-      }else{
-        form.submit();
-      }
-    });
-  
-   
-  </script>
-
-
-
+ 
+</script>
 
 <%- include('../layouts/footer.ejs') %>
+

@@ -1,0 +1,359 @@
+<%- include('../layouts/header.ejs') %>
+ <!-- Google Font -->
+ <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+ rel="stylesheet">
+
+ <!-- Css Styles -->
+ <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+ <link rel="stylesheet" href="/static/css/font-awesome.min.css" type="text/css">
+ <link rel="stylesheet" href="/static/css/elegant-icons.css" type="text/css">
+ <link rel="stylesheet" href="/static/css/magnific-popup.css" type="text/css">
+ <link rel="stylesheet" href="/static/css/nice-select.css" type="text/css">
+ <link rel="stylesheet" href="/static/css/owl.carousel.min.css" type="text/css">
+ <link rel="stylesheet" href="/static/css/slicknav.min.css" type="text/css">
+ <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+
+<body>
+ <!-- Page Preloder -->
+ <div id="preloder">
+     <div class="loader"></div>
+ </div>
+
+ 
+
+ <!-- Header Section Begin -->
+ <header class="header">
+   
+     <div class="container">
+         <div class="row">
+             <div class="col-lg-3 col-md-3">
+                 <div class="header__logo">
+                     <a href="./inex.html"><img src="/static/img/logo.png" alt=""></a>
+                 </div>
+             </div>
+             <div class="col-lg-6 col-md-6">
+                 <nav class="header__menu mobile-menu">
+                     <ul>
+                         <li><a href="/home">Home</a></li>
+                         <li class="active"><a href="/userProfile">Account</a></li>
+                         <li><a href="#">Pages</a>
+                             <ul class="dropdown">
+                                 <li><a href="./about.html">About Us</a></li>
+                                 <li><a href="./shop-details.html">Shop Details</a></li>
+                                 <li><a href="./shopping-cart.html">Shopping Cart</a></li>
+                                 <li><a href="./checkout.html">Check Out</a></li>
+                                 <li><a href="./blog-details.html">Blog Details</a></li>
+                             </ul>
+                         </li>
+                         <li><a href="/shop">shop</a></li>
+                         <li><a href="./contact.html">Contacts</a></li>
+                     </ul>
+                 </nav>
+             </div>
+             <div class="col-lg-3 col-md-3">
+                 <div class="header__nav__option">
+                     
+                     <a href="#"><img src="/static/img/icon/heart.png" alt=""></a>
+                     <a href="/home/cart"><img src="/static/img/icon/cart.png" alt=""> <span>0</span></a>
+                   
+                 </div>
+             </div>
+         </div>
+         <div class="canvas__open"><i class="fa fa-bars"></i></div>
+     </div>
+ </header>
+ <!-- Header Section End -->
+
+ <!-- Shop Details Section Begin -->
+        <section class="shop-details">
+    
+            <div class="product__details__pic">
+                <div class="row">
+            
+                        <div class="col-lg-12">
+                          <div class="product__details__breadcrumb">
+                              <a href="./index.html">Home</a>
+                              <a href="./shop.html">Account</a>
+                              <span>Orders</span>
+                          </div>
+                        </div>
+                </div>
+                        <div class="container">
+            
+                            <div class="row">
+                                <nav class="mt-3 col-md-12 col-sm-12 col-lg-2 d-md-block bg-light sidebar">
+                                  <div class="sidebar-sticky " id="sidebar">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="/userProfile">PROFILE</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#wishlist">WHISHLIST</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link "  href="/userProfile/order">ORDERS  >>></a>
+                                        </li>
+                                       
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/userProfile/address">ADDRESSES</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#wallet">WALLET</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/login">LOGOUT</a>
+                                        </li>
+                                    </ul>
+                                  </div>
+                                </nav>
+    
+                                     <main role="main" class="col-md-12 ml-sm-auto col-lg-10 col-sm-12  px-md-4">
+                                                 <!-- Search Bar -->
+                                          
+
+                                            <!-- Orders Table -->
+                                            <div class="table-responsive mt-4">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Order ID</th>
+                                                            <th>Order Date</th>
+                                                            <th>Total Price</th>
+                                                            <th>Items Count</th>
+                                                            <th>Order Status</th>
+                                                            <th>Payment Status</th>
+                                                            <th>Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="ordersTableBody">
+                                                        <% orders.forEach((order)=>{%>   
+                                                                <tr>
+                                                                     <td><%=order.orderId%></td>
+                                                                     <td><%= new Date(order.orderDate).toLocaleDateString()%></td>
+                                                                     <td><%=order.amount%></td>
+                                                                     <td><%=order.orderItems.length%></td>
+                                                                     <td><%=order.orderStatus%></td>
+                                                                     <td><%=order.paymentStatus%></td>
+                                                                    <td> <div class="blue-box">
+                                                            <a href="/orderinfo?orderId=<%=order.orderId%>">Info</a>
+                                                                    </div></td>
+                                                                </tr>
+                                                           <% })%>
+                                                           </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Pagination -->
+                                            <nav aria-label="Page navigation" class="mt-4">
+                                                <ul class="pagination" id="pagination">
+                                                    <!-- Pagination items will be dynamically added here -->
+                                                </ul>
+                                            </nav>
+
+                                     </main>
+                            </div>
+                        </div>
+             </div>
+        </section>
+
+        <!-- pagination -->
+        <div class="pagination">
+            <% if (hasPrevPage) { %>
+                <a href="/userProfile/order?page=<%= currentPage - 1 %>"><<</a>
+            <% } else { %>
+                <span class="disabled"><<</span>
+            <% } %>
+            
+            <span class="page-info border-0">
+                <span class="page-number"><%= currentPage %></span> 
+                <span class="page-number"><%= totalPages %></span>
+            </span>
+            
+            <% if (hasNextPage) { %>
+                <a href="/userProfile/order?page=<%= currentPage + 1 %>">>></a>
+            <% } else { %>
+                <span class="disabled">>></span>
+            <% } %>
+        </div>
+    
+
+<style>
+/* pagination  */
+.pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+        .pagination a, .pagination span {
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+        }
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+        .pagination .active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+        .pagination .page-info {
+            margin: 0 15px;
+        }
+        .page-number {
+            font-weight: bold;
+            background-color: #f1f1f1;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+        }
+
+/* pagination  */
+
+
+
+
+
+
+
+
+ .blue-box {
+            background-color: #007BFF; /* Blue background */
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .blue-box a {
+            color: white; /* Link color */
+            font-size: 12px; /* Small font size */
+            text-decoration: none;
+        }
+
+        .blue-box a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+
+    #carddiv{
+        display: flex;
+    }
+
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+header,
+footer {
+    height: 50px;
+    background-color: #ffffff;
+
+}
+.error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+.sidebar {
+    width: 100%;
+    height: calc(80vh - 100px);
+    top: 1px;
+    bottom: 50px;
+    background-color: #808080;
+    padding: 20px;
+    overflow: hidden; /* Remove scrollbars */
+}
+
+.sidebar .nav-link {
+    color: #333;
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #ddd;
+}
+
+.add-symbol {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: black;
+}
+
+
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.main {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        height: auto;
+        position: relative;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        padding-right: 11.5rem 
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+}
+
+</style>
+
+
+</script>
+
+<script>
+    const loadFile = (event) => {
+        const output = document.getElementById('sidebar');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = () => {
+            URL.revokeObjectURL(output.src); 
+        };
+        document.querySelector('.add-symbol').style.display = 'none';
+    };
+
+    </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <!-- Js Plugins -->
+ <script src="/static/js/jquery-3.3.1.min.js"></script>
+ <script src="/static/js/bootstrap.min.js"></script>
+ <script src="/static/js/jquery.nice-select.min.js"></script>
+ <script src="/static/js/jquery.nicescroll.min.js"></script>
+ <script src="/static/js/jquery.magnific-popup.min.js"></script>
+ <script src="/static/js/jquery.countdown.min.js"></script>
+ <script src="/static/js/jquery.slicknav.js"></script>
+ <script src="/static/js/mixitup.min.js"></script>
+ <script src="/static/js/owl.carousel.min.js"></script>
+ <script src="/static/js/main.js"></script>
+
+<%- include('../layouts/footer.ejs') %>

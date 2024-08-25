@@ -1,35 +1,96 @@
 <%- include('../layouts/header.ejs') %>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card shadow">
-          <div class="card-body">
-            <h2 class="card-title text-center mb-4">OTP Verification</h2>
-            
-            <form action="/verify" method="post" class="mb-3" id="otpForm">
-              <div class="form-group">
-                <input type="text" name="otp" class="form-control form-control-lg" placeholder="Enter OTP" required>
-              </div>
-              <button type="submit" class="btn btn-primary btn-block btn-lg mt-3">Verify OTP</button>
-            </form>
-            
+<div class="container">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-4">
+      <div class="otp-form">
+        <h2 class="text-center mb-4">OTP Verification</h2>
         
-              <button type="button" class="btn btn-secondary btn-block" id="resendOtpBtn"  >Resend OTP</button>
-              <span id="otp-timer" class="otp-timer text-danger btn btn-warning fw-bold">00:00</span>  
-            </div>
-              <div id="message" class="alert mt-3" role="alert" style="display: none;"></div>
-            
-            <% if(typeof message !== 'undefined' && message) { %>
-              <div class="alert alert-info mt-3" role="alert">
-                <%= message %>
-              </div>
-            <% } %>
+        <form action="/verify" method="post" id="otpForm">
+          <div class="mb-3">
+            <input type="text" name="otp" class="form-control" placeholder="Enter OTP" required>
           </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Verify OTP</button>
+            <button type="button" class="btn btn-outline-light" id="resendOtpBtn">Resend OTP</button>
+          </div>
+        </form>
+        
+        <div class="text-center mt-3">
+          <span id="otp-timer" class="otp-timer">00:00</span>
         </div>
+        
+        <div id="message" class="alert mt-3" role="alert" style="display: none;"></div>
+        
+        <% if(typeof message !== 'undefined' && message) { %>
+          <div class="alert alert-custom mt-3" role="alert">
+            <%= message %>
+          </div>
+          
+        <% } %>
       </div>
     </div>
   </div>
+</div>
+
+<style>
+  body {
+  
+    background-image: url('/public/userimages/1719139428208-1st\ image\ new\ -\ Copy\ -\ Copy\ \(2\).jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  .otp-form {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  .form-control {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    padding: 12px;
+  }
+  .btn-primary {
+    background-color: #4e54c8;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .btn-primary:hover {
+    background-color: #3f45b6;
+  }
+  .btn-outline-light {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-color: #fff;
+    padding: 12px;
+  }
+  .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  h2, .text-center {
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+  .otp-timer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+  .alert-custom {
+    background-color: rgba(78, 84, 200, 0.2);
+    border: 1px solid rgba(78, 84, 200, 0.5);
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    border-radius: 10px;
+  }
+</style>
 
   <script>
     let otpDurationSeconds; // 1 minute
@@ -51,12 +112,11 @@
         const currentTime = Date.now();
         const remainingTime = Math.max(0, Math.floor((parseInt(storedEndTime) - currentTime) / 1000));
         if (remainingTime > 0) {
-          // otpDurationSeconds = remainingTime;
+          
             startOTPTimer(remainingTime);
-          //  resendOTPBtn.style.display = 'none';
+          
         } else {
-          // otpTimerElement.textContent = '00:00';
-          // resendOTPBtn.style.display = 'block';
+          
           expireOTP()
                }
     }else{
@@ -173,11 +233,7 @@ function startOTPTimer(duration) {
 function otpSent() {
     startOTPTimer(60);
 }
-// startInitialOTPTimer();
 
-// if (!localStorage.getItem('isFirstOtpSend')) {
-//     localStorage.setItem('isFirstOtpSend', 'true');
-// }
 </script>
 <script>
   window.onload = function() {
@@ -189,4 +245,183 @@ function otpSent() {
 
 <%- include('../layouts/footer.ejs') %>
 
+<!-- <div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">OTP Verification</h2>
+          
+          <form action="/verify" method="post" class="mb-3" id="otpForm">
+            <div class="form-group">
+              <input type="text" name="otp" class="form-control form-control-lg" placeholder="Enter OTP" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg mt-3">Verify OTP</button>
+          </form>
+          
+      
+            <button type="button" class="btn btn-secondary btn-block" id="resendOtpBtn"  >Resend OTP</button>
+            <span id="otp-timer" class="otp-timer text-danger btn btn-warning fw-bold">00:00</span>  
+          </div>
+            <div id="message" class="alert mt-3" role="alert" style="display: none;"></div>
+          
+          <% if(typeof message !== 'undefined' && message) { %>
+            <div class="alert alert-info mt-3" role="alert">
+              <%= message %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let otpDurationSeconds; // 1 minute
+  let timerInterval
+  const otpTimerElement = document.getElementById('otp-timer');
+  const otpForm = document.getElementById('otpForm');
+  const resendOTPBtn = document.getElementById('resendOtpBtn');
+
+  document.addEventListener("DOMContentLoaded", function() {
+      resendOTPBtn.addEventListener('click', resendOtp);
+      initializeTimer()
+  
+  });
+
+  function initializeTimer() {
+  const storedEndTime = localStorage.getItem('otpEndTime');
+  // const isFirstSend = localStorage.getItem('isFirstOtpSend') !== 'false'; 
+  if (storedEndTime) {
+      const currentTime = Date.now();
+      const remainingTime = Math.max(0, Math.floor((parseInt(storedEndTime) - currentTime) / 1000));
+      if (remainingTime > 0) {
+        
+          startOTPTimer(remainingTime);
+        
+      } else {
+        
+        expireOTP()
+             }
+  }else{
+    expireOTP();
+  }
+}
+
+
+
+
+
+function startOTPTimer(duration) {
+clearInterval(timerInterval)
+otpDurationSeconds = duration
+const endTime = Date.now() + otpDurationSeconds * 1000;
+localStorage.setItem('otpEndTime', endTime.toString());
+  updateOTPTimer();
+  timerInterval = setInterval(updateOTPTimer, 1000);
+  resendOTPBtn.style.display = 'none';
+}
+
+
+
+
+  function updateOTPTimer() {
+    const currentTime = Date.now();
+    const endTime = parseInt(localStorage.getItem('otpEndTime'))
+    otpDurationSeconds = Math.max(0, Math.floor((endTime - currentTime) / 1000));
+
+      const minutes = Math.floor(otpDurationSeconds / 60);
+      const seconds = otpDurationSeconds % 60;
+      const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      otpTimerElement.textContent = formattedTime;
+    
+
+      // Check if the timer has reached 0
+      if (otpDurationSeconds <=0) {
+          // clearInterval(timerInterval); // Stop the timer
+          // otpTimerElement.textContent = '00:00';
+          // resendOTPBtn.style.display = 'block'; // Show the Resend OTP button
+          // localStorage.removeItem('otpEndTime');
+          // otpForm.reset(); // Reset the form
+          expireOTP()
+      }
+  }
+  function expireOTP() {
+  clearInterval(timerInterval);
+  otpTimerElement.textContent = '00:00';
+  resendOTPBtn.style.display = 'block';
+  localStorage.removeItem('otpEndTime');
+  // otpForm.reset();
+}
+
+  
+  async function resendOtp() {
+      try {    
+          const response = await fetch('/resend-otp', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+             const result = await response.json();
+          if (result.success) {
+            startOTPTimer(60);
+              document.getElementById('message').textContent = 'OTP resent successfully.';
+              document.getElementById('message').style.display = 'block';
+                        } else {
+              document.getElementById('message').textContent = result.message;
+          document.getElementById('message').style.display = 'block'
+         
+          }
+      } catch (error) {
+          console.error('Error resending OTP:', error);
+      }
+  }
+
+  // Function to submit the OTP form
+  otpForm.addEventListener('submit',async function(event) {
+      event.preventDefault(); // Prevent the default form submission
+     
+      try {
+      const response = await fetch('/verify', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              otp: this.elements.otp.value
+          })
+      });
+      const result = await response.json();
+      if (result.success) {
+          // clearInterval(timerInterval);
+          localStorage.removeItem('otpEndTime');
+          // localStorage.removeItem('isFirstOtpSend');
+          // this.reset();
+          expireOTP();
+          window.location.href = '/login'; // Redirect to login page
+      } else {
+          document.getElementById('message').textContent = result.message;
+          document.getElementById('message').style.display = 'block';
+        
+      }
+  } catch (error) {
+      console.error('Error verifying OTP:', error);
+  }
+
+
+  });
+//     function startInitialOTPTimer() {
+//     startOTPTimer(60); // Start a 60-second timer
+// }
+function otpSent() {
+  startOTPTimer(60);
+}
+
+</script>
+<script>
+window.onload = function() {
+  otpSent();
+}
+</script> -->
 

@@ -938,6 +938,7 @@ ol {
 .product__item {
 	overflow: hidden;
 	margin-bottom: 40px;
+	width: 220px;
 }
 
 .product__item.sale .product__item__pic .label {
@@ -976,7 +977,8 @@ ol {
 	height: 260px;
 	position: relative;
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: contain;
+	width: 100%;
 }
 
 .product__item__pic .label {
@@ -1504,9 +1506,8 @@ ol {
 
 .product__details__pic {
 	text-align: center;
-	background: #f3f2ee;
-	padding: 40px 0 60px;
-	margin-bottom: 100px;
+	padding: 45px 0 60px;
+	/* margin-bottom: 100px; */
 }
 
 .product__details__pic .nav-tabs {

@@ -1,14 +1,29 @@
-const isAdmin = async(req,res,next)=>{
-    try {
-          if(req.session.admin_id){
-            next()
-          }else{
-            res.redirect('/admin/login')
-          }
-    } catch (error) {
-        console.log(error);
+const Admin = require('../models/adminmodel');
+
+const isLogin = async (req,res,next) => {
+    try{
+        if(req.session && req.session.admin_id){
+            return next();
+        }else{
+            return res.redirect('/admin/login');
+        }
+    }catch(error){
+        res.send(error.message);
     }
 }
-module.exports={
-  isAdmin
+
+const isLogout = async (req,res,next) => {
+    try{
+        if(req.session && req.session.admin_id){
+           return res.redirect('/admin/dashboard');
+        }
+        return next();
+    }catch(error){
+        res.send(error.message);
+    }
+};
+
+module.exports = {
+    isLogin,
+    isLogout
 }

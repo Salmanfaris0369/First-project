@@ -2,6 +2,8 @@ const categories = require('../models/categoryModel');
 const product = require('../models/productModel')
 const Category = require('../models/categoryModel')
 const brand = require('../models/brandModel')
+const fs = require('fs').promises;
+const path = require('path');
 
 
 const loadProduct=async(req,res)=>{
@@ -49,10 +51,7 @@ const addProduct= async(req,res)=>{
 
         const imageFilenames = req.files ? req.files.map(file => file.filename) : [];
 
-    
-    
-
-        const newProduct = new product({
+            const newProduct = new product({
             productName:productName,
             productCategory:productCategory,
             productBrand: productBrand,
@@ -91,13 +90,86 @@ const loadEditProduct=async(req,res)=>{
         res.status(500).json({ message: 'Server error', error: error.message })
     }
 }
-const editProduct=async(req,res)=>{
-    try {
-        console.log(req.body);
-          
+
+const editProduct = async (req, res) => {
+    try {  
+        const { productName, productCategory, productBrand, productGender, productDescription, variants } = req.body;
+                  
+             
+       
+        const Product = await product.findById(req.body.productId); 
+       
+    
+        if (!Product) {
+          return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+        Product.productName = productName;
+        Product.productCategory = productCategory;
+        Product.productBrand = productBrand;
+        Product.productGender = productGender;
+        Product.productDescription = productDescription;
+    
+   
+        if (Product.variants.length > 0) {
+    
+          Product.variants[0].color = variants[0].color;
+          Product.variants[0].price = variants[0].price;
+          Product.variants[0].quantity = variants[0].quantity;
+
+          // Handle images
+          const newImages = req.files.map(file => file.filename);
+          const existingImages = variants[0].existingImages || []; // Filter out new images
+          console.log(existingImages,'fytyrt');
+          console.log(Product.variants[0].images,'uyuyiugt');
+          // Remove images that are not in existingImages
+          const imagesToRemove = Product.variants[0].images.filter(img => !existingImages.includes(img));
+          console.log(imagesToRemove,'yg');
+          for (const img of imagesToRemove) {
+            await fs.unlink(path.join('public/productImages/', img));
+          }
+          Product.variants[0].images = [...existingImages, ...newImages];
+        } else {
+          // Create new variant if it doesn't exist
+          Product.variants[0].push({
+            color: variants[0].color,
+            price: variants[0].price,
+            quantity: variants[0].quantity,
+            images: req.files.map(file => file.filename)
+          });
+        }
+    
+        await Product.save();
+    
+        res.json({ success: true, message: 'Product updated successfully' });
     } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: 'Server error', error: error.message })
+        console.error('Error updating product:', error);
+        res.status(500).json({ success: false, message: 'Error updating product', error: error.message });
+    }
+};
+
+
+const loadProductDetails = async(req,res)=>{
+    try {  console.log(req.query.productId,'nmnmnm');
+
+        
+             const productID=req.query.productId
+             if(!productID){
+                return res.status(400).json({success:false,message:"product id is not found"})
+            }
+            const productData =await product.findOne({_id:productID}).populate('productCategory', 'categoryName').populate('productBrand', 'brandName')
+               console.log(productData);
+             if (!productData) {
+                return res.status(404).send('product not found');
+            }
+
+           
+
+            res.render('productDetails',{productData});
+
+        
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({ success: false, message: 'Error in getting  product details', error: error.message });
     }
 }
 
@@ -411,5 +483,6 @@ module.exports ={
     recoverProduct,
     deleteProduct,
     loadEditProduct,
-    editProduct
+    editProduct,
+    loadProductDetails
 }

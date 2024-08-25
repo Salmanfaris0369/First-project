@@ -23,6 +23,8 @@ const userschema = mongoose.Schema({
         type:String,
         required:false
     },
+    resetPasswordToken:String,
+     resetPasswordExpires:Date,
     is_blocked:{
         type:Boolean,
         default:false

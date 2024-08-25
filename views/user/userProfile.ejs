@@ -1,0 +1,632 @@
+<%- include('../layouts/header.ejs') %>
+ <!-- Google Font -->
+ <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+ rel="stylesheet">
+
+ <!-- Css Styles -->
+ <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+ <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+ <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+ <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+ <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+ <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+ <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+ <link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+
+<body>
+ <!-- Page Preloder -->
+ <div id="preloder">
+     <div class="loader"></div>
+ </div>
+
+ 
+
+ <!-- Header Section Begin -->
+ <header class="header">
+   
+     <div class="container">
+         <div class="row">
+             <div class="col-lg-3 col-md-3">
+                 <div class="header__logo">
+                     <a href="./inex.html"><img src="img/logo.png" alt=""></a>
+                 </div>
+             </div>
+             <div class="col-lg-6 col-md-6">
+                <nav class="header__menu mobile-menu">
+                     <ul>
+                         <li><a href="/home">Home</a></li>
+                         <li class="active"><a href="/shop">Shop</a></li>
+                         <li><a href="#">Pages</a>
+                             <ul class="dropdown">
+                                 <li><a href="./about.html">About Us</a></li>
+                                 <li><a href="./shop-details.html">Shop Details</a></li>
+                                 <li><a href="./shopping-cart.html">Shopping Cart</a></li>
+                                 <li><a href="./checkout.html">Check Out</a></li>
+                                 <li><a href="./blog-details.html">Blog Details</a></li>
+                             </ul>
+                         </li>
+                         <li><a href="./blog.html">Blog</a></li>
+                         <li><a href="./contact.html">Contacts</a></li>
+                     </ul>
+                 </nav>
+             </div>
+             <div class="col-lg-3 col-md-3">
+                 <div class="header__nav__option">
+                     
+                     <a href="#"><img src="img/icon/heart.png" alt=""></a>
+                     <a href="/home/cart"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+                     
+                 </div>
+             </div>
+         </div>
+         <div class="canvas__open"><i class="fa fa-bars"></i></div>
+     </div>
+ </header>
+ <!-- Header Section End -->
+
+ <!-- Shop Details Section Begin -->
+ <section class="shop-details">
+    
+     <div class="product__details__pic">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="product__details__breadcrumb">
+                    <a href="./index.html">Home</a>
+                    <a href="./shop.html">Account</a>
+                    <span>Profile</span>
+                </div>
+            </div>
+        </div>
+         <div class="container">
+            
+             <div class="row">
+                <nav class="col-md-4 col-lg-2 d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky" id="sidebar">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/userProfile">PROFILE >>></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#wishlist">WHISHLIST</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/userProfile/order">ORDERS</a>
+                            </li>
+                           
+                            <li class="nav-item">
+                                <a class="nav-link" href="/userProfile/address">ADDRESSES</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#wallet">WALLET</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">LOGOUT</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+    
+                <main role="main" class="col-md-8 ml-sm-auto col-lg-8 px-md-4">
+                   
+                    <div class="profile-details  p-4 bg-white rounded shadow-sm">
+                        <div class="d-flex justify-content-center align-items-center mt-4">
+                            <!-- <div class="image-sec">
+                            <div class="image-upload">
+                                <label for="file-input">
+                                    <img id="profile-image" src="default-profile.png" alt="Upload Profile Image"/>
+                                    <div class="add-symbol">+</div>
+                                </label>
+                                <input id="file-input" type="file" accept="image/*" onchange="loadFile(event)"/>
+                            </div>
+                        </div> -->
+                         </div>
+                        <div class="bio">
+                        <h3>Profile Details</h3>
+                         <p><strong>User Name:</strong><%=currentUser.name%> </p>
+                        <p><strong>Email:</strong> <%=currentUser.email%></p>
+                        <p><strong>Phone:</strong> <%=currentUser.mobile%></p>
+                        <div class="button-group d-flex justify-content-around">
+                            <button class="btn btn-primary"  data-toggle="modal" data-target="#passwordModal">Change Password</button>
+                            <!-- <button class="btn btn-secondary">Change Email</button> -->
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editUserModal">
+                                Edit User Details
+                            </button>
+                        </div>
+                         </div>
+                    </div>
+                </main>
+             </div>
+         </div>
+     </div>
+     
+     </div>
+ </section>
+ <!-- Shop Details Section End -->
+   <!--edit Modal -->
+   <div class="modal fade" id="editUserModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit User Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <div class="form-group">
+                        <label for="name">User Name:</label>
+                        <input type="text" value="<%=currentUser.name%>" class="form-control" id="name" name="name" required>
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+                     <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" value="<%=currentUser.email%>" class="form-control" id="email" name="email" required>
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Phone:</label>
+                        <input type="number" value="<%=currentUser.mobile%>" class="form-control" id="mobile" name="mobile" required>
+                        <div class="error-message" id="phoneError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">confirm your password:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="error-message" id="phoneError"></div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submitForm()">Save Changes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- changepassword modal -->
+  <!--edit Modal -->
+  <div class="modal fade" id="passwordModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Change password</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label for="oldpassord">Old password:</label>
+                        <input type="password" class="form-control" id="oldpassword" name="oldPassword" required>
+                        <div class="error-message" id="oldpasswordError"></div>
+                    </div>
+                     <div class="form-group">
+                        <label for="newpassword">New password:</label>
+                        <input type="password" class="form-control" id="newpassword" name="newpassword" required>
+                        <div class="error-message" id="newpasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmpassword">confirm new password:</label>
+                        <input type="password" class="form-control" id="conformpassword" name="confirmpassword" required>
+                        <div class="error-message" id="confirmpasswordError"></div>
+                    </div>
+                   
+                </form>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submitPasswordForm()">Save password</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+header,
+footer {
+    height: 50px;
+    background-color: #ffffff;
+
+}
+.error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+.sidebar {
+    width: 100%;
+    height: calc(80vh - 100px);
+    top: 1px;
+    bottom: 50px;
+    background-color: #808080;
+    padding: 20px;
+    overflow: hidden; /* Remove scrollbars */
+}
+
+.sidebar .nav-link {
+    color: #333;
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #ddd;
+}
+
+.image-upload {
+    bottom: 74px;
+    position: relative;
+}
+
+.image-upload label {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.image-upload img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px dashed #ccc;
+    object-fit: cover;
+}
+
+.image-upload input {
+    display: none;
+}
+
+.add-symbol {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: black;
+}
+
+.profile-details {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+}
+
+.profile-details h3 {
+    margin-bottom: 20px;
+}
+
+.profile-details p {
+    margin-bottom: 10px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.main {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        height: auto;
+        position: relative;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        padding-right: 11.5rem 
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+}
+
+</style>
+
+    
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    const loadFile = (event) => {
+        const output = document.getElementById('sidebar');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = () => {
+            URL.revokeObjectURL(output.src); // free memory
+        };
+        document.querySelector('.add-symbol').style.display = 'none';
+    };
+
+    </script>
+
+<!-- edit user details -->
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('editUserForm');
+    const submitButton = document.querySelector('#editUserModal .btn-primary');
+
+    if (form && submitButton) {
+        ['name', 'email', 'mobile', 'password'].forEach(field => {
+            const errorId = `${field}Error`;
+            if (!document.getElementById(errorId)) {
+                const errorElement = document.createElement('div');
+                errorElement.id = errorId;
+                errorElement.className = 'error-message';
+                errorElement.style.color = 'red';
+                errorElement.style.display = 'none';
+                const inputElement = document.getElementById(field);
+                if (inputElement && inputElement.parentNode) {
+                    inputElement.parentNode.insertBefore(errorElement, inputElement.nextSibling);
+                }
+            }
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            submitForm();
+        });
+    } else {
+        console.error('Form or submit button not found');
+    }
+});
+
+function getElementValue(id) {
+    const element = document.getElementById(id);
+    return element ? element.value.trim() : '';
+}
+
+function validateForm() {
+    let isValid = true;
+    const nameRegex = /^[a-zA-Z\s]{2,15}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const mobileRegex = /^\+?[\d\s()-]{10,10}$/;
+
+    isValid = validateField('name', value => nameRegex.test(value), 'Name is required', 'Name should be 2-30 characters long and contain only letters') && isValid;
+    isValid = validateField('email', value => emailRegex.test(value), 'Email is required', 'Please enter a valid email address') && isValid;
+    isValid = validateField('mobile', value => mobileRegex.test(value), 'Phone number is required', 'Please enter a valid phone number') && isValid;
+    isValid = validateField('password', value => value.length >= 4, 'Password is required', 'Password must be at least 4 characters long') && isValid;
+
+    return isValid;
+}
+
+function validateField(id, validator, emptyMessage, invalidMessage) {
+    const value = getElementValue(id);
+    if (!value) {
+        setErrorMessage(id + 'Error', emptyMessage);
+        return false;
+    } else if (!validator(value)) {
+        setErrorMessage(id + 'Error', invalidMessage);
+        return false;
+    } else {
+        setErrorMessage(id + 'Error', '');
+        return true;
+    }
+}
+
+function setErrorMessage(id, message) {
+    const errorElement = document.getElementById(id);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = message ? 'block' : 'none';
+    } else {
+        console.error(`Error element with id '${id}' not found`);
+    }
+}
+
+async function submitForm() {
+    console.log('Submit form function called');
+    if (validateForm()) {
+        const data = {
+            name: getElementValue('name'),
+            password: getElementValue('password'),
+            email: getElementValue('email'),
+            mobile: getElementValue('mobile')
+        };
+
+        console.log('Submitting data:', data);
+
+        try {
+            const response = await fetch('/userProfile/editProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            console.log('Response status:', response.status);
+
+            if (response.ok) {
+                // alert('User details updated successfully');
+                setTimeout(() => location.reload(), 1000);
+                $('#editUserModal').modal('hide');
+            } else {
+                const errorData = await response.json();
+                alert(errorData.message || 'Error updating user details');
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            alert('Network error');
+        }
+    } else {
+        console.log('Form validation failed');
+    }
+}
+</script>
+<!--  -->
+<!--  -->
+<script>
+    // change password 
+    
+ document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('passwordForm');
+    const submitButton = document.querySelector('#passwordModal .btn-primary');
+
+    if (form && submitButton) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            submitPasswordForm();
+        });
+
+        submitButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            submitPasswordForm();
+        });
+
+        console.log('Event listeners attached to password form and submit button');
+    } else {
+        console.error('Password form or submit button not found');
+    }
+});
+
+function getElementValue(id) {
+    const element = document.getElementById(id);
+    return element ? element.value.trim() : '';
+}
+
+function validatePasswordForm() {
+    let isValid = true;
+
+    isValid = validateField('oldpassword', value => value.length > 0, 'Old password is required') && isValid;
+    isValid = validateField('newpassword', value => value.length >= 8, 'New password is required', 'New password must be at least 8 characters long') && isValid;
+    isValid = validateConfirmPassword() && isValid;
+
+    return isValid;
+}
+
+function validateField(id, validator, emptyMessage, invalidMessage = '') {
+    const value = getElementValue(id);
+    if (!value) {
+        setErrorMessage(id + 'Error', emptyMessage);
+        return false;
+    } else if (!validator(value)) {
+        setErrorMessage(id + 'Error', invalidMessage || emptyMessage);
+        return false;
+    } else {
+        setErrorMessage(id + 'Error', '');
+        return true;
+    }
+}
+
+function validateConfirmPassword() {
+    const newPassword = getElementValue('newpassword');
+    const confirmPassword = getElementValue('conformpassword');
+    if (!confirmPassword) {
+        setErrorMessage('confirmpasswordError', 'Confirm password is required');
+        return false;
+    } else if (newPassword !== confirmPassword) {
+        setErrorMessage('confirmpasswordError', 'Passwords do not match');
+        return false;
+    } else {
+        setErrorMessage('confirmpasswordError', '');
+        return true;
+    }
+}
+
+function setErrorMessage(id, message) {
+    const errorElement = document.getElementById(id);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = message ? 'block' : 'none';
+    } else {
+        console.error(`Error element with id '${id}' not found`);
+    }
+}
+
+async function submitPasswordForm() {
+    console.log('Submit password form function called');
+    if (validatePasswordForm()) {
+        const data = {
+            oldpassword: getElementValue('oldpassword'),
+            newpassword: getElementValue('newpassword'),
+            conformPassword: getElementValue('conformpassword')
+        };
+
+        console.log('Submitting data:', data);
+
+        try {
+            const response = await fetch('/userProfile/changePassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            console.log('Response status:', response.status);
+
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    alert('Password updated successfully');
+                    setTimeout(() => location.reload(), 1000);
+                    $('#passwordModal').modal('hide');
+                } else {
+                    // Handle server-side validation errors
+                    if (responseData.errors) {
+                        Object.keys(responseData.errors).forEach(field => {
+                            setErrorMessage(field + 'Error', responseData.errors[field]);
+                        });
+                    }
+                }
+            } else {
+                const errorData = await response.json();
+                alert(errorData.message || 'Error updating password');
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            alert('Network error');
+        }
+    } else {
+        console.log('Password form validation failed');
+    }
+}
+
+</script>
+
+    
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    
+
+ <!-- Js Plugins -->
+ <script src="js/jquery-3.3.1.min.js"></script>
+ <script src="js/bootstrap.min.js"></script>
+ <script src="js/jquery.nice-select.min.js"></script>
+ <script src="js/jquery.nicescroll.min.js"></script>
+ <script src="js/jquery.magnific-popup.min.js"></script>
+ <script src="js/jquery.countdown.min.js"></script>
+ <script src="js/jquery.slicknav.js"></script>
+ <script src="js/mixitup.min.js"></script>
+ <script src="js/owl.carousel.min.js"></script>
+ <script src="js/main.js"></script>
+
+<%- include('../layouts/footer.ejs') %>

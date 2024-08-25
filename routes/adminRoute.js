@@ -33,55 +33,62 @@ const upload=multer({storage:storage,limits: { fileSize: 50 * 1024 * 1024 }})
 
 
 admin_route.use(session({
-    secret:config.sessionSecret,
-    resave:false,
-    saveUninitialized:true,
-    cookie:{
-     _expires:60000,
-    path:'/admin',
-    httpOnly:true
-                }
-}))
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        path: '/admin',
+        _expires: 86400000,
+        httpOnly: true
+    }
+}));
 
 
-admin_route.get('/login',adminController.loadLogin)
+admin_route.get('/login',adminauth.isLogout,adminController.loadLogin)
 admin_route.post('/login',adminController.verifyLogin)
+admin_route.post('/login',adminController.logOut)
 
 
-admin_route.get('/dashboard',adminController.loadDashboard)
-admin_route.get('/admin/dashboard',adminauth.isAdmin,adminController.loadDashboard)
+admin_route.get('/dashboard',adminauth.isLogin,adminController.loadDashboard)
+admin_route.get('/admin/dashboard',adminauth.isLogin,adminController.loadDashboard)
 
 
-admin_route.get('/users',adminController.loadUsers )
+admin_route.get('/users',adminauth.isLogin,adminController.loadUsers )
 admin_route.post('/users/block_unblock/:id',adminController.block_unblock)
 
 
 //  <--category-->
-admin_route.get('/categories',categoryController.loadCategories)
+admin_route.get('/categories',adminauth.isLogin,categoryController.loadCategories)
 admin_route.post('/categories/add',categoryController.addCategory)
 admin_route.post('/categories/edit',categoryController.editCategory)
-admin_route.get('/categoriesRecovery',categoryController.categoriesRecovery)
+admin_route.get('/categoriesRecovery',adminauth.isLogin,categoryController.categoriesRecovery)
 admin_route.post('/categoriesRecovery',categoryController.recoverCategory)
 admin_route.post('/categories/delete',categoryController.deleteCategory)
 
 
 //  <--product-->
-admin_route.get('/product',categoryController.loadProduct)
-admin_route.get('/product/addProduct',categoryController.loadAddProduct)
+admin_route.get('/product',adminauth.isLogin,categoryController.loadProduct)
+admin_route.get('/product/addProduct',adminauth.isLogin,categoryController.loadAddProduct)
 admin_route.post('/product/addProduct',upload.array('images',3),categoryController.addProduct)
-admin_route.get('/productRecovery',categoryController.productRecovery)
+admin_route.get('/productRecovery',adminauth.isLogin,categoryController.productRecovery)
 admin_route.post('/productRecovery',categoryController.recoverProduct)
 admin_route.post('/product/delete',categoryController.deleteProduct)
-admin_route.get('/editProduct/:productId',categoryController.loadEditProduct)
-admin_route.post('/product/editProduct',categoryController.editProduct)
+admin_route.get('/editProduct/:productId',adminauth.isLogin,categoryController.loadEditProduct)
+admin_route.post('/product/editProduct', upload.any(),categoryController.editProduct)
+admin_route.get('/productDetails',adminauth.isLogin,categoryController.loadProductDetails)
 
 
 //  <--brands-->
-admin_route.get('/brand',categoryController.loadBrand)
-admin_route.post('/brand/add',categoryController.addBrand)
+admin_route.get('/brand',adminauth.isLogin,categoryController.loadBrand)
+admin_route.post('/brand/add',adminauth.isLogin,categoryController.addBrand)
 admin_route.post('/brand/edit',categoryController.editBrand)
-admin_route.get('/brandRecovery',categoryController.brandRecovery)
+admin_route.get('/brandRecovery',adminauth.isLogin,categoryController.brandRecovery)
 admin_route.post('/brandRecovery',categoryController.recoverBrand)
 admin_route.post('/brand/delete',categoryController.deleteBrand)
+
+//  <--orders-->
+admin_route.get('/order',adminController.loadOrder)
+admin_route.get('/adminOrderInfo',adminController.loadOaderInfo)
+admin_route.post('/statusChange',adminController.statusChange)
 
 module.exports=admin_route

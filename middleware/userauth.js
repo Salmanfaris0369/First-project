@@ -25,13 +25,11 @@ const isLogout = async (req,res,next) => {
     }
 };
 
-
-
 const checkUserStatus = async (req, res, next) => {
-    if (req.session&&req.session.user_id) {
+    if (req.session && req.session.user_id) {
         try {
             const user = await User.findById(req.session.user_id);
-            if (User && User.is_blocked) {
+            if (user && user.is_blocked) {
                 req.session.destroy((err) => {
                     if (err) {
                         console.error('Error destroying session:', err);
@@ -45,8 +43,33 @@ const checkUserStatus = async (req, res, next) => {
             console.error('Error checking user status:', error);
             next(error);
         }
+    } else if (req.session && req.session.admin_id) {
+        // If it's an admin session, just proceed
+        next();
     } else {
         next();
+    }
+};
+
+
+const authMiddleware = async (req, res, next) => {
+    try {
+        if (req.session && req.session.user_id) {
+            const user = await User.findById(req.session.user_id);
+            if (user) {
+                res.locals.isAuthenticated = true;
+                res.locals.user = user;
+            } else {
+                res.locals.isAuthenticated = false;
+                res.locals.user = null;
+            }
+        } else {
+            res.locals.isAuthenticated = false;
+            res.locals.user = null;
+        }
+        next();
+    } catch (error) {
+        res.send(error.message);
     }
 };
 
@@ -54,5 +77,6 @@ const checkUserStatus = async (req, res, next) => {
 module.exports = {
     isLogin,
     isLogout,
-    checkUserStatus
+    checkUserStatus,
+    authMiddleware
 }

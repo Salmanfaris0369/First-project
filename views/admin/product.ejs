@@ -101,55 +101,7 @@ WebFont.load({
             <p>Base</p>
             <span class="caret"></span>
           </a>
-          <!-- <div class="collapse" id="base">
-            <ul class="nav nav-collapse">
-              <li>
-                <a href="/static/adminfile/components/avatars.html">
-                  <span class="sub-item">Avatars</span>
-                </a>
-              </li>
-              <li>
-                <a href="/static/adminfile/components/buttons.html">
-                  <span class="sub-item">Buttons</span>
-                </a>
-              </li>
-              <li>
-                <a href="/static/adminfile/components/gridsystem.html">
-                  <span class="sub-item">Grid System</span>
-                </a>
-              </li>
-              <li>
-                <a href="/static/adminfile/components/panels.html">
-                  <span class="sub-item">Panels</span>
-                </a>
-              </li>
-              <li>
-                <a href="/static/adminfile/components/notifications.html">
-                  <span class="sub-item">Notifications</span>
-                </a>
-              </li>
-              <li>
-                <a href="/static/adminfile/components/sweetalert.html">
-                  <span class="sub-item">Sweet Alert</span>
-                </a>
-              </li>
-              <li>
-                <a href="/static/adminfile/components/font-awesome-icons.html">
-                  <span class="sub-item">Font Awesome Icons</span>
-                </a>
-              </li>
-              <li>
-                <a href="/static/adminfile/components/simple-line-icons.html">
-                  <span class="sub-item">Simple Line Icons</span>
-                </a>
-              </li>
-              <li>
-                <a href="/static/adminfile/components/typography.html">
-                  <span class="sub-item">Typography</span>
-                </a>
-              </li>
-            </ul>
-          </div> -->
+          
         </li>
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#sidebarLayouts">
@@ -763,7 +715,9 @@ WebFont.load({
                                     <button  onclick="deleteCategory('<%= pro._id %>')"  >
                                       unlist
                                     </button>
-                                    
+                                    <button><a href="/admin/productDetails?productId=<%=pro._id%>" style="text-decoration: none;color:black"> info</a></button>
+
+
                             </td>
                           </tr>
                         <% }); %>
