@@ -63,25 +63,19 @@
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li><a href="/home">Home</a></li>
-                            <li class="active"><a href="/shop">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="./about.html">About Us</a></li>
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="/userProfile">Account</a></li>
-                            <li><a href="./contact.html">Contacts</a></li>
+                            <li ><a href="/shop">Shop</a></li>
+                            <% if (isAuthenticated) { %>
+                               <li><a class="text-decoration-none" href='/userProfile'>Account</a></li>
+                           <% } else { %>
+                               <li><a class="text-decoration-none" href="/login">Sign In</a></li>
+                           <% } %>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
                        
-                        <a href="#"><img src="/static/img/icon/heart.png" alt=""></a>
+                        <a href="/home/whishlist"><img src="/static/img/icon/heart.png" alt=""></a>
                         <a href="/home/cart"><img src="/static/img/icon/cart.png" alt=""> <span>0</span></a>
                        
                     </div>
@@ -271,15 +265,19 @@
                                             <img src="/static/productimages/<%=car.productImage%>" alt="" width="100px" height="100px">
                                         </div>
                                         <div class="product__cart__item__text">
-                                            <span class="d-none"><%= car.productId %></span>
+                                            <span class="d-none"><%= car.productId._id %></span>
                                             <h4><%=car.productName%></h4>
-                                            <h5>₹<%=car.ProductPrice%></h5>
+                                            <% if(car.productId.productOffer){ %> 
+                                                <h5>₹ <%= car.productId.discountPrice %><span id="offer" class="real__price">₹ <%= car.productId.variants[0].price %></span></h5>
+                                                   <% }else{ %>
+                                                    <h5 class="real__price">₹ <%= car.productId.variants[0].price %></h5>
+                                                   <% } %>
                                             <h6><%=car.productColor%></h6>
                                         </div>
                                     </td>
                                     <td class="quantity__item l">
                                         <div class="quantity control ">
-                                            <div class="pro-qty-2" data-cart-item-id="<%=car._id%>">
+                                            <div class="pro-qty-2" data-id="<%=car._id%>">
                                                 
                                                 <input class="pro-qty-2 text-center border-0" style="width: 50px;" type="text" value="<%=car.productQuantity%>" readonly>
                                                 
@@ -301,18 +299,25 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="cart__discount">
-                        <h6>Discount codes</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Coupon code">
-                            <button type="submit">Apply</button>
+                        <h6>Discount Codes</h6>
+                        <form action="" id="couponForm">
+                            <input type="text" id="couponInput" placeholder="click and apply Coupon code" autocomplete="off">
+                            <div id="dropdown" class="dropdown"></div>
+                     
                         </form>
+                        <div>
+                            <button type="submit" id="applyButton" class="apply-button" onclick="applyCoupon()" autocomplete="off">Apply</button>
+                            <button type="button" id="removeButton" class="remove-button" onclick="removeCoupon()" style="display: none;">Remove</button>
+                        </div>
                     </div>
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
                             <li>Price (<%= cart.length%>) <span class="cart__subtotal">₹0.00</span></li>
-                            <li>Subtotal <span class="cart__total__amount">₹0.00</span></li>
-                            <!-- <li>Total <span class="cart__total__amount">$0.00</span></li> -->
+                            <li>Discount <span class="cart__discountamount">₹0.00</span></li>
+                            <li>Coupon <span class="cart_coupon">₹0.00</span></li>
+                            <li>Subtotal <span class="cartdiscount">₹0.00</span></li>
+                         
                         </ul>
                         <hr class="divider">
 
@@ -325,7 +330,7 @@
                             </li>
                             <li>
                                 <input type="radio" id="wallet" name="paymentOption" value="wallet">
-                                <label for="wallet">Wallet (Balance: ₹000.00)</label>
+                                <label for="wallet">Wallet (Balance: ₹<%= wallet.balance%>)</label>
                             </li>
                             <li>
                                 <input type="radio"  id="cod" name="paymentOption" value="cod" checked>
@@ -348,6 +353,7 @@
         </div>
     </section>
     <!-- Shopping Cart Section End -->
+
 
 <!-- Footer Section Begin -->
     <footer class="footer">
@@ -508,6 +514,75 @@
 
 
 <style>
+
+
+
+
+#offer {
+color: #b7b7b7;
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 10px;
+    text-decoration: line-through;
+}
+
+.cart__discount {
+        margin: 20px 0;
+        position: relative; /* Position relative to the container */
+    }
+
+    #couponInput {
+        width: 100%; /* Full width */
+        max-width: 400px; /* Maximum width */
+        padding: 10px; /* Padding for better UI */
+        border: 1px solid #ccc; /* Border style */
+        border-radius: 5px; /* Rounded corners */
+        font-size: 16px; /* Font size */
+        margin-bottom: 10px; /* Space between the input and button */
+    }
+
+    .dropdown {
+        display: none; /* Hidden by default */
+        position: absolute; /* Positioned relative to parent */
+        width: 100%; /* Same width as the input */
+        max-width: 400px; /* Matches the input width */
+        background-color: white; /* Background color */
+        border: 1px solid #ccc; /* Border */
+        border-radius: 5px; /* Rounded corners */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Drop shadow */
+        z-index: 1000; /* On top of other elements */
+        max-height: 150px; /* Limit height */
+        overflow-y: auto; /* Scroll if needed */
+    }
+
+    .dropdown div {
+        padding: 10px; /* Padding for each option */
+        cursor: pointer; /* Pointer cursor on hover */
+    }
+
+    .dropdown div:hover {
+        background-color: #f0f0f0; /* Light background on hover */
+    }
+
+    .apply-button {
+        background-color: #007bff; /* Button color */
+        color: #fff; /* Text color */
+        padding: 10px 20px; /* Padding */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        font-size: 16px; /* Font size */
+        cursor: pointer; /* Pointer cursor */
+        transition: background-color 0.3s; /* Smooth hover transition */
+    }
+
+    .apply-button:hover {
+        background-color: #0056b3; /* Darker button on hover */
+    }
+
+
+
+
+
 .cart__total {
     padding: 20px;
     border: 1px solid #ddd;
@@ -636,37 +711,292 @@
 @keyframes fadeout {
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
+    
+}
+
+/* removecoupon */
+.apply-button,
+.remove-button {
+    margin: 5px; /* Adjust spacing as needed */
+    padding: 8px 16px;
+    background-color: #007bff; /* Example button color */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.remove-button {
+    background-color: #dc3545; /* Example color for the remove button */
+}
+
+.apply-button:hover,
+.remove-button:hover {
+    opacity: 0.9; /* Hover effect */
 }
 </style>
+
+
+<script>
+    
+function removeCoupon() {
+
+    const couponInput = document.getElementById("couponInput");
+    const reducedAmount = document.querySelector('.cart_coupon').textContent;
+        const subtotal = document.querySelector('.cartdiscount').textContent;
+
+        const code = couponInput.value
+
+    
+    document.getElementById("couponInput").value = "";
+
+    console.log("Coupon removed");
+
+    document.getElementById("applyButton").style.display = "block";
+    document.getElementById("removeButton").style.display = "none";
+
+
+    const dropdown = document.getElementById("dropdown");
+    if (dropdown) {
+        dropdown.innerHTML = ""; 
+    }
+
+       const removecoupon ={
+            code:code,
+            reducedAmount:reducedAmount,
+            total:subtotal
+        }
+         if(code){
+        fetch('/removeCoupon', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(removecoupon),
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(json => {
+                                    // Extract only the message part from the error response
+                                    throw new Error(json.message);
+                                  });
+                                return response.text().then(text => {
+                                    throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Success:', data);
+                         
+                           updateCoupon(data)
+                            // Show SweetAlert modal
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'coupon removed!',
+                                text: 'Your coupon has been removed successfully.',
+                                showConfirmButton: true,
+                                timerProgressBar: true,
+                                confirmButtonColor: '#3085d6',
+                                backdrop: true,
+                                customClass: {
+                                    popup: 'swal-custom-popup'
+                                }
+                            })
+
+                          
+                        })
+                        .catch((error) => {
+
+                            showSnackbar(error.message);
+                        // setTimeout(() => location.reload(),1500);
+                            console.error('Error:', error);
+
+                        
+                        });
+
+                    }else{
+                        showSnackbar("no coupon code found")
+                    }
+}
+
+
+</script>
+ <!-- remove coupon  -->
+
+
+<script>
+  function updateCoupon(data) {
+    console.log(data.discountAmount);
+    console.log(data.couponAmount);
+
+    const couponElement = document.querySelector('.cart_coupon');
+    if (couponElement) {
+        couponElement.innerHTML = `-₹${data.discountAmount.toFixed(2)}`;
+    }
+
+    const discountElement = document.querySelector('.cartdiscount');
+    if (discountElement) {
+        discountElement.innerHTML = `₹${data.couponAmount.toFixed(2)}`;
+    }
+}
+// ________
+
+    function applyCoupon(){
+     
+        
+        const couponInput = document.getElementById("couponInput");
+        const subtotal = document.querySelector('.cartdiscount').textContent;
+        const code = couponInput.value
+           if(code){
+        document.getElementById("applyButton").style.display = "none";
+        document.getElementById("removeButton").style.display = "block";
+           }
+     
+        const applycoupon ={
+            code:code,
+            total:subtotal
+        }
+         if(code){
+        fetch('/applyCoupon', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(applycoupon),
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(json => {
+                                    // Extract only the message part from the error response
+                                    throw new Error(json.message);
+                                  });
+                                return response.text().then(text => {
+                                    throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                          
+                           updateCoupon(data)
+                            // Show SweetAlert modal
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'coupon added!',
+                                text: 'Your coupon has been added successfully.',
+                                showConfirmButton: true,
+                                timerProgressBar: true,
+                                confirmButtonColor: '#3085d6',
+                                backdrop: true,
+                                customClass: {
+                                    popup: 'swal-custom-popup'
+                                }
+                            })
+                      
+                          
+                        })
+                        .catch((error) => {
+
+                            showSnackbar(error.message);
+                        // setTimeout(() => location.reload(),1500);
+                            console.error('Error:', error);
+
+                        
+                        });
+                    }else{
+                        showSnackbar("coupon code not found")
+                    }
+ }
+</script>
+
+<script>
+    const coupons = <%- JSON.stringify(coupon) %>;
+        document.addEventListener("DOMContentLoaded", function () { // Ensure DOM is loaded before running the script
+       
+
+            const couponInput = document.getElementById("couponInput");
+    const dropdown = document.getElementById("dropdown");
+
+    function formatCouponDetails(coupon) {
+        return `${coupon.code} - ${coupon.discount}% off, Min Purchase: ₹${coupon.minPurchase}, Expires: ${new Date(coupon.expiryDate).toLocaleDateString()}`;
+    }
+
+    function populateDropdown() {
+        dropdown.innerHTML = ''; // Clear previous options
+        coupons.forEach(coupon => {
+            const option = document.createElement("div");
+            option.textContent = formatCouponDetails(coupon);
+            option.addEventListener("click", () => {
+                couponInput.value = coupon.code;
+                dropdown.style.display = "none"; 
+            });
+            dropdown.appendChild(option);
+        });
+    }
+
+    couponInput.addEventListener("focus", () => {
+        populateDropdown();
+        dropdown.style.display = "block"; 
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest(".cart__discount")) {
+            dropdown.style.display = "none"; 
+        }
+    });
+
+    document.getElementById("couponForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const selectedCouponCode = couponInput.value;
+        const selectedCoupon = coupons.find(coupon => coupon.code === selectedCouponCode);
+
+        if (selectedCoupon) {
+            console.log(`Coupon applied: ${selectedCouponCode}`);
+          
+        } else {
+            showSnackbar('please select a coupon');
+        }
+    });
+});
+</script>
+
 
 <!-- order placing  -->
 <script>
 function placeOrder() {
+    const couponElement = document.querySelector('.cart_coupon');
+    const couponvalue = couponElement.textContent
+    console.log(couponvalue,'dddsss');
+    
     // Get selected address
     const selectedAddress = document.getElementById('selectedAddress');
+    console.log(selectedAddress);
     const addressText = selectedAddress.textContent.trim();
     const selectedAddressElement = document.getElementById('selectedAddress');
     console.log(selectedAddressElement,'sasasa');
   
 
     const addressId = selectedAddressElement.getAttribute('data-address-id');
-    if(!addressId){
-       
-    }
-console.log(addressId);
-    // Get cart items
+
+   
     const cartItems = [];
     const rows = document.querySelectorAll('.shopping__cart__table tbody tr');
     rows.forEach(row => {
+      
         const productId = row.querySelector('.product__cart__item__text span').textContent;
-        // const addressId = row.getAttribute('data-address-id');
+        
+       
         const productName = row.querySelector('.product__cart__item__text h4').textContent;
-        const productPrice = row.querySelector('.product__cart__item__text h5').textContent;
+
+        const productPriceElement = row.querySelector('.product__cart__item__text h5');  
+        const productPrice = productPriceElement.firstChild.textContent.trim().replace('₹', '').trim(); 
+
         const productColor = row.querySelector('.product__cart__item__text h6').textContent;
         
         const quantity = row.querySelector('.pro-qty-2 input').value;
         const totalPrice = row.querySelector('.cart__price').textContent;
-        
+      
         cartItems.push({
             productId,
             productName,
@@ -680,80 +1010,223 @@ console.log(addressId);
    
 
 
-    // Get cart total
+    
     const subtotal = document.querySelector('.cart__subtotal').textContent;
-    const total = document.querySelector('.cart__total__amount').textContent;
-
-    // Get selected payment option
+   
+    const total = document.querySelector('.cartdiscount').textContent;
+    
+   
     const paymentOption = document.querySelector('input[name="paymentOption"]:checked').value;
-
-    // Get delivery date
+     
+   
     const deliveryDate = document.querySelector('.delivery-date span').textContent;
 
-    // Construct order object
+    
     const order = {
         addressId,
         address: addressText,
         items: cartItems,
-        subtotal,
         total,
         paymentOption,
-        deliveryDate
+        deliveryDate,
+        couponvalue
     };
 
-    // Log the order object (for testing purposes)
-    console.log('Order placed:', order);
-    fetch('/placeOrder', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+    if (paymentOption === 'razorPay') {
+        // Create Razorpay order
+        fetch('/create-razorpay-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(order),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const options = {
+                key:"rzp_test_fJtszzen5xi5mf", 
+                amount: data.amount,
+                currency: "INR",
+                name: "Male fashion",
+                description: "Order Payment",
+                order_id: data.orderId,
+                handler: function (response) {
+                    // Handle successful payment
+                    console.log(response,'dddddd');
+                    verifyPayment(response, order);
                 },
-                body: JSON.stringify(order),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
-                    });
+                prefill: {
+                    name: "Customer Name",
+                    email: "customer@example.com",
+                    contact: "9999999999"
+                },
+                theme: {
+                    color: "#3399cc"
                 }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Success:', data);
+            };
+            const rzp = new Razorpay(options);
 
-                // Show SweetAlert modal
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Order Placed!',
-                    text: 'Your order has been placed successfully. Thank you for shopping with us!',
-                    showConfirmButton: true,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    confirmButtonText: 'Continue Shopping',
-                    confirmButtonColor: '#3085d6',
-                    backdrop: true,
-                    customClass: {
-                        popup: 'swal-custom-popup'
+            rzp.on('payment.failed', function (response){
+        // Handle payment failure
+        handleFailedPayment(order, response.error);
+                                      });
+
+
+            rzp.open();
+        })
+        .catch(error => {
+            
+            console.error('Error:', error);
+            showSnackbar("Error creating Razorpay order");
+        });
+
+
+
+    }else{
+
+                // Log the order object (for testing purposes)
+                console.log('Order placed:', order);
+                fetch('/placeOrder', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(order),
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(json => {
+        // Extract only the message part from the error response
+        throw new Error(json.message);
+      });
+                                return response.text().then(text => {
+                                    throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Success:', data);
+
+                            // Show SweetAlert modal
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Order Placed!',
+                                text: 'Your order has been placed successfully. Thank you for shopping with us!',
+                                showConfirmButton: true,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                confirmButtonText: 'Continue Shopping',
+                                confirmButtonColor: '#3085d6',
+                                backdrop: true,
+                                customClass: {
+                                    popup: 'swal-custom-popup'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '/shop'; // Redirect to shop page on button click
+                                }
+                            });
+
+                            // Redirect to shop page after a delay (e.g., 3 seconds)
+                            // setTimeout(() => {
+                            //     window.location.href = '/shop'; // Adjust the URL to your shop page
+                            // }, 3000);
+                        })
+                        .catch((error) => {
+                            showSnackbar(error.message);
+                        // setTimeout(() => location.reload(),1500);
+                            console.error('Error:', error);
+
+                        
+                        });
+             }
+
+            //  _______verify razorpay
+
+                        function verifyPayment(razorpayResponse, orderDetails) {
+                            console.log( razorpayResponse.razorpay_payment_id, razorpayResponse.razorpay_order_id, razorpayResponse.razorpay_signature);
+
+                fetch('/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        razorpayPaymentId: razorpayResponse.razorpay_payment_id,
+                        razorpayOrderId: razorpayResponse.razorpay_order_id,
+                        razorpaySignature: razorpayResponse.razorpay_signature,
+                        orderDetails: orderDetails
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message and redirect
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Payment Successful!',
+                            text: 'Your order has been placed successfully. Thank you for shopping with us!',
+                            showConfirmButton: true,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            confirmButtonText: 'Continue Shopping',
+                            confirmButtonColor: '#3085d6',
+                            backdrop: true,
+                            customClass: {
+                                popup: 'swal-custom-popup'
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '/shop';
+                            }
+                        });
+                    } else {
+                        showSnackbar("Payment verification failed");
                     }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = '/shop'; // Redirect to shop page on button click
-                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showSnackbar("Error verifying payment");
                 });
+                                                                       }
+                  
+ function handleFailedPayment(orderId, error = null) {
+    console.log(orderId,'ppppppp');
+    console.log('failed payment');
+    fetch('/handle_failed_payment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ orderId,error })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data,'dataaa');
+        Swal.fire({
+            icon: 'error',
+            title: 'Payment Failed',
+            text: 'Order placed. You can continue to pay from the orders page.',
+        }).then(() => {
+            window.location.href = '/userProfile/order';
+        });
+    })
+    .catch(error => {
+        console.error('Error handling failed payment:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to process your order. Please try again later.',
+        });
+    });
+}
+        //    _____________________verify razorpay
 
-                // Redirect to shop page after a delay (e.g., 3 seconds)
-                setTimeout(() => {
-                    window.location.href = '/shop'; // Adjust the URL to your shop page
-                }, 3000);
-            })
-            .catch((error) => {
-                showSnackbar(data.message);
-            setTimeout(() => location.reload(),1500);
-                console.error('Error:', error);
 
-               
-            });
+        //    ________
             function showSnackbar(message) {
+                console.log(message,'mmmmmmmmm');
     // Create snackbar container if it doesn't exist
     let snackbar = document.getElementById("snackbar");
     if (!snackbar) {
@@ -761,22 +1234,42 @@ console.log(addressId);
         snackbar.id = "snackbar";
         document.body.appendChild(snackbar);
     }
-
-    // Set the message
-    snackbar.textContent = message;
-
-    // Add the "show" class
+       snackbar.textContent = message;
+     // Add the "show" class
     snackbar.className = "show";
 
     // After 3 seconds, remove the show class
     setTimeout(() => {
         snackbar.className = snackbar.className.replace("show", "");
     }, 3000);
+    }
+    //  ___
+  
 }
-}
+
+  //    ________
+  function showSnackbar(message) {
+                console.log(message,'mmmmmmmmm');
+    // Create snackbar container if it doesn't exist
+    let snackbar = document.getElementById("snackbar");
+    if (!snackbar) {
+        snackbar = document.createElement("div");
+        snackbar.id = "snackbar";
+        document.body.appendChild(snackbar);
+    }
+       snackbar.textContent = message;
+     // Add the "show" class
+    snackbar.className = "show";
+
+    // After 3 seconds, remove the show class
+    setTimeout(() => {
+        snackbar.className = snackbar.className.replace("show", "");
+    }, 3000);
+    }
+    //  ___
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <!-- edit address -->
 <script>
@@ -1158,6 +1651,8 @@ console.log(addressId);
 <script>
     function updateCart() {
     let subtotal = 0;
+    let orgiPrice =0;
+
 
     // Select all rows in the cart table that contain cart items
     const cartRows = document.querySelectorAll('tbody tr'); // Adjusted to ensure only cart items are selected
@@ -1167,17 +1662,35 @@ console.log(addressId);
         // Get the price element within the current row
         const priceElement = row.querySelector('.cart__price');
 
+        const realPriceElement = row.querySelector('.real__price');
+
         // Get the input element within the current row
         const quantityInputElement = row.querySelector('.pro-qty-2 input');
 
         // Ensure both elements exist before proceeding
-        if (priceElement && quantityInputElement) {
+        if (realPriceElement||priceElement && quantityInputElement) {
             // Extract the price as a floating-point number
             const priceText = priceElement.textContent.replace('₹', '').trim();
+           
             const price = parseFloat(priceText);
+
+
+            const realPriceText = realPriceElement.textContent.replace('₹', '').trim();
+            const realPrice = parseFloat(realPriceText);
+
+
 
             // Extract the quantity as an integer
             const quantity = parseInt(quantityInputElement.value);
+
+
+            const totalPriceForItem = price;
+                const realTotalPriceForItem=realPrice
+
+                    orgiPrice += realTotalPriceForItem *quantity
+
+
+
 
             console.log(`Price: ${price}, Quantity: ${quantity}`);
 
@@ -1187,17 +1700,25 @@ console.log(addressId);
         }
     });
 
+    const discount =orgiPrice-subtotal
+       console.log(discount,'discount');
     console.log('Subtotal:', subtotal); // Log the final subtotal
+    console.log(orgiPrice);
 
     // Update the subtotal and total elements on the page
     const subtotalElement = document.querySelector('.cart__subtotal');
     if (subtotalElement) {
-        subtotalElement.innerHTML = `₹${subtotal.toFixed(2)}`;
+        subtotalElement.innerHTML = `₹${orgiPrice.toFixed(2)}`;
     }
 
-    const totalElement = document.querySelector('.cart__total__amount');
+    const totalElement = document.querySelector('.cart__discountamount');
     if (totalElement) {
-        totalElement.innerHTML = `₹${subtotal.toFixed(2)}`;
+        totalElement.innerHTML = `-₹${discount.toFixed(2)}`;
+    }
+
+    const discountElement = document.querySelector('.cartdiscount');
+    if (discountElement) {
+        discountElement.innerHTML = `₹${subtotal.toFixed(2)}`;
     }
 }
 

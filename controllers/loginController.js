@@ -8,6 +8,7 @@ const { error } = require('console');
 const passport =require('passport')
 const Googlestrategy=require('passport-google-oauth20').Strategy
 const session = require('express-session')
+const Wallet =require('../models/walletModel')
 
 
 
@@ -131,6 +132,9 @@ console.log(req.body.otp);
         const user =req.session.userData;
          const newUser=new User(user);
          const newuserData = await newUser.save();
+      
+
+
 
         if(newuserData){
             req.session.otp=null
@@ -181,7 +185,7 @@ const resendOtp = async(req,res)=>{
 
 const loginLoad = async(req,res)=>{
     try {
-        res.render('login')
+        res.render('userlogin')
     } catch (error) {
     console.log(error.message);        
     }
@@ -204,13 +208,25 @@ const verifyLogin = async(req,res)=>{
                if(passwordMatch){
                        if(userData.is_blocked==true){
                         
-                        res.render('login',{message:"You are blocked"})
+                        res.render('userlogin',{message:"You are blocked"})
                        }else{
                         req.session.user_id=userData._id
                         console.log(req.session.user_id,'sdfghj');
                         req.session.user_id = userData._id;
                         console.log( req.session.user_id+'melbin');
                         res.redirect('/home')
+
+                        let wallet = await Wallet.findOne({ userId: userData._id });
+                    if (!wallet) {
+                        wallet = new Wallet({
+                            user: userData._id,
+                            balance: 0
+                        });
+
+                        await wallet.save();
+                    }
+                  
+
                        }
                }else{
                 res.render('login',{message:"password is incorrect"})
@@ -228,7 +244,7 @@ const verifyLogin = async(req,res)=>{
 
 const logout = async(req,res)=>{
     try { console.log(req.session.user_id,'qw8gcdx');
-        req.session.destroy();
+        delete req.session.user_id
         res.redirect('/login')
     } catch (error) {
         console.log(error.message);
@@ -249,7 +265,7 @@ passport.use(new Googlestrategy({
 
     if(!user){
              user=new User({
-                googleId:profile._id,
+                googleId:profile.id,
                 name:profile.displayName,
                 email:profile.emails[0].value,
                 image:profile.photos[0].value
@@ -257,7 +273,7 @@ passport.use(new Googlestrategy({
              await user.save()
        }
 
-       return done(null,profile)
+       done(null,user)
      
     }catch(error){
         console.log(error);
@@ -271,7 +287,7 @@ passport.serializeUser((user,done)=>{
 
 passport.deserializeUser(async(id,done)=>{
     try {
-        const user=await User.findById(id)
+        const user=await User.findById(id);
         done(null,user)
     } catch (error) {
         done (error)
@@ -286,12 +302,28 @@ const googleSuccess = async(req,res,next)=>{
         if(req.user.is_blocked==1){
             return res.render('login',{message:'user is blocked'})
         }
-       req.session.user_id=req.user._id
-           res.redirect('/home')
+        console.log(req.user);
+        const user = await User.findById(req.user.id);
+       req.session.user_id=req.user.id
+       let wallet = await Wallet.findOne({ user : req.user.id});
+if (!wallet) {
+    wallet = new Wallet({
+        user: req.user.id,
+        balance: 0
+    });
+    await wallet.save();
+}
+           res.redirect('/')
     } catch (error) {
         console.log(error);
     }
 }
+
+
+
+
+
+
 
 const resetPasswordPage = async(req,res)=>{
     try {
@@ -307,7 +339,7 @@ const emailToken = async(req,res)=>{
           const {email} = req.body
           console.log(req.body);
           const user = await User.findOne({email : email})
-console.log(user);
+console.log(user,'nnnnnnnn');
           if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -345,25 +377,19 @@ console.log(user);
     }
 }
 
-const newPasswordPage = async(req,res)=>{
-    try {    
-        const token = req.params.token
-        res.render('newPassword',{token})
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ success : false, error : "Some error occured"}); 
-    }
-}
+
 
 
 const resetPassword = async(req,res)=>{
     try {
         const{token}=req.params
         const user =  await User.findOne({resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now()}})
+        console.log(user,'kkkkkkkkkkk');
         if (!user) {
             return res.status(400).json({ message: 'Invalid or expired token' });
         }
     
+        console.log(token,'3dtfrhjbgtcrdxersx');
         res.render('newPassword', { token }); 
     } catch (error) {
         console.log(error)
@@ -372,17 +398,21 @@ const resetPassword = async(req,res)=>{
 }
 const updatePassword = async(req,res)=>{
     try { 
-        const {token,password,confirmPassword} = req.body;
-        console.log(req.body);
+        const { token } = req.params;
+        const {password,confirmPassword} = req.body;
+        console.log(token,'jkjkkjkjk');
+        console.log(req.body,'sallllllll');
            if(password!==confirmPassword){
             return res.status(400).json({success : false , message : `password do not match`})
            }        
            const user = await User.findOne({resetPasswordToken:token})
+           console.log(user);
            if(!user){
             return res.status(400).json({success : false , message : `user not found`})
            }
            const hashPassword = await bcrypt.hash(password,10)
            user.password=hashPassword
+           console.log(user.password,'llllllllll');
            user.resetPasswordToken = undefined
            await user.save()
            res.status(200).json({success : true , message : `password has been successfully changed,you can now`})
@@ -407,7 +437,6 @@ module.exports={
     resetPassword,
     resetPasswordPage,
     emailToken,
-    newPasswordPage,
     updatePassword
     
 }

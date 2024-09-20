@@ -2,7 +2,10 @@
 const mongoose=require('mongoose')
 
 const userschema = mongoose.Schema({
-
+    googleId : {
+        type : String,
+        required : false
+    },
     name:{
         type:String,
         required:true

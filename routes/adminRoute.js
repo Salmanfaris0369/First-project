@@ -8,6 +8,17 @@ const path = require('path')
 const multer=require('multer')
 const adminauth=require('../middleware/adminauth')
 
+admin_route.use(session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        path: '/admin',
+        _expires: 86400000,
+        httpOnly: true
+    }
+}));
+
 
 admin_route.use(express.json())
 admin_route.use(express.urlencoded({extended:true}))
@@ -32,29 +43,22 @@ const upload=multer({storage:storage,limits: { fileSize: 50 * 1024 * 1024 }})
 
 
 
-admin_route.use(session({
-    secret: config.sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        path: '/admin',
-        _expires: 86400000,
-        httpOnly: true
-    }
-}));
 
 
 admin_route.get('/login',adminauth.isLogout,adminController.loadLogin)
 admin_route.post('/login',adminController.verifyLogin)
-admin_route.post('/login',adminController.logOut)
+admin_route.get('/logout',adminController.logOut)
 
-
-admin_route.get('/dashboard',adminauth.isLogin,adminController.loadDashboard)
-admin_route.get('/admin/dashboard',adminauth.isLogin,adminController.loadDashboard)
+admin_route.get('/dashboard',adminauth.isLogin,adminController.getAdminDashboardAnalytics)
+// admin_route.get('/dashboard',adminauth.isLogin,adminController.getAdminDashboardAnalytics)
+// admin_route.get('/dashboard',adminauth.isLogin,adminController.getAdminDashboardAnalytics)
 
 
 admin_route.get('/users',adminauth.isLogin,adminController.loadUsers )
 admin_route.post('/users/block_unblock/:id',adminController.block_unblock)
+
+admin_route.get('/dashboard/salesReport',adminauth.isLogin,adminController.loadSalesReport)
+admin_route.get('/download',adminauth.isLogin,adminController.downloadReport)
 
 
 //  <--category-->
@@ -91,4 +95,15 @@ admin_route.get('/order',adminController.loadOrder)
 admin_route.get('/adminOrderInfo',adminController.loadOaderInfo)
 admin_route.post('/statusChange',adminController.statusChange)
 
+//  <--coupons-->
+admin_route.get('/coupon',adminauth.isLogin,adminController.loadCoupon)
+admin_route.post('/coupon/add',adminController.addCoupon)
+admin_route.post('/coupon/edit',adminController.editCoupon)
+admin_route.post('/coupon/delete',adminauth.isLogin,adminController.deleteCoupon)
+
+// offers
+admin_route.get('/offer',adminauth.isLogin,adminController.loadOffer)
+admin_route.post('/offer/add',adminController.addOffer)
+admin_route.delete('/offer/delete',adminauth.isLogin,adminController.deleteOffer)
+admin_route.post('/offer/edit',adminController.editOffer)
 module.exports=admin_route

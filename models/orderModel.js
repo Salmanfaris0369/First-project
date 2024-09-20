@@ -31,12 +31,26 @@ const Order = new Schema({
                 type:String,
                 default:'Pending',
                 required:true 
+            },
+            returnStatus: { 
+                type: String,
+                enum: ['not requested', 'requested', 'returned'],
+                default: 'not requested'
+            },
+            returnReason: {
+                type: String,
+                default: ''
+            },
+            discountPrice : {
+                type: Number,
+                default:0
             }
 
         }
     ],
     orderDate:{
-        type:String
+        type: Date,
+        default: Date.now
     },
     address: {
         type: mongoose.Schema.Types.ObjectId,
@@ -45,15 +59,13 @@ const Order = new Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['cod', 'RazorPay'],
+        enum: ['cod', 'razorPay','wallet'],
         
     },
     amount : {
         type : Number
     },
-    AllDiscount : {
-        type: Number
-    },
+    
     paymentStatus: {
         type: String,
         enum: ['unpaid', 'paid'],
@@ -65,21 +77,19 @@ const Order = new Schema({
         enum: ['pending', 'shipped', 'delivered', 'Canceled' ,'order returned'],
         default: 'pending'
     },
-    returnStatus: { 
-        type: String,
-        enum: ['not requested', 'requested', 'returned'],
-        default: 'not requested'
-    },
-    returnReason: {
-        type: String,
-        default: ''
-    },
+   
     orderId:{
         type: String
+    },
+    couponPrice :{
+        type: Number,
+        default:0
+          },
+    razorpayOrderId : {
+        type : String
     }
   
-   
-}, { timestamps: true });
+   },{ timestamps: true });
 
 
 module.exports = mongoose.model("Order", Order);

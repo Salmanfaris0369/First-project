@@ -64,8 +64,8 @@
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="./index.html">Home</a></li>
-                            <li><a href="/shop">Shop</a></li>
+                            <li><a href="./index.html">Home</a></li>
+                            <li class="active"><a href="/shop">Shop</a></li>
                            
                             <% if (isAuthenticated) { %>
                                 <li><a class="text-decoration-none" href='/userProfile'>Account</a></li>
@@ -80,8 +80,15 @@
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
                         
-                        <a href="#"><img src="img/icon/heart.png" alt=""></a>
-                        <a href="/home/cart"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+                        
+                        <a href="/home/whishlist">
+                            <img src="img/icon/heart.png" alt=""> <span class="mt-2"><%= wishlistCount %></span> 
+                         
+                          </a>
+                          <a href="/home/cart">
+                            <img src="img/icon/cart.png" alt=""><br>
+                            <span class="mt-2"><%= cartCount %></span> 
+                          </a>
                        
                     </div>
                 </div>
@@ -145,15 +152,6 @@
 
 
 
-                                                    <!-- <li><a href="#">Men (20)</a></li>
-                                                    <li><a href="#">Women (20)</a></li>
-                                                    <li><a href="#">Bags (20)</a></li>
-                                                    <li><a href="#">Clothing (20)</a></li>
-                                                    <li><a href="#">Shoes (20)</a></li>
-                                                    <li><a href="#">Accessories (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li> -->
                                                 </ul>
                                             </div>
                                         </div>
@@ -261,14 +259,21 @@
                             <p>No products found matching your criteria.</p>
                         <% } else { %>
                         <% products.forEach(product => { %>
-                        <div class="col-lg-4 col-md-6 col-sm-6">
-                            <div class="product__item" style="width: 220px;">
-                                <a href="/productinfo/<%= product._id %>"><div class="product__item__pic clickable-product"  alt="Clickable Image" data-product-id="<%=product._id%>" id="clickableImage" style="background-image: url('/static/productimages/<%= product.variants[0].images[0] %>');" ></a> 
-                                   
-                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item" style="width: 220px;">
+                                       <% if(product.productOffer){ %>
+                                        <div class="offer-badge"><%= product.productOffer.discountPercentage %>%OFF</div>
+                                     <% } %>
+                                      <a href="/productinfo/<%= product._id %>"><div class="product__item__pic clickable-product" type="butto"  alt="Clickable Image" data-product-id="<%=product._id%>" id="clickableImage" style="background-image: url('/static/productimages/<%= product.variants[0].images[0] %>');" ></a> 
+                                                                              
+                                    </div>
                                 <div class="product__item__text">
+                                    
                                     <h6><%= product.productName %></h6>
-                        <a href="#" class="add-cart" data-id="<%= product._id %>">+ Add To Cart</a>
+                                    <% if(product.variants[0].quantity >0){ %>
+                                    <a href="#" class="add-cart" style="margin-left: 30px;" data-id="<%= product._id %>">+ Add To Cart</a>
+                                    <%}%>
+                                    <a href="#" class="add-wishlist" data-id="<%= product._id %>"><img src="img/icon/heart.png"></a>
                                     <div class="rating">
                                         <i class="fa fa-star-o"></i>
                                         <i class="fa fa-star-o"></i>
@@ -276,11 +281,18 @@
                                         <i class="fa fa-star-o"></i>
                                         <i class="fa fa-star-o"></i>
                                     </div>
+                                    <% if(product.productOffer){ %>
+                                        <h5>₹<%= product.discountPrice %><span id="offer">₹<%= product.variants[0].price %></span></h5>
+                                     <% }else{ %>
                                     <h5>₹<%= product.variants[0].price %></h5>
+                                     <%}%>
                                     <h5><%= product.variants[0].color %></h5>
+                                    
                                    
                                     <div class="product__color__select">
-                                        <label for="pc-4">
+                                        
+                                        
+                                        <!-- <label for="pc-4">
                                             <input type="radio" id="pc-4">
                                         </label>
                                         <label class="active black" for="pc-5">
@@ -288,9 +300,11 @@
                                         </label>
                                         <label class="grey" for="pc-6">
                                             <input type="radio" id="pc-6">
-                                        </label>
+                                        </label> -->
                                     </div>
+                                    
                                 </div>
+                                
                             </div>
                         </div>
                     <% }) %>
@@ -400,6 +414,14 @@
     </div>
     <!-- Search End -->
 <style>
+#offer {
+color: #b7b7b7;
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 10px;
+    text-decoration: line-through;
+}
+
  .pagination {
             display: flex;
             justify-content: center;
@@ -438,6 +460,25 @@
             margin: 0 5px;
         }
 
+
+        .product__item__pic:hover {
+    transform: scale(1.05);
+}
+
+.offer-badge {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    background-color: black; /* Badge background color */
+    color: white;
+    font-weight: bold;
+    padding: 5px 8px;
+    font-size: 12px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    text-transform: uppercase;
+}
 </style>
 <!-- for search product ...... -->
 <script>
@@ -595,6 +636,91 @@
 
 </script>
 
+ <!-- <---add to whishlist---> 
+  <script>
+    
+ document.addEventListener('DOMContentLoaded', () => {
+    // Handle 'Add to Cart' functionality
+    document.querySelectorAll('.add-wishlist').forEach(link => {
+        link.addEventListener('click', async (event) => {
+            event.preventDefault();
+            console.log('kjrhghtu');
+            // Get the closest product__item element
+            const item = link.closest('.product__item');
+
+            // Extract data from the item
+            const productId = link.getAttribute('data-id');
+            const productName = item.querySelector('h6').textContent;
+            const imageUrl = item.querySelector('.product__item__pic').style.backgroundImage.slice(5, -2).split('/').pop();
+            const price = parseFloat(item.querySelector('h5').textContent.replace('₹', '').trim());
+            const color = item.querySelector('h5:nth-of-type(2)').textContent;
+            
+
+            // Confirmation SweetAlert
+            const result = await Swal.fire({
+                title: 'Add to Whishlist',
+                text: `Are you sure you want to add ${productName} to your whishlist?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, add it!'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch('/shop/add-to-whishlist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            productId,
+                            color,
+                            price,
+                            imageUrl
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        // Success SweetAlert
+                        await Swal.fire({
+                            title: 'Success!',
+                            text: 'Product added to whishlist successfully!',
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        // Error SweetAlert
+                        await Swal.fire({
+                            title: 'Error!',
+                            text: result.message || 'Failed to add product to whishlist.',
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            footer: '<a href="/login" style="text-decoration: none; color: #007bff; font-weight: bold;">Login or register your account</a>'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error adding product to whishlist:', error);
+                    // Error SweetAlert
+                    await Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while adding the product to the whishlist.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+            }
+        });
+    });
+
+  
+});
+
+
+</script>
+  </script>
 
 
 

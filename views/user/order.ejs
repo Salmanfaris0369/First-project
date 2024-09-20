@@ -36,15 +36,7 @@
                      <ul>
                          <li><a href="/home">Home</a></li>
                          <li class="active"><a href="/userProfile">Account</a></li>
-                         <li><a href="#">Pages</a>
-                             <ul class="dropdown">
-                                 <li><a href="./about.html">About Us</a></li>
-                                 <li><a href="./shop-details.html">Shop Details</a></li>
-                                 <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                 <li><a href="./checkout.html">Check Out</a></li>
-                                 <li><a href="./blog-details.html">Blog Details</a></li>
-                             </ul>
-                         </li>
+                         
                          <li><a href="/shop">shop</a></li>
                          <li><a href="./contact.html">Contacts</a></li>
                      </ul>
@@ -53,7 +45,7 @@
              <div class="col-lg-3 col-md-3">
                  <div class="header__nav__option">
                      
-                     <a href="#"><img src="/static/img/icon/heart.png" alt=""></a>
+                     <a href="/home/whishlist"><img src="/static/img/icon/heart.png" alt=""></a>
                      <a href="/home/cart"><img src="/static/img/icon/cart.png" alt=""> <span>0</span></a>
                    
                  </div>
@@ -85,23 +77,23 @@
                                   <div class="sidebar-sticky " id="sidebar">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="/userProfile">PROFILE</a>
+                                            <a class="nav-link active" href="/userProfile">PROFILE >>></a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#wishlist">WHISHLIST</a>
+                                            <a class="nav-link" href="/home/whishlist">WHISHLIST</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link "  href="/userProfile/order">ORDERS  >>></a>
+                                            <a class="nav-link" href="/userProfile/order">ORDERS</a>
                                         </li>
                                        
                                         <li class="nav-item">
                                             <a class="nav-link" href="/userProfile/address">ADDRESSES</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#wallet">WALLET</a>
+                                            <a class="nav-link" href="/userProfile/wallet">WALLET</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/login">LOGOUT</a>
+                                            <a class="nav-link" href="/logout">LOGOUT</a>
                                         </li>
                                     </ul>
                                   </div>
@@ -123,6 +115,8 @@
                                                             <th>Order Status</th>
                                                             <th>Payment Status</th>
                                                             <th>Details</th>
+                                                            <th>payment</th>
+                                                           
                                                         </tr>
                                                     </thead>
                                                     <tbody id="ordersTableBody">
@@ -134,9 +128,16 @@
                                                                      <td><%=order.orderItems.length%></td>
                                                                      <td><%=order.orderStatus%></td>
                                                                      <td><%=order.paymentStatus%></td>
-                                                                    <td> <div class="blue-box">
-                                                            <a href="/orderinfo?orderId=<%=order.orderId%>">Info</a>
-                                                                    </div></td>
+                                                                     <td> <div class="blue-box">
+                                                                        <a href="/orderinfo?orderId=<%=order.orderId%>">Info</a>
+                                                                                </div></td>
+
+                                                                    <% if( order.paymentStatus =='unpaid'){ %>
+                                                                        <td> <div>
+                                                                            <button class="btn btn-success" onclick="initiatePayment('<%= order._id%>')">Pay Now</button>
+                                                                                    </div></td>
+                                                                                        <% }%>
+                                                                   
                                                                 </tr>
                                                            <% })%>
                                                            </tbody>
@@ -328,7 +329,135 @@ footer {
 
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+function showSnackbar(message) {
+                console.log(message,'mmmmmmmmm');
+    // Create snackbar container if it doesn't exist
+    let snackbar = document.getElementById("snackbar");
+    if (!snackbar) {
+        snackbar = document.createElement("div");
+        snackbar.id = "snackbar";
+        document.body.appendChild(snackbar);
+    }
+       snackbar.textContent = message;
+     // Add the "show" class
+    snackbar.className = "show";
 
+    // After 3 seconds, remove the show class
+    setTimeout(() => {
+        snackbar.className = snackbar.className.replace("show", "");
+    }, 3000);
+    }
+
+    function initiatePayment(orderId) {
+        fetch('/order-create-razorpay-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderId: orderId }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const options = {
+                key: "rzp_test_fJtszzen5xi5mf", 
+                amount: data.amount,
+                currency: "INR",
+                name: "Male fashion",
+                description: "Order Payment",
+                order_id: data.razorpayOrderId,
+                handler: function (response) {
+                    console.log(response,'rrrrrrrr');
+                    verifyPayment(response, orderId);
+                },
+                prefill: {
+                    name: "Customer Name",
+                    email: "customer@example.com",
+                    contact: "9999999999"
+                },
+                theme: {
+                    color: "#3399cc"
+                },
+               
+            };
+            const rzp = new Razorpay(options);
+          
+            rzp.open();
+        })
+        .catch(error => {
+            console.error('Error creating Razorpay order:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Order Creation Failed',
+                text: 'There was an error creating your order. Please try again later.',
+            });
+        });
+    }
+
+    function verifyPayment(razorpayResponse, orderId) {
+        console.log(razorpayResponse,'response');
+        fetch('/order-verify-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                orderCreationId:  razorpayResponse.razorpay_Order_id,
+                razorpayPaymentId: razorpayResponse.razorpay_payment_id,
+                razorpayOrderId: razorpayResponse.razorpay_order_id,
+                razorpaySignature: razorpayResponse.razorpay_signature,
+                orderId: orderId
+            }),
+        })
+        .then(response => {
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Payment Successful!',
+                    text: 'Your order has been placed successfully. Thank you for shopping with us!',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    confirmButtonText: 'Continue Shopping',
+                    confirmButtonColor: '#3085d6',
+                    backdrop: true,
+                    customClass: {
+                        popup: 'swal-custom-popup'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/shop';
+                    }
+                });
+            } else {
+                throw new Error('Payment verification failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error verifying payment:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Payment Verification Failed',
+                text: 'There was an error verifying your payment. Please contact customer support.',
+            });
+        });
+    }
+
+   
 </script>
 
 <script>

@@ -969,6 +969,10 @@ ol {
 	opacity: 0;
 }
 
+.product__item:hover .product__item__text .rating {
+	opacity: 0;
+}
+
 .product__item:hover .product__item__text .product__color__select {
 	opacity: 1;
 }

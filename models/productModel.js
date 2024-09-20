@@ -16,20 +16,10 @@ const variantSchema = new Schema({
         type:Number,
         required:true
     },
-    discountPrice:{
-        type:Number,
-        required:false
-    },
     quantity:{
         type:Number,
         required:true
-    },
-   
-    offer:{
-        type:Schema.Types.ObjectId,
-        ref:'offer',
-        required:false
-    },
+    }
 },{_id:false});
 
 const productSchema=new Schema({
@@ -55,14 +45,25 @@ const productSchema=new Schema({
         type:String,
         required:true
     },
-    variants:[variantSchema],
-    orderCount:{
-        type:Number,
-        default:0
+    productOffer:{
+        type:Schema.Types.ObjectId,
+        ref:'offer',
+        required:false
     },
+    discountPrice:{
+        type:Number,
+        required:false,
+        default :0
+    },
+    variants:[variantSchema],
+   
     is_delete:{
         type:Boolean,
         default:false
+    },
+    orderCount: {
+        type: Number,
+        default: 0
     },
     averageRating: {
         type: Number,

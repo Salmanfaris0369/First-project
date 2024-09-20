@@ -84,8 +84,14 @@ crossorigin="anonymous"></script>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
                         
-                        <a href="#"><img src="img/icon/heart.png" alt=""></a>
-                        <a href="/home/cart"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+                        <a href="/home/whishlist">
+                            <img src="img/icon/heart.png" alt=""> <span class="mt-2"><%= wishlistCount %></span> 
+                         
+                          </a>
+                          <a href="/home/cart">
+                            <img src="img/icon/cart.png" alt=""><br>
+                            <span class="mt-2"><%= cartCount %></span> 
+                          </a>
                        
                     </div>
                 </div>

@@ -8,7 +8,7 @@ const Cart=new Schema({
     },
     productId:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Product',
+        ref:'product',
         required:true
     },
     productImage:{

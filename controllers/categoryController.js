@@ -50,6 +50,7 @@ const addProduct= async(req,res)=>{
         }
 
         const imageFilenames = req.files ? req.files.map(file => file.filename) : [];
+        const discountPrice = variantData.price
 
             const newProduct = new product({
             productName:productName,
@@ -57,6 +58,7 @@ const addProduct= async(req,res)=>{
             productBrand: productBrand,
             productDescription: productDescription,
             productGender:productGender,
+            discountPrice:discountPrice,
             variants: [{
             color: variantData.color,
             images: imageFilenames,
@@ -108,6 +110,12 @@ const editProduct = async (req, res) => {
         Product.productBrand = productBrand;
         Product.productGender = productGender;
         Product.productDescription = productDescription;
+
+        if(!Product.productOffer){
+            console.log(variants[0].price,'dddfffffff');
+            const discountPrice = variants[0].price
+            Product.discountPrice=discountPrice
+        }
     
    
         if (Product.variants.length > 0) {
@@ -139,6 +147,7 @@ const editProduct = async (req, res) => {
         }
     
         await Product.save();
+        console.log(Product,'pppprrrr');
     
         res.json({ success: true, message: 'Product updated successfully' });
     } catch (error) {
@@ -186,7 +195,7 @@ const loadBrand= async(req,res)=>{
 }
 const productRecovery=async(req,res)=>{
     try {  
-        const products=await product.find({is_delete:true}) .populate('productCategory', 'categoryName').populate('productBrand', 'brandName') 
+        const products=await product.find({is_delete:true}).populate('productCategory', 'categoryName').populate('productBrand', 'brandName') 
         res.render('productRecovery',{products:products})
 
         

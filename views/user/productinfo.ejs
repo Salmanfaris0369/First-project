@@ -75,8 +75,14 @@
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
                     
-                        <a href="#"><img src="/static/img/icon/heart.png" alt=""></a>
-                        <a href="/home/cart"><img src="/static/img/icon/cart.png" alt=""> <span>0</span></a>
+                        <a href="/home/whishlist">
+                            <img src="/static/img/icon/heart.png" alt=""> <span class="mt-2"><%= wishlistCount %></span> 
+                         
+                          </a>
+                          <a href="/home/cart">
+                            <img src="/static/img/icon/cart.png" alt=""><br>
+                            <span class="mt-2"><%= cartCount %></span> 
+                          </a>
                        
                     </div>
                 </div>
@@ -135,24 +141,24 @@
 
                                     
                                             <div class="product__details__tab__content__item col-md-8">
-                                                <h5 style="text-align: center;">Products Infomation</h5>
-                                                <p style="text-align: center;"> Name :
+                                                <h5 style="text-align: left;">Products Infomation</h5>
+                                                <p style="text-align: left;"> Name :
                                                     <%= productData.productName %>
                                                 </p>
                                                      <br>
-                                                     <p style="text-align: center;"> Brand :
+                                                     <p style="text-align: left;"> Brand :
                                                         <%= productData.productBrand.brandName %>
                                                     </p>
                                                          <br>
-                                                         <p style="text-align: center;"> Category :
+                                                         <p style="text-align: left;"> Category :
                                                             <%= productData.productCategory.categoryName %>
                                                         </p>
                                                              <br>
-                                                             <p style="text-align: center;">Color :
+                                                             <p style="text-align: left;">Color :
                                                                 <%= productData.variants[0].color %>
                                                             </p>
                                                                  <br>
-                                                                 <p style="text-align: center;"> price : ₹ 
+                                                                 <p style="text-align: left;"> price : ₹ 
                                                                     <%= productData.variants[0].price %>
                                                                 </p>
                                                                      <br>      
@@ -188,7 +194,12 @@
                                 <i class="fa fa-star-o"></i>
                                 <span> - 5 Reviews</span>
                             </div>
-                            <h3>₹ <%= productData.variants[0].price %><span>70.00</span></h3>
+                             <% if(productData.productOffer){ %> 
+                            <h3>₹ <%= productData.discountPrice %><span>₹ <%= productData.variants[0].price %></span></h3>
+                               <% }else{ %>
+                                <h3>₹ <%= productData.variants[0].price %></h3>
+                               <% } %>
+                               
                             <p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
                                 cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
                             with placket.</p>
@@ -230,9 +241,12 @@
                             <div class="product__details__cart__option">
                                 <div class="quantity">
                                     <div id="quantity-status" class="quantity-status"></div>
+                                   
                                 </div>
                                 <a class="text-light primary-btn" id="addCartMain" onclick="getInfo('<%= productData.productName %>','<%= productData.variants[0].color %>','<%= productData.variants[0].price %>','<%= productData.variants[0].images[0] %>')" data-id="<%= productData._id %>">add to cart</a>
+                              
                             </div>
+                            <a class="add-wishlist text-light primary-btn" data-id="<%= productData._id %>">add to wishlist</a>
                             <!-- <div class="product__details__btns__option">
                                 <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
                                 <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
@@ -551,6 +565,89 @@
         }
 
     </style>
+
+<!-- <---add to whishlist---> 
+<script>
+    
+    document.addEventListener('DOMContentLoaded', () => {
+    // Handle 'Add to Wishlist' functionality
+    document.querySelectorAll('.add-wishlist').forEach(link => {
+        link.addEventListener('click', async (event) => {
+            event.preventDefault();
+            console.log('Add to wishlist clicked');
+
+            // Extract data from the page
+            const productId = link.getAttribute('data-id');
+            const productName = document.querySelector('.product__details__tab__content__item p:nth-child(2)').textContent.split(':')[1].trim();
+            const imageUrl = document.querySelector('.sub-image').getAttribute('src').split('/').pop();
+            const price = parseFloat(document.querySelector('.product__details__tab__content__item p:nth-child(10)').textContent.split('₹')[1].trim());
+            const color = document.querySelector('.product__details__tab__content__item p:nth-child(8)').textContent.split(':')[1].trim();
+
+            // Confirmation SweetAlert
+            const result = await Swal.fire({
+                title: 'Add to Wishlist',
+                text: `Are you sure you want to add ${productName} to your wishlist?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, add it!'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch('/shop/add-to-whishlist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            productId,
+                            color,
+                            price,
+                            imageUrl
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        // Success SweetAlert
+                        await Swal.fire({
+                            title: 'Success!',
+                            text: 'Product added to wishlist successfully!',
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        // Error SweetAlert
+                        await Swal.fire({
+                            title: 'Error!',
+                            text: result.message || 'Failed to add product to wishlist.',
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            footer: '<a href="/login" style="text-decoration: none; color: #007bff; font-weight: bold;">Login or register your account</a>'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error adding product to wishlist:', error);
+                    // Error SweetAlert
+                    await Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while adding the product to the wishlist.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+            }
+        });
+    });
+});
+   
+   
+   </script>
+
+
+
 <!-- stock maintaining  -->
 <script id="product-data" type="application/json">
     <%- JSON.stringify(productData) %>

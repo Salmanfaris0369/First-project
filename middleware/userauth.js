@@ -30,12 +30,15 @@ const checkUserStatus = async (req, res, next) => {
         try {
             const user = await User.findById(req.session.user_id);
             if (user && user.is_blocked) {
-                req.session.destroy((err) => {
-                    if (err) {
-                        console.error('Error destroying session:', err);
-                    }
-                    return res.redirect('/login');
-                });
+                // // Check if the session belongs to an admin
+                // if (req.session.is_admin) {
+                //     next(); // Allow admin to continue
+                // } else {
+                //     // Block the user and redirect to login page
+                    delete req.session.user_id
+                    res.redirect('/login');
+                // }
+                
             } else {
                 next();
             }
@@ -43,13 +46,11 @@ const checkUserStatus = async (req, res, next) => {
             console.error('Error checking user status:', error);
             next(error);
         }
-    } else if (req.session && req.session.admin_id) {
-        // If it's an admin session, just proceed
-        next();
     } else {
         next();
     }
 };
+
 
 
 const authMiddleware = async (req, res, next) => {

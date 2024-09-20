@@ -34,27 +34,21 @@
              <div class="col-lg-6 col-md-6">
                  <nav class="header__menu mobile-menu">
                      <ul>
-                         <li><a href="./inex.html">Home</a></li>
-                         <li class="active"><a href="./shop.html">Shop</a></li>
-                         <li><a href="#">Pages</a>
-                             <ul class="dropdown">
-                                 <li><a href="./about.html">About Us</a></li>
-                                 <li><a href="./shop-details.html">Shop Details</a></li>
-                                 <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                 <li><a href="./checkout.html">Check Out</a></li>
-                                 <li><a href="./blog-details.html">Blog Details</a></li>
-                             </ul>
-                         </li>
-                         <li><a href="./blog.html">Blog</a></li>
-                         <li><a href="./contact.html">Contacts</a></li>
+                        <li><a href="/home">Home</a></li>
+                        <li ><a href="/shop">Shop</a></li>
+                        <% if (isAuthenticated) { %>
+                           <li class="active"><a class="text-decoration-none" href='/userProfile'>Account</a></li>
+                       <% } else { %>
+                           <li><a class="text-decoration-none" href="/login">Sign In</a></li>
+                       <% } %>
                      </ul>
                  </nav>
              </div>
              <div class="col-lg-3 col-md-3">
                  <div class="header__nav__option">
                      <a href="#" class="search-switch"><img src="/static/img/icon/search.png" alt=""></a>
-                     <a href="#"><img src="/static/img/icon/heart.png" alt=""></a>
-                     <a href="#"><img src="/static/img/icon/cart.png" alt=""> <span>0</span></a>
+                     <a href="/home/whishlist"><img src="/static/img/icon/heart.png" alt=""></a>
+                     <a href="/home/cart"><img src="/static/img/icon/cart.png" alt=""> <span>0</span></a>
                      <div class="price">$0.00</div>
                  </div>
              </div>
@@ -85,23 +79,23 @@
                                   <div class="sidebar-sticky " id="sidebar">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="/userProfile">PROFILE</a>
+                                            <a class="nav-link active" href="/userProfile">PROFILE >>></a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#wishlist">WHISHLIST</a>
+                                            <a class="nav-link" href="/home/whishlist">WHISHLIST</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link "  href="/userProfile/order">ORDERS  >>></a>
+                                            <a class="nav-link" href="/userProfile/order">ORDERS</a>
                                         </li>
                                        
                                         <li class="nav-item">
                                             <a class="nav-link" href="/userProfile/address">ADDRESSES</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#wallet">WALLET</a>
+                                            <a class="nav-link" href="/userProfile/wallet">WALLET</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="/login">LOGOUT</a>
+                                            <a class="nav-link" href="/logout">LOGOUT</a>
                                         </li>
                                     </ul>
                                   </div>
@@ -117,10 +111,15 @@
                                                     <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
                                                     <p><strong>Payment Status:</strong> <%= order.paymentStatus %></p>
                                                     <p><strong>Order Status:</strong> <%= order.orderStatus %></p>
-                                                    <p><strong>Delivery Date:</strong>  <%= new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString() %></p>
+
+                                                    <% if (order.orderStatus !== 'Canceled') { %>
+                                                        <p><strong>Delivery Date:</strong>  <%= new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString() %></p>
+                                                    <% } %>
+                                                   
                                                 </div>
                                                
                                                 <div class="address-details">
+                                                    <button onclick="downloadOrderPDF('<%= order.orderId %>')" class="btn btn-primary mb-1">Download invoice</button>
                                                     <h4>Delivery Address</h4>
                                                     <p><strong>Name:</strong> <%= user.name %></p>
                                                     <p><strong>Email:</strong> <%= user.email %></p>
@@ -142,15 +141,55 @@
                                                         <p><strong>Quantity:</strong> <%= item.quantity %></p> <br>
                                                         <p><strong>Price:</strong> ₹<%= item.price %></p> <br>
                                                         <p><strong>Item Status:</strong><%= item.itemStatus %></p> 
-                                                       <% if(item.itemStatus !== "Canceled"){ %>
+                                                       <% if(item.itemStatus == "shipped" || item.itemStatus == "Pending"){ %>
                                                         <button class="cancel-button" onclick="orderCancel('<%=order.orderId%>','<%=item._id%>','<%= item.color %>')">Cancel</button>
                                                         <% }%>
+
+                                                        <% if(item.itemStatus == "delivered"){ %>
+                                                            <button class="cancel-button" data-bs-toggle="modal" data-bs-target="#returnModal">Return</button>
+
+                                                            
+                                                          
+                                                            <% }%>
+                                                      <!-- Add Money to Wallet Modal -->
+<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="addWalletModalLabel">Reason for returning product</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form id="addMoneyForm">
+            <!-- Amount Input -->
+            <div class="mb-3">
+              <label for="amount" class="form-label">Reason</label>
+              <textarea name="returnReason" class="form-control" id="returnReason"></textarea>
+            </div>
+            <!-- Submit Button -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-primary" onclick="orderReturn('<%=order.orderId%>','<%=item._id%>','<%= item.color %>')">Return</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
                                                     </div>
                                                 </div>
                                                 <% }); %>
                                             </div>
                                             
                                         </div>
+
+       
+
                                         
                                     </main>         
         </section>
@@ -332,6 +371,15 @@ footer {
 
 
 </style>
+<script>
+function downloadOrderPDF(orderId) {
+    console.log(orderId,'lll');
+    
+    window.location.href = `/order/download-pdf/${orderId}`;
+}
+</script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
      function orderCancel(orderId,itemId,itemColor) {
@@ -352,7 +400,7 @@ footer {
                   headers: {
                       'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({orderId:orderId,itemId,itemId,itemColor:itemColor}) 
+                  body: JSON.stringify({orderId:orderId,itemId:itemId,itemColor:itemColor}) 
               })
               .then(response => response.json())
               .then(data => {
@@ -386,6 +434,68 @@ footer {
       });
   }
 </script>
+
+<script>
+    function orderReturn(orderId,itemId,itemColor) {
+        const reason = document.getElementById('returnReason').value
+     console.log(orderId);
+     console.log(itemId);
+     console.log(itemColor);
+     
+     console.log(reason);
+     Swal.fire({
+         title: 'Are you sure?',
+         text: "You want to return the order!",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Yes, return it!'
+     }).then((result) => {
+         if (result.isConfirmed) {
+             // Assuming you have a route to handle delete
+             fetch('/orderReturn', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json',
+                 },
+                 body: JSON.stringify({orderId:orderId,itemId:itemId,color:itemColor,returnReason:reason}) 
+             })
+             .then(response => response.json())
+             .then(data => {
+                 if (data.success) {
+      
+                     Swal.fire(
+                         'Returned!',
+                         'order has been returned.',
+                         'success'
+                     ).then(() => {
+                                   
+                         location.reload();
+                        
+                     });
+                 } else {
+                     Swal.fire(
+                         'Error!',
+                         'There was an issue return the order.',
+                         'error'
+                     );
+                 }
+             })
+             .catch(error => {
+                 Swal.fire(
+                     'Error!',
+                     'There was an issue return the order.',
+                     'error'
+                 );
+             });
+         }
+     });
+ }
+</script>
+
+
+
 
 
 <script>

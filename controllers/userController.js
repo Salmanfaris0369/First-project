@@ -6,6 +6,7 @@ const bcrypt=require('bcrypt')
 const Address=require('../models/addressModel')
 const Cart=require('../models/cartModel')
 const Order = require('../models/orderModel')
+const Whishlist = require('../models/whishlistModel')
 const mongoose = require('mongoose');
 
 
@@ -18,11 +19,22 @@ const securePassword= async(password)=>{
     }
 }
 
+const landing = async (req,res)=>{
+     res.redirect('/home')
+}
+
 const loadHome=async(req,res)=>{
     
     console.log(req.session.user_id,'qwert');
-    try {   const products = await Product.find({ is_delete: false });
-    res.render('home', { products: products });
+   
+    try {   const userId =req.session.user_id
+        const wishlistCount = await Whishlist.countDocuments({ userId });
+    
+       
+        const cartCount = await Cart.countDocuments({ userId });
+        
+        const products = await Product.find({ is_delete: false });
+    res.render('home', { products: products,wishlistCount,cartCount });
     
     } catch (error) {
         console.log(error);
@@ -33,17 +45,22 @@ const loadHome=async(req,res)=>{
 
 const loadShop = async (req, res) => {
     try {
+        const userId =req.session.user_id
+        const wishlistCount = await Whishlist.countDocuments({ userId });
+    
+       
+        const cartCount = await Cart.countDocuments({ userId });
+
         const page = parseInt(req.query.page) || 1; 
         const limit = 9;
 
         const skip = (page - 1) * limit; 
 
-        // Parse filter parameters from the request
+      
     const { brand: brandFilter, category: categoryFilter,priceRange,sort } = req.query;
    console.log(sort);
     const search = Array.isArray(req.query.search) ? req.query.search[0] : req.query.search;
-         console.log(req.query);
-      // Build the filter object
+      
     const filter = { is_delete: false };
 
     if (brandFilter) {
@@ -115,7 +132,7 @@ const loadShop = async (req, res) => {
    
 
         
-        const products = await Product.find(filter).sort(sortOption).collation(collation).populate('variants').skip(skip).limit(limit);
+        const products = await Product.find(filter).sort(sortOption).collation(collation).populate('variants').populate('productOffer').skip(skip).limit(limit);
 
       
         const categories = await category.find({ is_delete: false });
@@ -133,6 +150,8 @@ const loadShop = async (req, res) => {
             hasNextPage: page < totalPages,
             hasPrevPage: page > 1,
             totalProducts:totalProducts,
+            wishlistCount,
+            cartCount,
             filters: { brandFilter, categoryFilter,search, priceRange: Array.isArray(priceRange) ? priceRange : [priceRange] },
             currentSort: sort || 'new_arrivals'
         });
@@ -146,16 +165,22 @@ const loadShop = async (req, res) => {
 
 const loadProductInfo = async (req, res) => {
     try {
+        const userId =req.session.user_id
+        const wishlistCount = await Whishlist.countDocuments({ userId });
+    
+       
+        const cartCount = await Cart.countDocuments({ userId });
+
         const productId = req.params.id;
 
-        const productinfo = await Product.findById(productId)
+        const productinfo = await Product.findById(productId).populate('productOffer')
             .populate('productCategory')
             .populate('productBrand');
 
         if (!productinfo) {
             return res.status(404).send("Product not found");
         }
-
+       console.log(productinfo);
         
         const { 
             productName, 
@@ -165,13 +190,15 @@ const loadProductInfo = async (req, res) => {
             productGender, 
             _id, 
             variants, 
+            discountPrice,
+            productOffer,
             is_delete
         } = productinfo;
 
 //   for related products 
     const products = await Product.find({productBrand:productBrand,productCategory:productCategory})
 
-console.log(products,'eeeeee');
+
 
 
                   // Process variants to include quantity status
@@ -190,7 +217,7 @@ console.log(products,'eeeeee');
                 quantityStatus
             };
         });
-
+  console.log(discountPrice,'sssssssoooooooooooo');
         // Create the processed product object
         const productData = {
             productName,
@@ -198,12 +225,14 @@ console.log(products,'eeeeee');
             productBrand,
             productDescription,
             productGender,
+            discountPrice,
+            productOffer,
             _id,
             variants: processedVariants,
             is_delete
         };
   console.log(productData);
-        res.render('productinfo', { productData: productData,products:products});
+        res.render('productinfo', { productData: productData,products:products,wishlistCount,cartCount});
     } catch (error) {
         console.error('Error in loadProductInfo:', error);
         res.status(500).send("An error occurred while loading product information");
@@ -214,11 +243,18 @@ console.log(products,'eeeeee');
 const loadProfile=async(req,res)=>{
 
     try {  const userId=req.session.user_id
+
+      
+        const wishlistCount = await Whishlist.countDocuments({ userId });
+    
+       
+        const cartCount = await Cart.countDocuments({ userId });
+
           const currentUser=await User.findById(userId)
            
         console.log(userId+'ssaa');
 
-         res.render('userProfile',{currentUser:currentUser})
+         res.render('userProfile',{currentUser:currentUser,wishlistCount,cartCount})
         
     } catch (error) {
         console.log(error);
@@ -297,9 +333,16 @@ const changePassword=async(req,res)=>{
 const loadAddress=async(req,res)=>{
     try {   
             const userID=req.session.user_id
+           
+        const wishlistCount = await Whishlist.countDocuments({ userID });
+    
+       
+        const cartCount = await Cart.countDocuments({ userID });
+
+
             const user=await User.findById(userID)
             const address=await Address.find({user_id:userID})
-           res.render('address',{address:address,user:user})
+           res.render('address',{address:address,user:user,wishlistCount,cartCount})
     } catch (error) {
         res.status(500).json({ success : false, error : "Some error occured"});
     }
@@ -405,13 +448,26 @@ const editAddress= async(req,res)=>{
 }
 
 const loadCart=async(req,res)=>{
-    try {  const userID=req.session.user_id
+    try {  
+        const page = parseInt(req.query.page) || 1; 
+        const limit = 3; 
+        const skip = (page - 1) * limit; 
+
+        const userID=req.session.user_id
         if(!userID){
             return res.status(400).json({success:false,message:"user id not found"})
         }
-           const cart=await Cart.find({userId:userID})
+        const totalCart = await Cart.countDocuments({ userId: userID });
+           const cart=await Cart.find({userId:userID}).populate('productId').skip(skip).limit(limit);
+
+           const totalPages = Math.ceil(totalCart / limit);
          
-            res.render('cart',{cart:cart})
+            res.render('cart',{cart:cart,
+                currentPage: page,
+                totalPages: totalPages,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+            })
     } catch (error) {
         console.log(error)
         res.status(500).json({ success : false, error : "Some error occured"});
@@ -419,6 +475,7 @@ const loadCart=async(req,res)=>{
 }
 
 
+     
 // from shop
 const addToCart = async(req,res)=>{
     try {  console.log(req.body);
@@ -432,7 +489,7 @@ const addToCart = async(req,res)=>{
             return res.status(400).json({success:false,message:"user id not found "})
         }
         const product = await Product.findById(productId)
-
+        console.log(product);
         const variant = product.variants.find(v => v.color === color);
         if (!variant || variant.quantity === 0) {
             return res.status(400).json({ success: false, message: "Product is out of stock" });
@@ -572,7 +629,6 @@ const decreaseCartQuantity = async (req, res) => {
         cartItem.productQuantity = newQuantity;
         cartItem.cartPrice = cartItem.ProductPrice * newQuantity;
         await cartItem.save();
-
         res.status(200).json({ 
             success: true, 
             message: `${cartItem.productName} product quantity decreased to ${newQuantity} `,
@@ -589,6 +645,7 @@ const decreaseCartQuantity = async (req, res) => {
 
 
 module.exports={
+landing,
 loadHome,
 loadShop,
 loadProductInfo,

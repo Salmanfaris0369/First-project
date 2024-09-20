@@ -36,26 +36,28 @@
                 <nav class="header__menu mobile-menu">
                      <ul>
                          <li><a href="/home">Home</a></li>
-                         <li class="active"><a href="/shop">Shop</a></li>
-                         <li><a href="#">Pages</a>
-                             <ul class="dropdown">
-                                 <li><a href="./about.html">About Us</a></li>
-                                 <li><a href="./shop-details.html">Shop Details</a></li>
-                                 <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                 <li><a href="./checkout.html">Check Out</a></li>
-                                 <li><a href="./blog-details.html">Blog Details</a></li>
-                             </ul>
-                         </li>
-                         <li><a href="./blog.html">Blog</a></li>
-                         <li><a href="./contact.html">Contacts</a></li>
+                         <li ><a href="/shop">Shop</a></li>
+                         <% if (isAuthenticated) { %>
+                            <li class="active"><a class="text-decoration-none" href='/userProfile'>Account</a></li>
+                        <% } else { %>
+                            <li><a class="text-decoration-none" href="/login">Sign In</a></li>
+                        <% } %>
+                        
+                        
                      </ul>
                  </nav>
              </div>
              <div class="col-lg-3 col-md-3">
                  <div class="header__nav__option">
                      
-                     <a href="#"><img src="img/icon/heart.png" alt=""></a>
-                     <a href="/home/cart"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+                    <a href="/home/whishlist">
+                        <img src="img/icon/heart.png" alt=""> <span class="mt-2"><%= wishlistCount %></span> 
+                     
+                      </a>
+                      <a href="/home/cart">
+                        <img src="img/icon/cart.png" alt=""><br>
+                        <span class="mt-2"><%= cartCount %></span> 
+                      </a>
                      
                  </div>
              </div>
@@ -88,7 +90,7 @@
                                 <a class="nav-link active" href="/userProfile">PROFILE >>></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#wishlist">WHISHLIST</a>
+                                <a class="nav-link" href="/home/whishlist">WHISHLIST</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/userProfile/order">ORDERS</a>
@@ -98,7 +100,7 @@
                                 <a class="nav-link" href="/userProfile/address">ADDRESSES</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#wallet">WALLET</a>
+                                <a class="nav-link" href="/userProfile/wallet">WALLET</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/logout">LOGOUT</a>
