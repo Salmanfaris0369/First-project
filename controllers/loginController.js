@@ -87,7 +87,7 @@ const insertUser= async(req,res)=>{
       req.session.otp=otp;
       req.session.otp_expire=Date.now() + 60000
 
-console.log(req.session.otp_expire);
+
        req.session.userData={
          name:req.body.name,
         email:req.body.email,
@@ -124,20 +124,15 @@ const verifyform= async(req,res)=>{
 const otpVerification = async(req,res)=>{
    try{
          const{otp}=req.body
-    console.log(req.session.otp_expire);
-console.log(req.body.otp);
     
     if(req.session.otp&&req.session.otp_expire>Date.now()&&req.body.otp===req.session.otp){
 
-        const user =req.session.userData;
+         const user =req.session.userData;
          const newUser=new User(user);
          const newuserData = await newUser.save();
       
-
-
-
-        if(newuserData){
-            req.session.otp=null
+       if(newuserData){
+        req.session.otp=null
         req.session.otp_expire=null
         req.session.userData=null
 
@@ -158,7 +153,7 @@ console.log(req.body.otp);
 
 
 
-const resendOtp = async(req,res)=>{
+   const resendOtp = async(req,res)=>{
     try {   
             const userData =req.session.userData
             console.log(userData);
@@ -166,8 +161,7 @@ const resendOtp = async(req,res)=>{
             return res.status(400).json({success:false,message:'session not found'})
            }
 
-
-           const newOtp=generateotp()
+     const newOtp=generateotp()
            console.log(newOtp);
           req.session.otp=newOtp
           req.session.otp_expire = Date.now() + 60000
@@ -207,13 +201,14 @@ const verifyLogin = async(req,res)=>{
                const passwordMatch=await bcrypt.compare(password,userData.password)
                if(passwordMatch){
                        if(userData.is_blocked==true){
+                        console.log('kkk');
                         
                         res.render('userlogin',{message:"You are blocked"})
                        }else{
                         req.session.user_id=userData._id
-                        console.log(req.session.user_id,'sdfghj');
+                    
                         req.session.user_id = userData._id;
-                        console.log( req.session.user_id+'melbin');
+                  
                         res.redirect('/home')
 
                         let wallet = await Wallet.findOne({ userId: userData._id });
@@ -229,7 +224,9 @@ const verifyLogin = async(req,res)=>{
 
                        }
                }else{
-                res.render('login',{message:"password is incorrect"})
+                console.log('notmatch');
+                
+                res.render('userlogin',{message:"password is incorrect"})
                }
        }else{
         res.render('login',{message:"user not found"})

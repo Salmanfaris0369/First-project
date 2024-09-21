@@ -9,7 +9,6 @@ const path = require('path');
 const loadProduct=async(req,res)=>{
     try {
         const products=await product.find({is_delete:false}) .populate('productCategory', 'categoryName').populate('productBrand', 'brandName') 
-        
         res.render('product',{product:products})
         
     } catch (error) {
@@ -32,7 +31,7 @@ const loadAddProduct=async(req,res)=>{
 
 const addProduct= async(req,res)=>{
     try {  
-          console.log(req.body);
+        
     const { productName, productCategory, productBrand, productDescription,productGender} = req.body
 
     if (!productName||!productCategory||!productBrand||!productDescription||!productGender) {
@@ -77,7 +76,7 @@ const addProduct= async(req,res)=>{
 }
 const loadEditProduct=async(req,res)=>{
     try {  const id=req.params.productId
-       // console.log(id);
+     
             const productData=await product.findById({_id:id})
             const brands=await brand.find()
             const categories=await Category.find()
@@ -112,14 +111,11 @@ const editProduct = async (req, res) => {
         Product.productDescription = productDescription;
 
         if(!Product.productOffer){
-            console.log(variants[0].price,'dddfffffff');
             const discountPrice = variants[0].price
             Product.discountPrice=discountPrice
         }
     
-   
         if (Product.variants.length > 0) {
-    
           Product.variants[0].color = variants[0].color;
           Product.variants[0].price = variants[0].price;
           Product.variants[0].quantity = variants[0].quantity;
@@ -127,17 +123,16 @@ const editProduct = async (req, res) => {
           // Handle images
           const newImages = req.files.map(file => file.filename);
           const existingImages = variants[0].existingImages || []; // Filter out new images
-          console.log(existingImages,'fytyrt');
-          console.log(Product.variants[0].images,'uyuyiugt');
+         
           // Remove images that are not in existingImages
           const imagesToRemove = Product.variants[0].images.filter(img => !existingImages.includes(img));
-          console.log(imagesToRemove,'yg');
+         
           for (const img of imagesToRemove) {
             await fs.unlink(path.join('public/productImages/', img));
           }
           Product.variants[0].images = [...existingImages, ...newImages];
         } else {
-          // Create new variant if it doesn't exist
+        
           Product.variants[0].push({
             color: variants[0].color,
             price: variants[0].price,
@@ -158,25 +153,20 @@ const editProduct = async (req, res) => {
 
 
 const loadProductDetails = async(req,res)=>{
-    try {  console.log(req.query.productId,'nmnmnm');
-
-        
+    try { 
              const productID=req.query.productId
              if(!productID){
                 return res.status(400).json({success:false,message:"product id is not found"})
             }
             const productData =await product.findOne({_id:productID}).populate('productCategory', 'categoryName').populate('productBrand', 'brandName')
-               console.log(productData);
+               
              if (!productData) {
                 return res.status(404).send('product not found');
             }
 
-           
+           res.render('productDetails',{productData});
 
-            res.render('productDetails',{productData});
-
-        
-    } catch (error) {
+     } catch (error) {
         console.error('Error updating product:', error);
         res.status(500).json({ success: false, message: 'Error in getting  product details', error: error.message });
     }
@@ -198,17 +188,17 @@ const productRecovery=async(req,res)=>{
         const products=await product.find({is_delete:true}).populate('productCategory', 'categoryName').populate('productBrand', 'brandName') 
         res.render('productRecovery',{products:products})
 
-        
-    } catch (error) {
+        } catch (error) {
         console.error("Error recover product:", error);
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
 
 const recoverProduct=async(req,res)=>{
-    try {  console.log(req.body);
-        const{productId}=req.body
-               const recoverData=await product.findByIdAndUpdate(req.body.productId,{is_delete:false},{new:true})
+    try {  
+          const{productId}=req.body
+          const recoverData=await product.findByIdAndUpdate(req.body.productId,{is_delete:false},{new:true})
+
           if(!recoverData){
             return res.status(400).json({message:" no product found"})
           }
@@ -221,7 +211,8 @@ const recoverProduct=async(req,res)=>{
     }
 }
 const deleteProduct=async(req,res)=>{
-    try {  const{productId}=req.body
+    try { 
+     const{productId}=req.body
     
     if(!productId){
         return res.status(400).json({success:false,message:"product required"})
@@ -243,27 +234,21 @@ const deleteProduct=async(req,res)=>{
 }
 
 
-
-
-
-
-
 const brandRecovery=async(req,res)=>{
     try {  
         const brands=await brand.find({is_delete:true})
         res.render('brandRecovery',{brands:brands})
 
-        
-    } catch (error) {
+          } catch (error) {
         console.error("Error recover category:", error);
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
 
 const recoverBrand=async(req,res)=>{
-    try {  console.log(req.body);
+    try { 
         const{brandId}=req.body
-               const recoverData=await brand.findByIdAndUpdate(req.body.brandId,{is_delete:false},{new:true})
+        const recoverData=await brand.findByIdAndUpdate(req.body.brandId,{is_delete:false},{new:true})
           if(!recoverData){
             return res.status(400).json({message:" no brand found"})
           }
@@ -278,10 +263,9 @@ const recoverBrand=async(req,res)=>{
 
 const addBrand= async(req,res)=>{
     try {   
-        console.log(req.body);
+       
         const {brandName}=req.body
-        console.log(brandName);
-
+      
         if(!brandName){
             return res.status(400).json({success:false,message:"brand required"})
         }
@@ -294,8 +278,7 @@ const addBrand= async(req,res)=>{
             brandName : brandName,
             is_delete:false
         });
-        console.log(newbrand);
-
+   
         const brandData = await newbrand.save()
         res.status(200).json({success:true,message:'brand added',brandData})
         
@@ -310,9 +293,7 @@ const editBrand =async(req,res)=>{
     try {  
         const{brandName,brandId} =req.body
 
-    console.log(brandName);
-    console.log(brandId);
-    if(!brandName){
+     if(!brandName){
         return res.status(400).json({message:"brand required"})
     }
     
@@ -333,12 +314,12 @@ const editBrand =async(req,res)=>{
 
 const deleteBrand=async(req,res)=>{
     try {  const{brandId}=req.body
-    console.log(brandId);
+   
     if(!brandId){
         return res.status(400).json({success:false,message:"brand required"})
     }
        const updatebrand = await brand.findByIdAndUpdate(req.body.brandId, { is_delete: true }, { new: true });
-       console.log(updatebrand);
+     
         if (updatebrand) {
           res.json({
             success: true,
@@ -354,11 +335,6 @@ const deleteBrand=async(req,res)=>{
 }
 
 
-
-
-
-
-
 const loadCategories= async(req,res)=>{
     try {
         const category=await categories.find({is_delete:false})
@@ -366,13 +342,13 @@ const loadCategories= async(req,res)=>{
         
     } catch (error) {
         console.log(error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
 
 const addCategory= async(req,res)=>{
     try {   
-        console.log(req.body);
-        const {categoryName}=req.body
+       const {categoryName}=req.body
 
         if(!categoryName){
             return res.status(400).json({message:"category required"})
@@ -386,8 +362,7 @@ const addCategory= async(req,res)=>{
             categoryName : categoryName,
             is_delete:false
         });
-        console.log(newcategory);
-
+      
         const categoryData = await newcategory.save()
         res.status(200).json({message:'category added',categoryData})
         
@@ -402,8 +377,6 @@ const editCategory =async(req,res)=>{
     try {  
         const{categoryName,categoryId} =req.body
 
-    console.log(categoryName);
-    console.log(categoryId);
     if(!categoryName){
         return res.status(400).json({message:"category required"})
     }
@@ -428,15 +401,15 @@ const categoriesRecovery=async(req,res)=>{
         const category=await categories.find({is_delete:true})
         res.render('categoriesRecovery',{category:category})
 
-        
-    } catch (error) {
+         } catch (error) {
         console.error("Error recover category:", error);
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 }
 
 const deleteCategory=async(req,res)=>{
-    try {  const{categoryId}=req.body
+    try { 
+     const{categoryId}=req.body
     if(!categoryId){
         return res.status(400).json({success:false,message:"category required"})
     }
@@ -457,9 +430,9 @@ const deleteCategory=async(req,res)=>{
 }
 
 const recoverCategory=async(req,res)=>{
-    try {  console.log(req.body);
+    try {  
         const{categoryId}=req.body
-               const recoverData=await categories.findByIdAndUpdate(req.body.categoryId,{is_delete:false},{new:true})
+         const recoverData=await categories.findByIdAndUpdate(req.body.categoryId,{is_delete:false},{new:true})
           if(!recoverData){
             return res.status(400).json({message:" no category found"})
           }

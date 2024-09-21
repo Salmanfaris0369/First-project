@@ -33,7 +33,7 @@ const verifyLogin=async(req,res)=>{
         const email=req.body.email
         const password=req.body.password
         const admindata=await Admin.findOne({adminEmail:email})
-        console.log(admindata);
+       
         if(admindata){
             const passwordMatch = await bcrypt.compare(password,admindata.adminPassword)
            
@@ -51,13 +51,7 @@ const verifyLogin=async(req,res)=>{
     }
 }
 
-// const loadDashboard = async(req,res)=>{
-//     try {
-//         res.render('dashboard')
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+
 
 const loadUsers = async(req,res)=>{
     try { 
@@ -73,7 +67,7 @@ const block_unblock = async(req, res) => {
     try {
         const userId = req.params.id;
         const action = req.body.action;
-        console.log(userId,action);
+      
 
         const user = await User.findById(userId);
         if (!user) {
@@ -107,7 +101,7 @@ const loadOrder=async(req,res)=>{
 
 const loadOaderInfo = async(req,res)=>{
     try {  
-        console.log(req.query.orderId,'salman');
+       
         
           const orderID=req.query.orderId
           if(!orderID){
@@ -119,7 +113,7 @@ const loadOaderInfo = async(req,res)=>{
              return res.status(404).send('Order not found');
          }
          if (!order.address) {
-            // Handle missing address case
+           
             return res.status(404).send('Address not found for this order');
         }
 
@@ -135,9 +129,6 @@ const loadOaderInfo = async(req,res)=>{
 const statusChange = async(req,res)=>{
     try {   
         const{orderId,itemId,currentStatus,user} = req.body
-
-     
-        console.log(orderId+','+itemId+','+currentStatus+','+user,'ghjkl');
 
         const order = await Order.findOne({orderId:orderId})
         if(!order){
@@ -155,7 +146,7 @@ const statusChange = async(req,res)=>{
         order.orderItems[itemIndex].itemStatus = currentStatus;
 
         const allItemsCanceled = order.orderItems.every(item => item.itemStatus === 'Canceled');
-          console.log(allItemsCanceled);
+         
         order.orderStatus = allItemsCanceled ? 'Canceled' : currentStatus;
 
         if(currentStatus === 'order returned'){
@@ -188,7 +179,8 @@ const statusChange = async(req,res)=>{
 }
 
   const loadCoupon = async(req,res)=>{
-    try {    const coupons=await Coupon.find()
+    try {  
+             const coupons=await Coupon.find()
               res.render('coupon',{coupons:coupons})
         
     } catch (error) {
@@ -199,7 +191,7 @@ const statusChange = async(req,res)=>{
 
   const addCoupon= async(req,res)=>{
     try {   
-        console.log(req.body);
+        
         const { couponName : couponName,discountPercentage:discountPercentage,minimumPurchase :minimumPurchase,expiryDate :expiryDate,usageLimit :usageLimit,redeemAmount :redeemAmount}=req.body
        
 
@@ -219,7 +211,7 @@ const statusChange = async(req,res)=>{
             usageLimit :usageLimit,
             redeemAmount :redeemAmount
         });
-        console.log(newCoupon);
+      
 
         const couponData = await newCoupon.save()
         res.status(200).json({success:true,message:'brand added',couponData})
@@ -232,10 +224,7 @@ const statusChange = async(req,res)=>{
 
 const editCoupon = async(req,res)=>{
     try {   const{couponId,code,discount,minPurchase,expiryDate,usageLimit,redeemAmount}=req.body
-           console.log(req.body,'wertyui');
-      
-   
-   
+          
     if (!couponId || !code || !discount || !minPurchase || !expiryDate || !usageLimit || !redeemAmount) {
        return res.status(400).json({ success: false, message: "Missing required fields" });
    }
@@ -249,7 +238,7 @@ const editCoupon = async(req,res)=>{
                                 usageLimit,
                                 redeemAmount
                             }},{new:true})
-        console.log(updateCoupon);
+      
    
 if(updateCoupon){
    res.status(201).json({success:true,message:"coupon updated successfully"})
@@ -264,7 +253,7 @@ if(updateCoupon){
 }
 
 const deleteCoupon = async(req,res)=>{
-    console.log(req.body);
+   
     try {  const couponid=req.body.couponId
 
            const deleteCoupon = await Coupon.findByIdAndDelete(couponid)
@@ -291,12 +280,10 @@ const loadOffer = async(req,res)=>{
 }
 
 const addOffer = async(req,res)=>{
-    try {    console.log(req.body);
+    try {    
         const{offerName,offerType,productOffer,categoryOffer,discountPercentage,maxRedeem,offerDescription}=req.body
 
-        
-        
-          if (!offerName || !offerType || !discountPercentage || !maxRedeem || !offerDescription) {
+        if (!offerName || !offerType || !discountPercentage || !maxRedeem || !offerDescription) {
            return res.status(400).json({ success: false, message: "Missing required fields" });
         }
         
@@ -310,11 +297,9 @@ const addOffer = async(req,res)=>{
             offerDescription
         
         })
-        console.log(offerType);
-        console.log(productOffer);
-        console.log(categoryOffer);
+      
         await newOffer.save()
-        console.log(newOffer,'newww offffer');
+       
 
         if(offerType ==='product'){
             const products = await product.findById(productOffer)
@@ -349,14 +334,12 @@ const applyOfferToProducts = async (categoryId, offerId, discountPercentage) => 
             product.productOffer = offerId;
             const existPrice = product.discountPrice
             product.discountPrice = Math.ceil(product.variants[0].price - (product.variants[0].price * (discountPercentage / 100)));
-            console.log(existPrice,'exist');
-            console.log(product.discountPrice,'newprice');
+           
             if(product.discountPrice && existPrice>product.discountPrice){
             await product.save();
             }
         }
 
-        console.log('offer   applied   ');
     } catch (error) {
         console.error('cannot able to apply', error);
     }
@@ -365,10 +348,10 @@ const applyOfferToProducts = async (categoryId, offerId, discountPercentage) => 
 
 
 const deleteOffer = async (req, res) => {
-    console.log(req.body, "deletebody");
+   
     try {
         const offerId = req.body.offerId;
-        console.log(offerId);
+       
         const offer = await Offer.findById(offerId);
         if (!offer) {
             return res.status(404).json({ success: false, message: 'Offer not found' });
@@ -376,59 +359,48 @@ const deleteOffer = async (req, res) => {
 
         if (offer.offerType === 'product' && offer.productOffer) {
 
-                // Find all products that had this offer
+               
             const affectedProducts = await product.find({ productOffer: offerId });
-            console.log(affectedProducts, 'affectproductssss');
-            // For each affected product, find the next best offer
+           
+      
             for (let product of affectedProducts) {
                 const bestOffer = await findBestOffer(offerId,product._id, 'product');
-                console.log(bestOffer, 'bestproduct offer');
+               
                 if (bestOffer) {
-                    // Apply the best offer to the product
                     await applyOfferToProduct(product._id, bestOffer);
                 }
             }
 
-            // Remove the offer from the product
+        
             const offerUpdatepro = await product.updateMany(
                 { productOffer: offerId },
                 { $unset: { productOffer: 1, discountPrice: 1 } }
             );
-            console.log(offerUpdatepro, 'yes');
+           
            
         }
 
         if (offer.offerType === 'category' && offer.categoryOffer) {
-            console.log("yes category");
-            
-            const affectedCategory = await Category.find(offer.categoryOffer);
-            console.log('Category before update:',affectedCategory);
-
-         
-
-            // Find the best offer for this category
-            const bestOffer = await findBestOffer(offer.categoryOffer, 'category');
-            console.log(bestOffer, 'bestoffer');
+           
+           const affectedCategory = await Category.find(offer.categoryOffer);
+           const bestOffer = await findBestOffer(offer.categoryOffer, 'category');
+          ;
             if (bestOffer) {
-                // Apply the best offer to the category
+                
                 await applyOfferToCategory(offer.categoryOffer, bestOffer);
             }
 
-            // Update the category
+           
             const updateResult = await Category.findByIdAndUpdate(
                 offer.categoryOffer,
                 { $unset: { offer: 1 } },
                 { new: true, runValidators: true }
             );
 
-            console.log('Category update result:', updateResult);
-
-
-            // Update all products in this category
-            await updateProductsInCategory(offerId,offer.categoryOffer);
+          await updateProductsInCategory(offerId,offer.categoryOffer);
         }
 
-        // Delete the offer
+
         await Offer.findByIdAndDelete(offerId);
         res.status(200).json({ success: true, message: 'Offer deleted successfully' });
     } catch (error) {
@@ -444,11 +416,10 @@ async function findBestOffer(offerId,id, type) {
     }else if(type === 'category') {
         offers = await Offer.find({ offerType: 'category', categoryOffer: id,_id: { $ne: offerId } }).sort({ discountPercentage: -1 });
     }else{
-        // Handle invalid `type` case if needed
-        return null; // or some other default handling
+       
+        return null; 
     }
 
-    // If no offers are found, return null or a default value
     if (!offers || offers.length === 0) {
         
         return null; 
@@ -459,9 +430,7 @@ async function findBestOffer(offerId,id, type) {
 
 async function applyOfferToProduct(productId, offer) {
     const products = await product.findById(productId);
-    console.log(products);
     const discountPrice = Math.ceil(products.variants[0].price * (1 - offer.discountPercentage / 100));
-    console.log(discountPrice);
     await product.updateOne(
         { _id: productId },
         { productOffer: offer._id, discountPrice: discountPrice }
@@ -473,45 +442,41 @@ async function applyOfferToCategory(categoryId, offer) {
         { _id: categoryId },
         { offer: offer._id }
     );
-    console.log(updateCategory);
+   
 }
 
 async function updateProductsInCategory(offerId,categoryId) {
     const category = await Category.findById(categoryId).populate('offer');
     const products = await product.find({productCategory: categoryId });
-    console.log(category, 'categorry');
-    console.log(products, 'productsssss');
+   
     for (let item of products) {
         const productOffer = await findBestOffer(offerId,item._id, 'product');
-        console.log(productOffer,'productoffer');
+       
         let updateFields = {};
 
         if (productOffer && (!category.offer || productOffer.discountPercentage > category.offer.discountPercentage)) {
-            console.log('pccc');
-            // Apply product-specific offer
+         
             const discountPrice = Math.ceil(item.variants[0].price - (item.variants[0].price * (productOffer.discountPercentage / 100)));
             updateFields = {
                 productOffer: productOffer._id,
                 discountPrice: discountPrice
             };
-            console.log(updateFields,'updatefield');
+            
         } else if (category.offer) {
-            // Apply category offer
+           
             const discountPrice = Math.ceil(item.variants[0].price - (item.variants[0].price * (category.offer.discountPercentage / 100)));
             updateFields = {
                 productOffer: category.offer._id,
                 discountPrice: discountPrice
             };
         } else {
-            // No offer applicable, reset to default
+           
             updateFields = {
                 $unset: { productOffer: 1 },
-                discountPrice: item.variants[0].price  // Set discount price back to original price
+                discountPrice: item.variants[0].price  
             };
         }
       
-        console.log(item._id,'productid');
-       
         const updateResult = await product.findOne({ _id: item._id})
         updateResult.productOffer=updateFields.productOffer
         updateResult.discountPrice= updateFields.discountPrice
@@ -521,12 +486,10 @@ async function updateProductsInCategory(offerId,categoryId) {
 }
 
 const  editOffer = async(req,res)=>{
-    try {  console.log(req.body);
+    try {  
         const{offerId,offerName,offerType,productOffer,categoryOffer,discountPercentage,maxRedeem,offerDescription}=req.body
 
-        
-        
-        if (!offerId || !offerName || !offerType || !discountPercentage || !maxRedeem || !offerDescription) {
+         if (!offerId || !offerName || !offerType || !discountPercentage || !maxRedeem || !offerDescription) {
          return res.status(400).json({ success: false, message: "Missing required fields" });
       }
       
@@ -540,12 +503,8 @@ const  editOffer = async(req,res)=>{
           offerDescription
           }},{new:true})
      
-    
-      console.log(updateOffer);
-
       if(offerType ==='product'){
           const products = await product.findById(productOffer)
-               
                 products.discountPrice = products.variants[0].price - (products.variants[0].price * (discountPercentage / 100))
                 await products.save()
       }else if(offerType === 'category'){
@@ -557,7 +516,6 @@ const  editOffer = async(req,res)=>{
             }
       }
 
-     
       if(updateOffer){
       res.status(201).json({success:true,message:"offer added successfully"}) }
       
@@ -572,16 +530,14 @@ const loadSalesReport = async(req,res)=>{
       const page = parseInt(req.query.page) || 1; 
       const limit = 5; 
       const skip = (page - 1) * limit; 
-        const { startDate, endDate, period } = req.query;
-        console.log(req.query,'query');
-        
-  const start = startDate ? new Date(startDate) : moment().subtract(30, 'days').toDate();
-  const end = endDate ? new Date(endDate) : moment().endOf('day').toDate();
+      const { startDate, endDate, period } = req.query;
+      const start = startDate ? new Date(startDate) : moment().subtract(30, 'days').toDate();
+      const end = endDate ? new Date(endDate) : moment().endOf('day').toDate();
 
-  start.setUTCHours(0, 0, 0, 0);
-  end.setUTCHours(23, 59, 59, 999);
+      start.setUTCHours(0, 0, 0, 0);
+      end.setUTCHours(23, 59, 59, 999);
 
-  // Summary pipeline
+ 
   const summaryPipeline = [
     {
       $match: {
@@ -669,7 +625,7 @@ const loadSalesReport = async(req,res)=>{
     }
   ];
 
-  // If period is yearly or monthly, adjust the grouping
+  
   if (period === 'yearly') {
     productPipeline[2].$group._id = {
       year: { $year: '$orderDate' },
@@ -687,15 +643,10 @@ const loadSalesReport = async(req,res)=>{
 
   const summary = await Order.aggregate(summaryPipeline);
   const productData = await Order.aggregate(productPipeline).skip(skip).limit(limit);
-
   const totalCount = await Order.aggregate(productPipeline).count("totalCount");
-  console.log(totalCount,'count');
-  console.log(limit,'limit');
   
-  
-
   const totalPages = Math.ceil(totalCount[0].totalCount/ limit);
-console.log(totalPages,'dddd');
+
 
   res.render('salesReport', {
     summary: summary[0] || { totalSales: 0, totalOrders: 0, totalDiscount: 0, totalCouponDeduction: 0, totalQuantity: 0 },
@@ -715,19 +666,13 @@ console.log(totalPages,'dddd');
     }
 }
 
-
-
-
-
-
-
 const downloadReport = async (req, res) => {
     try {
         const { format, startDate, endDate } = req.query;
         const start = startDate ? new Date(startDate) : moment().subtract(7, 'days').toDate();
         const end = endDate ? new Date(endDate) : new Date();
 
-        // Fetch overall summary
+       
         const summary = await Order.aggregate([
             {
                 $match: {
@@ -754,7 +699,6 @@ const downloadReport = async (req, res) => {
               }
         ]);
 
-        // Fetch product data
         const productData = await Order.aggregate([
             {
                 $match: {
@@ -916,15 +860,11 @@ const downloadReport = async (req, res) => {
 
 const getAdminDashboardAnalytics = async (req, res) => {
     try {
-      console.log(req.query, 'query');
-      
       const { period = 'monthly' } = req.query;
       const currentDate = new Date();
-      currentDate.setHours(23, 59, 59, 999); // Set to end of the current day
+      currentDate.setHours(23, 59, 59, 999); 
       let startDate, groupId, sortStage;
-      console.log(currentDate,'currr');
-      
-  
+    
       switch (period) {
         case 'yearly':
           startDate = new Date(currentDate.getFullYear() - 5, 0, 1);
@@ -1100,8 +1040,7 @@ const getAdminDashboardAnalytics = async (req, res) => {
       ];
   
       const analyticsData = await Order.aggregate(pipeline);
-      console.log(analyticsData, 'analyticsDatasss');
-      
+     
       res.render('dashboard', { 
         analyticsData, 
         period,
@@ -1116,11 +1055,11 @@ const getAdminDashboardAnalytics = async (req, res) => {
 
 
 const logOut = async(req,res)=>{
-    try {  console.log(req.session.admin_id,'ggg');
+    try {  
         delete req.session.admin_id
         res.redirect('/admin/login')
         
-    } catch (error) {
+      } catch (error) {
         console.log(error);
         res.status(500).json({ success : false, error : "Some error occured"});
     }
@@ -1148,7 +1087,7 @@ module.exports={
     getAdminDashboardAnalytics,
     logOut
     
-}
+  }
 
 
 

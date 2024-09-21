@@ -212,7 +212,15 @@ WebFont.load({
 
                                     <img src=" /static/productimages/<%= item.product.variants[0].images[0]%>" alt="<%= item.product.productName %>" class="product-image">
                                     <div class="item-details">
-                                        <h5><%= item.product.productName %></h5> 
+                                        <h5><%= item.product.productName %>
+                                        
+                                         
+                                          <% if (item.returnStatus == 'requested') { %>
+                                            <span title="Return Requested">❗</span> 
+                                          <% } %>
+                                        
+                                        
+                                        </h5> 
                                         <p><strong>Color:</strong> <%= item.color %></p> 
                                         <p><strong>Quantity:</strong> <%= item.quantity %></p> 
                                         <p><strong>Price:</strong> ₹<%= item.price %></p> 
@@ -376,17 +384,17 @@ WebFont.load({
             title: 'Update failed',
             text: 'Cannot change the status of returned item'
         });
-        return; // Exit the function early
+        return; 
     }
-    if (itemStatus === 'pending' && currentStatus !='shipped') {
+    if (itemStatus === 'Pending' && currentStatus !='shipped') {
       console.log('inside');
       
         Swal.fire({
             icon: 'error',
             title: 'Update failed',
-            text: 'you can only change pending order status in to shipped'
+            text: 'you can only change placed order status in to shipped'
         });
-        return; // Exit the function early
+        return; 
     }
 
     if (itemStatus === 'shipped' && currentStatus !='delivered') {

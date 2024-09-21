@@ -132,7 +132,7 @@
                                                                         <a href="/orderinfo?orderId=<%=order.orderId%>">Info</a>
                                                                                 </div></td>
 
-                                                                    <% if( order.paymentStatus =='unpaid'){ %>
+                                                                    <% if( order.paymentStatus =='unpaid' &&order.paymentMethod =='razorPay'){ %>
                                                                         <td> <div>
                                                                             <button class="btn btn-success" onclick="initiatePayment('<%= order._id%>')">Pay Now</button>
                                                                                     </div></td>

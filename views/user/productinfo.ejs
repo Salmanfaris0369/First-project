@@ -118,7 +118,7 @@
                                         <% productData.variants.forEach((variant, variantIndex) => { %>
                                             <% variant.images.forEach((image, imageIndex) => { %>
                                                 <div class="carousel-item <%= variantIndex === 0 && imageIndex === 0 ? 'active' : '' %>">
-                                                    <img src="/static/productImages/<%= image %>" id="img"  class="d-block w-100 main-image" alt="Product Image" data-toggle="modal" data-target="#imageModal">
+                                                    <img src="/static/productimages/<%= image %>" id="img"  class="d-block w-100 main-image" alt="Product Image" data-toggle="modal" data-target="#imageModal">
                                                 </div>
                                             <% }) %>
                                         <% }) %>
@@ -133,7 +133,7 @@
                                             <% productData.variants.forEach((variant, variantIndex) => { %>
                                                 <% variant.images.forEach((image, imageIndex) => { %>
                                                     <div class="product-preview mx-1">
-                                                        <img src="/static/productImages/<%= image %>" alt="Product Thumbnail" class="sub-image" data-variant="<%= variantIndex %>" data-image="<%= imageIndex %>" style="height: 105px;">
+                                                        <img src="/static/productimages/<%= image %>" alt="Product Thumbnail" class="sub-image" data-variant="<%= variantIndex %>" data-image="<%= imageIndex %>" style="height: 105px;">
                                                     </div>
                                                 <% }) %>
                                             <% }) %>

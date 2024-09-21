@@ -90,12 +90,11 @@ const loadCheckout = async(req,res)=>{
                 return res.status(400).json({success:false,message:"address not found"})
             }
 
-            const totalCart = await Cart.countDocuments({ userId: uId });
-
             const cart = await Cart.find({userId:uId}).populate('productId')
             if(!cart){
                 return res.status(400).json({success:false,message:"cart not found"})
             }
+        
             const wallet = await Wallet.findOne({user:uId})
             if(!wallet){
                 return res.status(400).json({success:false,message:"wallet not found"})
@@ -283,12 +282,14 @@ const orderRazorpayOrder = async(req,res)=>{
     }
 
    
-    const totalAmount = order.orderItems.reduce((acc, item) => {
+    let totalAmount = order.orderItems.reduce((acc, item) => {
         if (item.orderStatus !== 'Canceled') {
             return acc + item.price ;
         }
         return acc;
     }, 0);
+
+    totalAmount-=order.couponPrice
 
     if (totalAmount <= 0) {
         console.log('Invalid total amount');
@@ -618,15 +619,24 @@ const cancelOrder = async(req,res)=>{
 const returnOrder = async(req,res)=>{
     try {  console.log(req.body);
           const{orderId,itemId,color,returnReason} = req.body
+          console.log(color,'color');
+          
             const order = await Order.findOne({orderId:orderId})
             if(!order){
                 return res.status(400).send({ success: false, message: "Order not found" });
             }
 
+            order.orderItems.forEach(item => {
+                console.log(item._id.toString(), item.color,'kkkkkkkk');
+            });
+
             const itemIndex = order.orderItems.findIndex(item => 
-                item._id.toString() === itemId && item.color === color
-            );
+               
+                item._id.toString() === itemId && item.color.toLowerCase() === color.toLowerCase()
+                );
+
          console.log(itemIndex);
+
             if (itemIndex === -1) {
                 return res.status(400).send({ success: false, message: "Item not found in the order" });
             }
