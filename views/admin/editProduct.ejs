@@ -246,7 +246,7 @@ WebFont.load({
                                       <% const variant = product.variants[0]; %>
                                       <% variant.images.forEach((image, imageIndex) => { %>
                                           <div class="image-wrapper" id="image-<%= imageIndex %>">
-                                              <img src="/static/productImages/<%= image %>" alt="Variant Image" width="100">
+                                              <img src="/static/productimages/<%= image %>" alt="Variant Image" width="100">
                                               <input type="hidden" name="variants[0][existingImages][]" value="<%= image %>">
                                               <button type="button" class="btn btn-danger btn-sm mt-2 remove-image" 
                                                       data-image="<%= imageIndex %>">
