@@ -41,15 +41,15 @@ WebFont.load({
 <div class="sidebar" data-background-color="dark">
   <div class="sidebar-logo">
     <!-- Logo Header -->
-    <div class="logo-header" data-background-color="dark">
-      <a href="index.html" class="logo">
+    <div class="logo-header" data-background-color="white">
+           
         <img
-          src="/static/adminfile/assets/img/kaiadmin/logo_light.svg"
+          src="/static/img/logo.png"
           alt="navbar brand"
           class="navbar-brand"
           height="20"
         />
-      </a>
+      
     </div>
     <!-- End Logo Header -->
   </div>
@@ -73,7 +73,7 @@ WebFont.load({
             <p>Categories</p>
           </a>
         </li>
-       <li class="nav-item">
+       <li class="nav-item active">
           <a data-bs-toggle="collapse" href="/admin/users">
             <i class="fas fa-pen-squaree"></i>
             <p>Users</p>
@@ -184,7 +184,7 @@ WebFont.load({
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Orders(return request<span title="Return Requested">❗</span> )</h4>
+              <h4 class="card-title">users</h4>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -213,7 +213,7 @@ WebFont.load({
                                 <td><%= users[i].is_blocked ? 'Blocked' : 'Active' %></td>
                                 <td>
                                    
-                                        <button  id="userActionBtn_<%= users[i]._id %>"  onclick="confirmAction('userActionBtn_<%= users[i]._id %>', '<%= users[i].is_blocked %>')">
+                                        <button class="btn btn-success"  id="userActionBtn_<%= users[i]._id %>"  onclick="confirmAction('userActionBtn_<%= users[i]._id %>', '<%= users[i].is_blocked %>')">
                                           <%= users[i].is_blocked ? 'Unblock' : 'Block' %>
                                         </button>
                                         

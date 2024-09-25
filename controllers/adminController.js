@@ -180,8 +180,21 @@ const statusChange = async(req,res)=>{
 
   const loadCoupon = async(req,res)=>{
     try {  
-             const coupons=await Coupon.find()
-              res.render('coupon',{coupons:coupons})
+      const page = parseInt(req.query.page) || 1; 
+      const limit = 6; 
+      const skip = (page - 1) * limit; 
+
+      const totalCoupons = await Coupon.countDocuments();
+      const coupons=await Coupon.find().skip(skip).limit(limit);
+
+      const totalPages = Math.ceil(totalCoupons / limit);
+              res.render('coupon',{
+                coupons:coupons,
+                currentPage: page,
+                totalPages: totalPages,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+              })
         
     } catch (error) {
         console.log(error);
@@ -189,8 +202,12 @@ const statusChange = async(req,res)=>{
     }
   }
 
+ 
+       
+
   const addCoupon= async(req,res)=>{
-    try {   
+    try {   console.log(req.body,'aaaaaaaa');
+    
         
         const { couponName : couponName,discountPercentage:discountPercentage,minimumPurchase :minimumPurchase,expiryDate :expiryDate,usageLimit :usageLimit,redeemAmount :redeemAmount}=req.body
        
@@ -268,16 +285,36 @@ const deleteCoupon = async(req,res)=>{
 }
 
 const loadOffer = async(req,res)=>{
-    try {  const offers=await Offer.find().populate('productOffer').populate('categoryOffer')
+    try {  const page = parseInt(req.query.page) || 1; 
+            const limit = 6; 
+            const skip = (page - 1) * limit; 
+
+            const totalOffers = await Offer.countDocuments();
+        
+          const offers=await Offer.find().populate('productOffer').populate('categoryOffer') .skip(skip).limit(limit);
            const products= await product.find() 
            const categories= await Category.find()
-        res.render('offer',{offers:offers,products:products,categories:categories})
+
+           const totalPages = Math.ceil(totalOffers / limit);
+
+        res.render('offer',{
+          offers:offers,
+          products:products,
+          categories:categories,
+          currentPage: page,
+          totalPages: totalPages,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1
+        })
         
     } catch (error) {
         console.log(error)
         res.status(500).json({ success : false, error : "Some error occured"});
     }
 }
+
+
+
 
 const addOffer = async(req,res)=>{
     try {    
@@ -305,6 +342,8 @@ const addOffer = async(req,res)=>{
             const products = await product.findById(productOffer)
                   products.productOffer = newOffer._id
                   products.discountPrice = Math.ceil(products.variants[0].price - (products.variants[0].price * (discountPercentage / 100)))
+                  console.log(products.discountPrice,'jjjjjjjj');
+                  
                   await products.save()
         }else if(offerType === 'category'){
             const category = await Category.findById(categoryOffer)
@@ -547,19 +586,61 @@ const loadSalesReport = async(req,res)=>{
     {
       $group: {
         _id: null,
-        totalSales: { $sum: '$amount' },
-        totalOrders: { $sum: 1 },
-        totalDiscount: {
-            $sum: {
-              $reduce: {
-                input: '$orderItems',
-                initialValue: 0,
-                in: { $add: ['$$value', '$$this.discountPrice'] }
+        totalSales: {
+          $sum: {
+            $reduce: {
+              input: '$orderItems',
+              initialValue: 0,
+              in: {
+                $cond: [
+                  { $eq: ['$$this.itemStatus', 'delivered'] },
+                  { $add: ['$$value', '$$this.price'] },
+                  '$$value'
+                ]
               }
             }
-          },
+          }
+        },
+        totalOrders: {
+          $sum: {
+            $size: {
+              $filter: {
+                input: '$orderItems',
+                as: 'item',
+                cond: { $eq: ['$$item.itemStatus', 'delivered'] }
+              }
+            }
+          }
+        },
+        totalDiscount: {
+          $sum: {
+            $reduce: {
+              input: '$orderItems',
+              initialValue: 0,
+              in: {
+                $cond: [
+                  { $eq: ['$$this.itemStatus', 'delivered'] },
+                  { $add: ['$$value', '$$this.discountPrice'] },
+                  '$$value'
+                ]
+              }
+            }
+          }
+        },
         totalCouponDeduction: { $sum: '$couponPrice' },
-        totalQuantity: { $sum: { $sum: '$orderItems.quantity' } }
+        totalQuantity: { $sum: { 
+          $reduce: {
+            input: '$orderItems',
+            initialValue: 0,
+            in: {
+              $cond: [
+                { $eq: ['$$this.itemStatus', 'delivered'] },
+                { $add: ['$$value', '$$this.quantity'] },
+                '$$value'
+              ]
+            }
+          }
+        } }
       }
     }
   ];
@@ -682,19 +763,61 @@ const downloadReport = async (req, res) => {
             {
                 $group: {
                   _id: null,
-                  totalSales: { $sum: '$amount' },
-                  totalOrders: { $sum: 1 },
-                  totalDiscount: {
-                      $sum: {
-                        $reduce: {
-                          input: '$orderItems',
-                          initialValue: 0,
-                          in: { $add: ['$$value', '$$this.discountPrice'] }
-                        }
-                      }
-                    },
+                   totalSales: {
+          $sum: {
+            $reduce: {
+              input: '$orderItems',
+              initialValue: 0,
+              in: {
+                $cond: [
+                  { $eq: ['$$this.itemStatus', 'delivered'] },
+                  { $add: ['$$value', '$$this.price'] },
+                  '$$value'
+                ]
+              }
+            }
+          }
+        },
+        totalOrders: {
+          $sum: {
+            $size: {
+              $filter: {
+                input: '$orderItems',
+                as: 'item',
+                cond: { $eq: ['$$item.itemStatus', 'delivered'] }
+              }
+            }
+          }
+        },
+        totalDiscount: {
+          $sum: {
+            $reduce: {
+              input: '$orderItems',
+              initialValue: 0,
+              in: {
+                $cond: [
+                  { $eq: ['$$this.itemStatus', 'delivered'] },
+                  { $add: ['$$value', '$$this.discountPrice'] },
+                  '$$value'
+                ]
+              }
+            }
+          }
+        },
                   totalCouponDeduction: { $sum: '$couponPrice' },
-                  totalQuantity: { $sum: { $sum: '$orderItems.quantity' } }
+                  totalQuantity: { $sum: { 
+                    $reduce: {
+                      input: '$orderItems',
+                      initialValue: 0,
+                      in: {
+                        $cond: [
+                          { $eq: ['$$this.itemStatus', 'delivered'] },
+                          { $add: ['$$value', '$$this.quantity'] },
+                          '$$value'
+                        ]
+                      }
+                    }
+                  } }
                 }
               }
         ]);
@@ -802,6 +925,11 @@ const downloadReport = async (req, res) => {
 
             doc.pipe(res);
 
+            doc.rect(10, 10, doc.page.width - 20, doc.page.height - 20).stroke();
+
+            // Add content to PDF
+            doc.fontSize(23).text('Malefashion.shop', { align: 'center',underline:true });
+
             doc.fontSize(18).text('Sales Report', { align: 'center' });
             doc.moveDown();
 
@@ -819,10 +947,10 @@ const downloadReport = async (req, res) => {
             doc.fontSize(14).text('Product details', { underline: true });
             doc.moveDown();
 
-            const tableTop = 250;
-            const tableLeft = 50;
+            const tableTop = 280;
+            const tableLeft = 70;
             const rowHeight = 20;
-            const colWidths = [40, 50, 150, 80, 80, 80];
+            const colWidths = [40, 50, 140, 80, 80, 80];
 
             // Table headers
             doc.font('Helvetica-Bold');
@@ -921,7 +1049,15 @@ const getAdminDashboardAnalytics = async (req, res) => {
                     ]
                   }
             },
-            totalOrders: { $sum: 1 },
+            totalOrders: { 
+              $sum: {
+                $cond: [
+                  { $eq: ['$orderItems.itemStatus', 'delivered'] },
+                  1,  
+                  0  
+                ]
+              }
+            },
             cancelledOrders: {
               $sum: { $cond: [{ $eq: ['$orderStatus', 'Canceled'] }, 1, 0] }
             },

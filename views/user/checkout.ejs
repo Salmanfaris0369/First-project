@@ -972,14 +972,19 @@ function placeOrder() {
     // Get selected address
     const selectedAddress = document.getElementById('selectedAddress');
     console.log(selectedAddress);
+    if(selectedAddress ==null){
+    showSnackbar("please provide your address")
+    return;
+   }
+   
     const addressText = selectedAddress.textContent.trim();
+    console.log(addressText,'adresstext');
+    
+   
     const selectedAddressElement = document.getElementById('selectedAddress');
     console.log(selectedAddressElement,'sasasa');
-  
-
     const addressId = selectedAddressElement.getAttribute('data-address-id');
 
-   
     const cartItems = [];
     const rows = document.querySelectorAll('.shopping__cart__table tbody tr');
     rows.forEach(row => {

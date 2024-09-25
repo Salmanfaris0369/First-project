@@ -43,16 +43,16 @@ WebFont.load({
 <div class="sidebar" data-background-color="dark">
   <div class="sidebar-logo">
     <!-- Logo Header -->
-    <div class="logo-header" data-background-color="dark">
-      <a href="index.html" class="logo">
-        <img
-          src="/static/adminfile/assets/img/kaiadmin/logo_light.svg"
-          alt="navbar brand"
-          class="navbar-brand"
-          height="20"
-        />
-      </a>
-    </div>
+    <div class="logo-header" data-background-color="white">
+           
+      <img
+        src="/static/img/logo.png"
+        alt="navbar brand"
+        class="navbar-brand"
+        height="30"
+      />
+    
+  </div>
     <!-- End Logo Header -->
   </div>
   <div class="sidebar-wrapper scrollbar scrollbar-inner">
@@ -202,22 +202,22 @@ WebFont.load({
                                       <input type="hidden" id="editcouponId" name="couponId">
                                       <div class="mb-3">
                                       <label for="editCouponName" class="form-label">Coupon Name</label>
-                                      <input type="text" class="form-control" id="editCouponName" name="couponName" required>
+                                      <input type="text" class="form-control" id="editCouponName" name="couponName">
 
                                       <label for="discountPercentage" class="form-label">Discount percentage</label>
-                                      <input type="number"  class="form-control" id="discountPercentage" name="discountPercentage" required>
+                                      <input type="number"  class="form-control" id="discountPercentage" name="discountPercentage">
 
                                       <label for="minimumPurchase" class="form-label">Minimum amount of purchase</label>
-                                      <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase" step="0.01" required>
+                                      <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase" step="0.01">
 
                                       <label for="expiryDate" class="form-label">Expiry date of coupon</label>
-                                      <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                                      <input type="date" class="form-control" id="expiryDate" name="expiryDate">
 
                                       <label for="usageLimit" class="form-label">Usage limit</label>
-                                      <input type="number" class="form-control" id="usageLimit" name="usageLimit" required>
+                                      <input type="number" class="form-control" id="usageLimit" name="usageLimit">
 
                                       <label for="redeemAmount" class="form-label">Redeem amount</label>
-                                      <input type="number" class="form-control" id="redeemAmount" name="redeemAmount" required>
+                                      <input type="number" class="form-control" id="redeemAmount" name="redeemAmount">
                                       </div>
                                       
                                       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -246,6 +246,30 @@ WebFont.load({
       </div>
           <% } %>
   </div>
+
+
+    <!-- pagination -->
+    <div class="pagination">
+      <% if (hasPrevPage) { %>
+          <a href="/coupon?page=<%= currentPage - 1 %>"><<</a>
+      <% } else { %>
+          <span class="disabled"><<</span>
+      <% } %>
+      
+      <span class="page-info border-0">
+          <span class="page-number"><%= currentPage %></span> 
+          <span class="page-number"><%= totalPages %></span>
+      </span>
+      
+      <% if (hasNextPage) { %>
+          <a href="/coupon?page=<%= currentPage + 1 %>">>></a>
+      <% } else { %>
+          <span class="disabled">>></span>
+      <% } %>
+  </div>
+
+
+
   
            <!-- Add Coupon Modal -->
             <div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addcouponModalLabel" aria-hidden="true">
@@ -258,23 +282,23 @@ WebFont.load({
                   <div class="modal-body">
                     <form id="addCouponForm" action="/admin/coupon/add" method="post">
                       <div class="mb-3">
-                        <label for="couponName" class="form-label">coupon Name</label>
-                         <input type="text" class="form-control" id="couponName" name="couponName" required>
+                        <label for="ecouponName" class="form-label">coupon Name</label>
+                         <input type="text" class="form-control" id="ecouponName" name="ecouponName">
 
-                         <label for="discountPercentage" class="form-label">Discount percentage</label>
-                         <input type="number" class="form-control" id="discountPercentage" name="discountPercentage" required>
+                         <label for="ediscountPercentage" class="form-label">Discount percentage</label>
+                         <input type="number" class="form-control" id="ediscountPercentage" name="ediscountPercentage">
 
-                         <label for="minimumPurchase" class="form-label">Minimum amount of purchase</label>
-                         <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase" step="0.01" required>
+                         <label for="eminimumPurchase" class="form-label">Minimum amount of purchase</label>
+                         <input type="number" class="form-control" id="eminimumPurchase" name="eminimumPurchase" step="0.01">
 
-                         <label for="expiryDate" class="form-label">Expiry date of coupon</label>
-                         <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                         <label for="eexpiryDate" class="form-label">Expiry date of coupon</label>
+                         <input type="date" class="form-control" id="eexpiryDate" name="eexpiryDate">
 
-                         <label for="usageLimit" class="form-label">Usage limit</label>
-                         <input type="number" class="form-control" id="usageLimit" name="usageLimit" required>
+                         <label for="eusageLimit" class="form-label">Usage limit</label>
+                         <input type="number" class="form-control" id="eusageLimit" name="eusageLimit">
 
-                         <label for="redeemAmount" class="form-label">Redeem amount</label>
-                         <input type="number" class="form-control" id="redeemAmount" name="redeemAmount" required>
+                         <label for="eredeemAmount" class="form-label">Redeem amount</label>
+                         <input type="number" class="form-control" id="eredeemAmount" name="eredeemAmount">
                       </div>
                       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="button" class="btn btn-secondary me-md-2" data-bs-dismiss="modal">Cancel</button>
@@ -288,17 +312,70 @@ WebFont.load({
 
 </div>
 
+<style>
 
+  /* pagination  */
+.pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+        .pagination a, .pagination span {
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+        }
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+        .pagination .active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+        .pagination .page-info {
+            margin: 0 15px;
+        }
+        .page-number {
+            font-weight: bold;
+            background-color: #f1f1f1;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+        }
+
+/* pagination  */
+
+</style>
 
 <script>
+
+
+
+
    document.getElementById('addCouponForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    const couponName = document.getElementById('couponName').value;
-    const discountPercentage= document.getElementById('discountPercentage').value;
-    const minimumPurchase = document.getElementById('minimumPurchase').value;
-    const expiryDate = document.getElementById('expiryDate').value;
-    const usageLimit = document.getElementById('usageLimit').value;
-    const redeemAmount = document.getElementById('redeemAmount').value;
+
+   
+
+
+
+    const couponName = document.getElementById('ecouponName').value;
+    const discountPercentage= document.getElementById('ediscountPercentage').value;
+    const minimumPurchase = document.getElementById('eminimumPurchase').value;
+    const expiryDate = document.getElementById('eexpiryDate').value;
+    const usageLimit = document.getElementById('eusageLimit').value;
+    const redeemAmount = document.getElementById('eredeemAmount').value;
+   console.log(discountPercentage,minimumPurchase,expiryDate,usageLimit,redeemAmount,'sasasa');
    
 
 console.log(couponName);
@@ -405,7 +482,7 @@ console.log(couponName);
   });
   
   
-  // <---deletebrand---->
+  // <---deletecoupon---->
   
   function deleteCoupon(couponId) {
       console.log(couponId);

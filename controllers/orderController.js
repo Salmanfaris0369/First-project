@@ -37,8 +37,11 @@ const downloadOrderPDF = async (req, res) => {
 
         doc.pipe(res);
 
+        doc.rect(10, 10, doc.page.width - 20, doc.page.height - 20).stroke();
+
         // Add content to PDF
-        doc.fontSize(18).text('Order Details', { align: 'center' });
+        doc.fontSize(23).text('Malefashion.shop', { align: 'center',underline:true });
+        doc.fontSize(18).text('Order Details', { align: 'left' });
         doc.moveDown();
         doc.fontSize(12).text(`Order ID: ${order.orderId}`);
         doc.text(`Order Date: ${new Date(order.orderDate).toLocaleDateString()}`);
@@ -525,6 +528,10 @@ const loadOrderinfo = async(req,res)=>{
              if (!order) {
                 return res.status(404).send('Order not found');
             }
+
+           if(order.user !=uID){
+            return res.status(404).send('Order not found');
+           }
 
             const user = await User.findById(uID);
 

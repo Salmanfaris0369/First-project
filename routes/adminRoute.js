@@ -9,7 +9,7 @@ const multer=require('multer')
 const adminauth=require('../middleware/adminauth')
 
 admin_route.use(session({
-    secret: config.sessionSecret,
+    secret: config.adminsessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -106,4 +106,15 @@ admin_route.get('/offer',adminauth.isLogin,adminController.loadOffer)
 admin_route.post('/offer/add',adminController.addOffer)
 admin_route.delete('/offer/delete',adminauth.isLogin,adminController.deleteOffer)
 admin_route.post('/offer/edit',adminController.editOffer)
+
+
+admin_route.use((err, req, res, next) => {
+    console.error('Error:', err);
+    res.status(500).render('500', { error: err.message });
+});
+
+admin_route.use((req, res, next) => {
+    res.status(404).render('404');
+});
+
 module.exports=admin_route

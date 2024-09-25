@@ -128,7 +128,7 @@ const editProduct = async (req, res) => {
           const imagesToRemove = Product.variants[0].images.filter(img => !existingImages.includes(img));
          
           for (const img of imagesToRemove) {
-            await fs.unlink(path.join('public/productImages/', img));
+            await fs.unlink(path.join(__dirname,'../public/productimages/', img));
           }
           Product.variants[0].images = [...existingImages, ...newImages];
         } else {
