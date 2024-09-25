@@ -460,8 +460,10 @@ for (let item of items) {
      
      
      if (variantIndex !== -1) {
-         product.variants[variantIndex].quantity -= item.quantity;
-         product.orderCount += item.quantity;
+         product.variants[variantIndex].quantity -= Number(item.quantity);
+         console.log(item.quantity,'quantity');
+         
+         product.orderCount += Number(item.quantity);
          await product.save();
          await Cart.findOneAndDelete({ userId: userId });
        
