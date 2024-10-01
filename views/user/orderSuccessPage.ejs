@@ -1,0 +1,239 @@
+<%- include('../layouts/header.ejs') %>
+ <!-- Google Font -->
+ <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+ rel="stylesheet">
+
+ <!-- Css Styles -->
+ <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+ <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+ <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+ <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+ <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+ <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+ <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+ <link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+
+<body>
+ <!-- Page Preloder -->
+ <div id="preloder">
+     <div class="loader"></div>
+ </div>
+
+ 
+
+ <!-- Header Section Begin -->
+ <header class="header">
+   
+     <div class="container">
+         <div class="row">
+             <div class="col-lg-3 col-md-3">
+                 <div class="header__logo">
+                    <img src="img/logo.png" alt="">
+                 </div>
+             </div>
+             <div class="col-lg-6 col-md-6">
+                <nav class="header__menu mobile-menu">
+                     <ul>
+                         <li><a href="/home">Home</a></li>
+                         <li ><a href="/shop">Shop</a></li>
+                         <% if (isAuthenticated) { %>
+                            <li><a class="text-decoration-none" href='/userProfile'>Account</a></li>
+                        <% } else { %>
+                            <li><a class="text-decoration-none" href="/login">Sign In</a></li>
+                        <% } %>
+                        
+                        
+                     </ul>
+                 </nav>
+             </div>
+             <div class="col-lg-3 col-md-3">
+                 <div class="header__nav__option">
+                     
+                    <a href="/home/whishlist">
+                        <img src="img/icon/heart.png" alt=""> 
+                     
+                      </a>
+                      <a href="/home/cart">
+                        <img src="img/icon/cart.png" alt=""><br>
+                      
+                      </a>
+                     
+                 </div>
+             </div>
+         </div>
+         <div class="canvas__open"><i class="fa fa-bars"></i></div>
+     </div>
+ </header>
+ <!-- Header Section End -->
+
+ <!-- Shop Details Section Begin -->
+ <section class="shop-details">
+    
+     <div class="product__details__pic">
+        <div class="row">
+            <div class="col-lg-12">
+               
+            </div>
+        </div>
+         <div class="container">
+            
+             <div class="row">
+                <!-- <nav class="col-md-4 col-lg-2 d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky" id="sidebar">
+                        <ul class="nav flex-column">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/userProfile">PROFILE >>></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/home/whishlist">WHISHLIST</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/userProfile/order">ORDERS</a>
+                            </li>
+                           
+                            <li class="nav-item">
+                                <a class="nav-link" href="/userProfile/address">ADDRESSES</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/userProfile/wallet">WALLET</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">LOGOUT</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav> -->
+    
+                <main role="main" class="col-md-8 ml-sm-auto col-lg-8 px-md-4 me-4">
+                   
+                    <div class="profile-details  p-4 bg-white rounded shadow-sm mt-5 ">
+                        <div class="d-flex justify-content-center align-items-center mt-4">
+                            <div class="image-sec">
+                            <div class="image-upload">
+                              
+                                    <img id="profile-image" src="/static/userimages/success.png" style="width: 100px;" alt="Upload Profile Image"/>
+                                  
+                              
+                            </div>
+                        </div>
+                         </div>
+                        <div class="bio">
+                       <h5>Your order has been placed successfully you can now continue shopping or check in orders</h5>
+                                    
+                        <div class="button-group d-flex justify-content-around">
+                          <a href="/userProfile/order" class="btn btn-success ms-4">Go to orders</a>
+                          <a href="/shop" class="btn btn-secondary">Continue shopping</a>
+                        </div>
+                         </div>
+                    </div>
+                </main>
+             </div>
+         </div>
+     </div>
+     
+     </div>
+ </section>
+ <!-- Shop Details Section End -->
+
+ 
+  
+   
+
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+header,
+footer {
+    height: 50px;
+    background-color: #ffffff;
+
+}
+
+
+.image-upload {
+    bottom: 20px;
+    position: relative;
+}
+
+
+
+.add-symbol {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: black;
+}
+
+.profile-details {
+    max-width: 400px;
+    /* margin: 20px auto;
+    padding: 20px; */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    /* display: flex; */
+}
+
+
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.main {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        height: auto;
+        position: relative;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        padding-right: 11.5rem 
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+}
+
+</style>
+
+    
+</body>
+
+
+    
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    
+
+ <!-- Js Plugins -->
+ <script src="js/jquery-3.3.1.min.js"></script>
+ <script src="js/bootstrap.min.js"></script>
+ <script src="js/jquery.nice-select.min.js"></script>
+ <script src="js/jquery.nicescroll.min.js"></script>
+ <script src="js/jquery.magnific-popup.min.js"></script>
+ <script src="js/jquery.countdown.min.js"></script>
+ <script src="js/jquery.slicknav.js"></script>
+ <script src="js/mixitup.min.js"></script>
+ <script src="js/owl.carousel.min.js"></script>
+ <script src="js/main.js"></script>
+
+<%- include('../layouts/footer.ejs') %>

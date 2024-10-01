@@ -136,6 +136,8 @@ user_route.post('/order-verify-payment',orderController.orderVerifyRazorpay)
 
 user_route.get('/order/download-pdf/:orderId', orderController.downloadOrderPDF);
 
+user_route.get('/orderSuccessPage',orderController.loadOrderSuccess)
+
 user_route.use((err, req, res, next) => {
     console.error('Error:', err);
     res.status(500).render('500', { error: err.message });

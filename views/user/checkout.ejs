@@ -1121,25 +1121,20 @@ function placeOrder() {
                                 showConfirmButton: true,
                                 timer: 3000,
                                 timerProgressBar: true,
-                                confirmButtonText: 'Continue Shopping',
                                 confirmButtonColor: '#3085d6',
                                 backdrop: true,
                                 customClass: {
                                     popup: 'swal-custom-popup'
                                 }
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = '/shop'; // Redirect to shop page on button click
-                                }
-                            });
+                            })
 
                             // Redirect to shop page after a delay (e.g., 3 seconds)
-                            // setTimeout(() => {
-                            //     window.location.href = '/shop'; // Adjust the URL to your shop page
-                            // }, 3000);
+                            setTimeout(() => {
+                                window.location.href = '/orderSuccessPage'; // Adjust the URL to your shop page
+                            }, 3000);
                         })
                         .catch((error) => {
-                            alert(error.message,'egetgrgt');
+                           showSnackbar(error.message)
                         // setTimeout(() => location.reload(),1500);
                             console.error('Error:', error);
 
@@ -1175,17 +1170,18 @@ function placeOrder() {
                             showConfirmButton: true,
                             timer: 3000,
                             timerProgressBar: true,
-                            confirmButtonText: 'Continue Shopping',
                             confirmButtonColor: '#3085d6',
                             backdrop: true,
                             customClass: {
                                 popup: 'swal-custom-popup'
                             }
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = '/shop';
-                            }
-                        });
+                        })
+
+                        setTimeout(() => {
+                                window.location.href = '/orderSuccessPage'; // Adjust the URL to your shop page
+                            }, 3000);
+
+
                     } else {
                         showSnackbar("Payment verification failed");
                     }
@@ -1216,6 +1212,8 @@ function placeOrder() {
         }).then(() => {
             window.location.href = '/userProfile/order';
         });
+
+      
     })
     .catch(error => {
         console.error('Error handling failed payment:', error);
@@ -1230,24 +1228,24 @@ function placeOrder() {
 
 
         //    ________
-            function showSnackbar(message) {
-                console.log(message,'mmmmmmmmm');
-    // Create snackbar container if it doesn't exist
-    let snackbar = document.getElementById("snackbar");
-    if (!snackbar) {
-        snackbar = document.createElement("div");
-        snackbar.id = "snackbar";
-        document.body.appendChild(snackbar);
-    }
-       snackbar.textContent = message;
-     // Add the "show" class
-    snackbar.className = "show";
+    //         function showSnackbar(message) {
+    //             console.log(message,'mmmmmmmmm');
+    // // Create snackbar container if it doesn't exist
+    // let snackbar = document.getElementById("snackbar");
+    // if (!snackbar) {
+    //     snackbar = document.createElement("div");
+    //     snackbar.id = "snackbar";
+    //     document.body.appendChild(snackbar);
+    // }
+    //    snackbar.textContent = message;
+    //  // Add the "show" class
+    // snackbar.className = "show";
 
-    // After 3 seconds, remove the show class
-    setTimeout(() => {
-        snackbar.className = snackbar.className.replace("show", "");
-    }, 3000);
-    }
+    // // After 3 seconds, remove the show class
+    // setTimeout(() => {
+    //     snackbar.className = snackbar.className.replace("show", "");
+    // }, 3000);
+    // }
     //  ___
   
 }

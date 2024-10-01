@@ -29,6 +29,10 @@ const downloadOrderPDF = async (req, res) => {
             return res.status(404).send('Order not found');
         }
 
+        const totalDiscountPrice = order.orderItems.reduce((total, item) => {
+            return total + item.discountPrice;
+        }, 0);
+
         const doc = new PDFDocument();
         const filename = `order-${orderId}.pdf`;
 
@@ -37,32 +41,121 @@ const downloadOrderPDF = async (req, res) => {
 
         doc.pipe(res);
 
+        // Set background color for the entire page
+        doc.rect(0, 0, doc.page.width, doc.page.height).fill('#f2f2f2'); // Light grey background
+        
+        // Reset the fill for text after background
+        doc.fillColor('black');
+        
+        // Draw border for the page
         doc.rect(10, 10, doc.page.width - 20, doc.page.height - 20).stroke();
-
-        // Add content to PDF
-        doc.fontSize(23).text('Malefashion.shop', { align: 'center',underline:true });
-        doc.fontSize(18).text('Order Details', { align: 'left' });
+        
+        // Add Title with custom color
+        doc.fontSize(26)
+           .fillColor('#007bff') // Blue color for title
+           .text('Malefashion', { align: 'center', underline: true });
+        
+        // Add subtitle for Order Details
         doc.moveDown();
-        doc.fontSize(12).text(`Order ID: ${order.orderId}`);
-        doc.text(`Order Date: ${new Date(order.orderDate).toLocaleDateString()}`);
+        doc.fontSize(18)
+           .fillColor('#000') // Black color for subtitle
+           .font('Helvetica-Bold')
+           .text('Order Details', { align: 'left' });
+        
+        // Add Order Information
+        doc.moveDown();
+        doc.fontSize(12).font('Helvetica').fillColor('#444'); // Dark grey for details
+        doc.font('Helvetica').fillColor('#444').text('Order ID:', { continued: true })
+           .font('Helvetica-Bold').fillColor('#000').text(` #${order.orderId}`);
+        doc.font('Helvetica').fillColor('#444').text(`Order Date: ${new Date(order.orderDate).toLocaleDateString()}`);
         doc.text(`Payment Method: ${order.paymentMethod}`);
         doc.text(`Payment Status: ${order.paymentStatus}`);
         doc.text(`Order Status: ${order.orderStatus}`);
+        doc.text(`Grand total: ${order.amount}`);
+        doc.text(`Coupon deduction: ${order.couponPrice}`);
+        doc.text(`Discount: ${totalDiscountPrice}`);
+        
+        // Add some space
         doc.moveDown();
-
-        doc.fontSize(14).text('Items:');
-        order.orderItems.forEach(item => {
-            doc.fontSize(12).text(`- ${item.product.productName}`);
-            doc.text(`  Color: ${item.color}, Quantity: ${item.quantity}, Price: ₹${item.price}`);
+        
+        // Add Items Section Title
+        doc.fontSize(16).font('Helvetica-Bold').fillColor('#000').text('Items:');
+        
+        // Table Headers
+        const tableTop = doc.y + 10; // Starting Y position for the table
+     
+        const itemX = 75, colorX = 185, qtyX = 300, priceX = 380; // X positions for each column
+        
+        // Draw headers for the table
+        doc.fontSize(12)
+           .font('Helvetica-Bold')
+           .text('Product Name', itemX, tableTop)
+           .text('Color', colorX, tableTop)
+           .text('Quantity', qtyX, tableTop)
+           .text('Price', priceX, tableTop);
+        
+        // Move down a bit after the headers
+        doc.moveDown();
+        
+        // Start listing items
+        order.orderItems.forEach((item, i) => {
+            const rowTop = tableTop + 20 + (i * 20); // Calculate Y position for each row
+        
+            // Fill each column with the item's details
+            doc.font('Helvetica').fontSize(12)
+               .text(item.product.productName, itemX, rowTop)
+               .text(item.color, colorX, rowTop)
+               .text(item.quantity.toString(), qtyX, rowTop)
+               .text(`₹${item.price}`, priceX, rowTop);
         });
-
+        
+        // Move down after items
         doc.moveDown();
-        doc.fontSize(14).text('Delivery Address:');
-        doc.fontSize(12).text(`${order.address.addressStreet}, ${order.address.addressPost}`);
-        doc.text(`${order.address.addressCity}, ${order.address.addressDistrict}`);
-        doc.text(`${order.address.addressState}, ${order.address.addressPin}`);
 
+        const addressX = 70; 
+        
+        // Add Delivery Address Title
+        doc.fontSize(16).font('Helvetica-Bold').fillColor('#000').text('Delivery Address:',addressX);
+        
+        // Add Address Details
+        doc.fontSize(12).font('Helvetica').fillColor('#444');
+        doc.text(`${order.address.addressStreet}, ${order.address.addressPost}`,addressX);
+        doc.text(`${order.address.addressCity}, ${order.address.addressDistrict}`,addressX);
+        doc.text(`${order.address.addressState}, ${order.address.addressPin}`,addressX);
+        
+        // End the document
         doc.end();
+        
+
+
+
+
+        // doc.rect(10, 10, doc.page.width - 20, doc.page.height - 20).stroke();
+
+        // // Add content to PDF
+        // doc.fontSize(23).text('Malefashion.shop', { align: 'center',underline:true });
+        // doc.fontSize(18).text('Order Details', { align: 'left' });
+        // doc.moveDown();
+        // doc.fontSize(12).text(`Order ID: ${order.orderId}`);
+        // doc.text(`Order Date: ${new Date(order.orderDate).toLocaleDateString()}`);
+        // doc.text(`Payment Method: ${order.paymentMethod}`);
+        // doc.text(`Payment Status: ${order.paymentStatus}`);
+        // doc.text(`Order Status: ${order.orderStatus}`);
+        // doc.moveDown();
+
+        // doc.fontSize(14).text('Items:');
+        // order.orderItems.forEach(item => {
+        //     doc.fontSize(12).text(`- ${item.product.productName}`);
+        //     doc.text(`  Color: ${item.color}, Quantity: ${item.quantity}, Price: ₹${item.price}`);
+        // });
+
+        // doc.moveDown();
+        // doc.fontSize(14).text('Delivery Address:');
+        // doc.fontSize(12).text(`${order.address.addressStreet}, ${order.address.addressPost}`);
+        // doc.text(`${order.address.addressCity}, ${order.address.addressDistrict}`);
+        // doc.text(`${order.address.addressState}, ${order.address.addressPin}`);
+
+        // doc.end();
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred while generating the PDF');
@@ -674,6 +767,8 @@ const loadWhishlist = async(req,res)=>{
 
 
         const whishlist= await Whishlist.find({ userId: uId}).populate('productId') .skip(skip).limit(limit);
+       
+        
         const totalPages = Math.ceil(totalWhish / limit);
 
      
@@ -695,8 +790,7 @@ const loadWhishlist = async(req,res)=>{
 
 // from shop
 const addToWhishlist = async(req,res)=>{
-    try {  console.log('salllmman');
-        console.log(req.body);
+    try { 
           const{productId,color,price,imageUrl}=req.body
           const uId=req.session.user_id
           console.log(uId+','+productId);
@@ -952,6 +1046,15 @@ async function eaddMoneyToWallet(userId, amount) {
     }
   }
 
+  const loadOrderSuccess = async(req,res)=>{
+    try {
+         res.render('orderSuccessPage')
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success : false, error : "Some error occured"});
+    }
+  }
+
 module.exports={
     downloadOrderPDF,
     loadCheckout,
@@ -972,5 +1075,6 @@ module.exports={
     addMoneyToWallet,
     verifyWallet,
     applyCoupon,
-    removeCoupon
+    removeCoupon,
+    loadOrderSuccess
   }

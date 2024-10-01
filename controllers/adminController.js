@@ -92,7 +92,7 @@ const block_unblock = async(req, res) => {
 
 const loadOrder=async(req,res)=>{
     try {  
-        const orders = await Order.find().populate('user').sort({ orderDate: -1 });;
+        const orders = await Order.find().populate('user').sort({ createdAt: -1 }) 
           res.render('order',{orders : orders})
     } catch (error) {
         res.status(500).json({ success : false, error : "Some error occured"});
